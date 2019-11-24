@@ -111,7 +111,7 @@
     </div>
 </div>
 
-<!-- Make offer Modal -->
+<!-- Capacity Modal -->
 <div class="modal fade" id="add_quantity" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -123,9 +123,9 @@
             </div>
             <div class="modal-body">
                     {% load crispy_forms_tags %}
-                    <form action="#" method="POST">
-                    {{ edit_form|crispy}}
-                    {% csrf_token %}
+                    <form action="{% url 'supplier:fuel_update' %}" method="POST">
+                        {% csrf_token %}
+                        {{ form|crispy}}
                     <button class="btn btn-primary" type="submit">Save Changes</button>
                     </form>
             </div>

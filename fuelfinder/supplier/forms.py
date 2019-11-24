@@ -1,10 +1,14 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
+<<<<<<< HEAD
 from .models import Profile, FuelUpdate, FuelRequest
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
+=======
+from .models import Profile, FuelUpdate, FuelRequest, Offer
+>>>>>>> e956477c2aa0515247f92b54f5facc5029671184
 
 
 class PasswordChange(PasswordChangeForm):
@@ -67,3 +71,10 @@ class FuelRequestForm(forms.ModelForm):
         fields = ['amount', 'split', 'payment_method', 'delivery_method', 'fuel_type']
 
 
+<<<<<<< HEAD
+=======
+class FuelUpdateForm(forms.ModelForm):
+    class Meta:
+        model = FuelUpdate
+        fields = ['max_amount', 'min_amount', 'deliver', 'payment_method']
+>>>>>>> e956477c2aa0515247f92b54f5facc5029671184
