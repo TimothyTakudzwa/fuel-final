@@ -2,7 +2,7 @@ from django.db import models
 # from django.contrib.auth.models import User
 from fuelfinder.settings import AUTH_USER_MODEL as User
 from PIL import Image
-from buyer.models import Profile, FuelRequest, Company
+from buyer.models import Profile, FuelRequest
 
 
 
@@ -10,7 +10,6 @@ from buyer.models import Profile, FuelRequest, Company
 
 class Profile(models.Model):
     name = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    company = models.ForeignKey(Company, on_delete=models.DO_NOTHING, related_name='buyer_company_name')
     picture = models.ImageField(default='default.png', upload_to='profiles')
     phone = models.CharField(max_length=20, help_text='eg 263775580596')  
     position_in_company = models.CharField(max_length=255)
@@ -42,8 +41,8 @@ class FuelUpdate(models.Model):
     fuel_type = models.CharField(max_length=20)
     deliver = models.BooleanField(default=False)
     payment_method = models.CharField(max_length=200)
-    date = models.DateField()
-    time = models.TimeField()
+    date = models.DateField(auto_now_add=True)
+    time = models.TimeField(auto_now_add=True)
     is_deleted = models.BooleanField(default=False)
 
     class Meta:

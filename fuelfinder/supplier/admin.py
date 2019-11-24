@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Profile, FuelUpdate, FuelRequest, Transaction, TokenAuthentication, \
-    SupplierRating, Offer, Company
+    SupplierRating, Offer
 
 
 admin.site.site_header = "FuelFinder Super Admin"
@@ -9,7 +9,6 @@ admin.site.index_title = 'FuelFinder Admin'
 
 
 admin.site.register(Profile)
-admin.site.register(Company)
 admin.site.register(FuelUpdate)
 admin.site.register(FuelRequest)
 admin.site.register(Transaction)

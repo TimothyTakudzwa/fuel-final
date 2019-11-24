@@ -68,3 +68,21 @@ class FuelUpdateForm(forms.ModelForm):
     class Meta:
         model = FuelUpdate
         fields = ['max_amount', 'min_amount', 'deliver', 'payment_method']
+
+
+class OfferForm(forms.ModelForm):
+    class Meta:
+        model = Offer
+        fields = ['quantity', 'price']
+
+
+def fuelupdate(request):
+    return {
+        'fuel_update_form': FuelUpdateForm()
+    }
+
+
+def makeoffer(request):
+    return {
+        'make_offer_form': OfferForm()
+    }
