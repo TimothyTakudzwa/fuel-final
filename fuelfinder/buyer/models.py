@@ -6,16 +6,16 @@ from django.contrib.auth.models import AbstractUser
 
 
 
-INDUSTRY_CHOICES = (
-    (, 'Ordinary Level'),
-    (, 'Advanced Level'),
-    (, 'Attachee'),
-    (, 'Certificate'),
-    (, 'Diploma'),
-    (, 'Degree'),
-    (, 'Masters Degree'),
-    (, 'Ph.D.'),
-)
+# INDUSTRY_CHOICES = (
+#     (, 'Ordinary Level'),
+#     (, 'Advanced Level'),
+#     (, 'Attachee'),
+#     (, 'Certificate'),
+#     (, 'Diploma'),
+#     (, 'Degree'),
+#     (, 'Masters Degree'),
+#     (, 'Ph.D.'),
+# )
 
 TYPE_CHOICES = (
     ('Buyer','BUYER'),
