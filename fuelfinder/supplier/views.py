@@ -8,6 +8,7 @@ from django.contrib import messages
 import secrets
 
 from datetime import date
+import time
 
 from .forms import PasswordChange, RegistrationForm, RegistrationProfileForm, \
     RegistrationEmailForm, UserUpdateForm, ProfilePictureUpdateForm, ProfileUpdateForm, FuelRequestForm
@@ -184,3 +185,24 @@ def rate_supplier(request):
         'title': 'Fuel Finder | Rate Supplier',
     }
     return render(request, 'supplier/accounts/ratings.html', context=context)
+
+@login_required
+def fuel_update(request):
+    if request.method == 'POST':
+        form = FuelUpdateForm(request.POST)
+        if form.is_valid:
+            closing_time = time.strftime("%H:%M:%S")
+            max_amount = request.POST.get('max_amount')
+            min_amount = request.POST.get('min_amount')
+            deliver = request.POST.get('deliver')
+            payment_method = request.POST.get('payment_method')
+            supplier = Profile.objects.get(name=request.user)
+            FuelUpdate.objects.create(closing_time=closing_time, max_amount=max_amount, min_amount=min_amount, deliver=deliver, payment_method=payment_method)
+            message.success(request, 'Capacity updated successfully')
+            return redirect('fuel-request')
+        else:
+            message.warning(request, 'Oops something went wrong!')
+            return redirect('fuel-request')
+
+    return render(request, 'supplier/accounts/ratings.html', {'form':form})
+

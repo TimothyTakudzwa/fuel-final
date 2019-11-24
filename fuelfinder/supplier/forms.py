@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
-from .models import Profile, FuelUpdate, FuelRequest
+from .models import Profile, FuelUpdate, FuelRequest, Offer
 
 
 class PasswordChange(PasswordChangeForm):
@@ -62,3 +62,9 @@ class FuelRequestForm(forms.ModelForm):
     class Meta:
         model = FuelRequest
         fields = ['amount', 'split', 'payment_method', 'delivery_method', 'fuel_type']
+
+
+class FuelUpdateForm(forms.ModelForm):
+    class Meta:
+        model = FuelUpdate
+        fields = ['max_amount', 'min_amount', 'deliver', 'payment_method']

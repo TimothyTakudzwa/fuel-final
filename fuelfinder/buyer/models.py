@@ -1,8 +1,11 @@
 from django.db import models
-from django.contrib.auth.models import User
+from fuelfinder.settings import AUTH_USER_MODEL as User
+# from django.contrib.auth.models import User
 from PIL import Image
+from django.contrib.auth.models import AbstractUser
 
 
+'''
 INDUSTRY_CHOICES = (
     (, 'Ordinary Level'),
     (, 'Advanced Level'),
@@ -13,6 +16,7 @@ INDUSTRY_CHOICES = (
     (, 'Masters Degree'),
     (, 'Ph.D.'),
 )
+'''
 
 TYPE_CHOICES = (
     ('Buyer','BUYER'),
@@ -28,6 +32,15 @@ class Company(models.Model):
 
     def __str__(self):
         return self.name
+
+class User(AbstractUser):
+    company = models.CharField(max_length=20, default='Company')
+    fuel_request = models.PositiveIntegerField(default=0)
+    phone_number = models.CharField(max_length=20, default='263')
+    stage = models.CharField(max_length=20, default='registration')
+    position = models.IntegerField(default=0)
+    user_type = models.CharField(max_length=20, default='')
+    image = models.ImageField(default='default.png', upload_to='buyer_profile_pics')
 
 
 class FuelRequest(models.Model):
@@ -50,7 +63,7 @@ class FuelRequest(models.Model):
 
 class Profile(models.Model):
     name = models.OneToOneField(User, on_delete=models.CASCADE, related_name='buyer_name')
-    company = models.ForeignKey(Company, on_delete=models.DO_NOTHING, related_name='comp_name')
+    company = models.ForeignKey(Company, on_delete=models.DO_NOTHING, related_name='company_profile')
     fuel_request = models.OneToOneField(FuelRequest, on_delete=models.CASCADE, related_name='fuel', null=True)
     phone_number = models.CharField(max_length=20, default='')
     stage = models.CharField(max_length=20, default='registration')
@@ -73,3 +86,4 @@ class Profile(models.Model):
 
     class Meta:
         ordering = ['name']
+
