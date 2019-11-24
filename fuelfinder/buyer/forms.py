@@ -2,12 +2,15 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import Profile
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
 
 class BuyerRegisterForm(UserCreationForm):
     email = forms.EmailField()
     phone_number = forms.CharField()
+    username = forms.CharField()
 
     class Meta: 
         model = User
@@ -21,7 +24,7 @@ class BuyerUpdateForm(forms.ModelForm):
 
 
     class Meta:
-        model = User
+        model = User   
         fields = ['username', 'email']
 
 class ProfileUpdateForm(forms.ModelForm):
