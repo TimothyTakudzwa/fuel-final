@@ -13,6 +13,9 @@ import time
 from .forms import PasswordChange, RegistrationForm, RegistrationProfileForm, \
     RegistrationEmailForm, UserUpdateForm, ProfilePictureUpdateForm, ProfileUpdateForm, FuelRequestForm
 from .models import Profile, FuelUpdate, FuelRequest, Transaction, Profile, TokenAuthentication
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 # today's date
 today = date.today()
