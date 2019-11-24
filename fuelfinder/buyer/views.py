@@ -4,8 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import BuyerRegisterForm, BuyerUpdateForm, ProfileUpdateForm
 from supplier.forms import FuelRequestForm
-from fuelfinder.settings import AUTH_USER_MODEL as User
-
+from buyer.models import User, Company
 import secrets
 from django.core.mail import BadHeaderError, EmailMultiAlternatives
 from datetime import datetime
@@ -18,14 +17,15 @@ def register(request):
         if form.is_valid():
             username = form.cleaned_data['username']
             email = form.cleaned_data['email']
-            password = form.cleaned_data['password']
+            password = form.cleaned_data['password1']
             phone_number = form.cleaned_data['phone_number']
-            
-
-            user = User.objects.create_user(username, email, password)
-            user.save() 
+            # Company.objects.create(name='example', address='123', industry='test', company_type='BUYER')
+            # company = Company.objects.get(name='example')
+            User.objects.create_user(username=username, email=email, password=password, is_active=False)
+            # user.save() 
             token = secrets.token_hex(12)
             domain = request.get_host()
+            user = User.objects.get(username=username)
             url = f'{domain}/verification/{token}/{user.id}'
 
             sender = f'Fuel Finder Accounts<tests@marlvinzw.me>'

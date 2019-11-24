@@ -5,17 +5,18 @@ from PIL import Image
 from django.contrib.auth.models import AbstractUser
 
 
-
-# INDUSTRY_CHOICES = (
-#     (, 'Ordinary Level'),
-#     (, 'Advanced Level'),
-#     (, 'Attachee'),
-#     (, 'Certificate'),
-#     (, 'Diploma'),
-#     (, 'Degree'),
-#     (, 'Masters Degree'),
-#     (, 'Ph.D.'),
-# )
+'''
+INDUSTRY_CHOICES = (
+    (, 'Ordinary Level'),
+    (, 'Advanced Level'),
+    (, 'Attachee'),
+    (, 'Certificate'),
+    (, 'Diploma'),
+    (, 'Degree'),
+    (, 'Masters Degree'),
+    (, 'Ph.D.'),
+)
+'''
 
 TYPE_CHOICES = (
     ('Buyer','BUYER'),
@@ -33,7 +34,7 @@ class Company(models.Model):
         return self.name
 
 class User(AbstractUser):
-    company = models.ForeignKey(Company, on_delete=models.DO_NOTHING, related_name='comp_name')
+    company = models.CharField(max_length=20, default='Company')
     fuel_request = models.PositiveIntegerField(default=0)
     phone_number = models.CharField(max_length=20, default='263')
     stage = models.CharField(max_length=20, default='registration')
