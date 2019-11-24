@@ -7,14 +7,15 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-class BuyerRegisterForm(UserCreationForm):
+class BuyerRegisterForm(forms.ModelForm):
     email = forms.EmailField()
     phone_number = forms.CharField()
-    username = forms.CharField()
+    first_name = forms.CharField() 
+    last_name = forms.CharField()
 
     class Meta: 
         model = User
-        fields = ['username', 'email', 'phone_number', 'password1', 'password2']
+        fields = ['email', 'phone_number', 'first_name', 'last_name']
 
 
 
@@ -25,7 +26,7 @@ class BuyerUpdateForm(forms.ModelForm):
 
     class Meta:
         model = User   
-        fields = ['username', 'email']
+        fields = ['image']
 
 class ProfileUpdateForm(forms.ModelForm):
 
