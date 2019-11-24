@@ -3,12 +3,31 @@ from django.contrib.auth.models import User
 from PIL import Image
 
 
+INDUSTRY_CHOICES = (
+    (, 'Ordinary Level'),
+    (, 'Advanced Level'),
+    (, 'Attachee'),
+    (, 'Certificate'),
+    (, 'Diploma'),
+    (, 'Degree'),
+    (, 'Masters Degree'),
+    (, 'Ph.D.'),
+)
+
+TYPE_CHOICES = (
+    ('Buyer','BUYER'),
+    ('Seller', 'SELLER'),
+)
+
 class Company(models.Model):
     name = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
     industry = models.CharField(max_length=255)
     is_verified = models.BooleanField(default=False)
-    company_type = models.CharField(max_length=255)
+    company_type = models.CharField(max_length=255, choices=TYPE_CHOICES)
+
+    def __str__(self):
+        return self.name
 
 
 class FuelRequest(models.Model):
