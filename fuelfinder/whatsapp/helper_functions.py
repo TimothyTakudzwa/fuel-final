@@ -1,8 +1,10 @@
 from django.shortcuts import render
 import requests
 from .constants import *
+from buyer.views import token_is_send
 from supplier.models import FuelRequest, Offer, Transaction
 from finder.reccomend import recommend
+from buyer.models import User
 
 
 def send_message(phone_number, message):
@@ -16,14 +18,14 @@ def send_message(phone_number, message):
     return r.status_code
 
 
-def bot_action(user, message):
+def bot_action(request, user, message):
     if message.lower() == 'menu' and user.stage != 'registration':
         user.position = 1
         user.stage = 'requesting'
         user.save()
         return requests_handler(user, message)
     if user.stage == 'registration':
-        response_message = registration_handler(user, message)
+        response_message = registration_handler(request, user, message)
     elif user.stage == 'requesting':
         response_message = requests_handler(user, message)
     elif user.stage == 'transacting':
@@ -33,23 +35,37 @@ def bot_action(user, message):
     return response_message
 
 
-def registration_handler(user, message):
-    if user.position == 0:
-        full_name = user.name.first_name.capitalize() + " " + user.name.last_name.capitalize()
-        response_message = greetings_message.format(full_name)
-        user.position = 1
+def registration_handler(request, user, message):
+    if user.position == 1: 
+       response_message = "Hie this is our first time talking what is your name"
+       user.position = 2
+       user.save()
+    elif user.position == 2: 
+        response_message = "Can i have your company email address.\n*NB* using your personal email address gets you lower precedence in the fuel finding process"
+        try:
+            user.first_name, user.last_name = message.split(' ', 2)
+        except:
+            user.first_name = message 
+        user.position = 3
         user.save()
-        print(response_message)
-    elif user.position == 1:
-        if message.lower() == 'yes':
-            response_message = successful_integration
-            user.stage = 'requesting'
-            user.position = 1
-            user.save()
+    elif user.position == 3:
+        response_message = "What kind of user are your.\n\n1. Fuel Supplier\n2. Fuel Buyer"
+        user.email = message
+        user.position = 4 
+        user.save()
+    elif user.position == 4:
+        response_message = "We have sent a verification email to your supplied email, Please visit the link to complete the registration process"
+        user.user_type = 'Supplier' if message == "1" else "Buyer"
+        username =initial_username = user.first_name[0] + user.last_name 
+        i = 0
+        while User.object.filter(username=username.lower()).exists():
+            username = initial_username + str(i)
+        user.position = 4 
+        user.save()
+        if token_is_send(request, user):
+            response_message = "We have sent a verification email to your supplied email, Please visit the link to complete the registration process"
         else:
-            response_message = "Unfortunately you will have to contact your admin to make changes, but for the time being we will block this account"
-            user.is_active = True
-            user.save()
+            response_message = "We have failed to register you to the platform"
     return response_message
 
 
