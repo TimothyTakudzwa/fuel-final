@@ -14,7 +14,7 @@ from .forms import PasswordChange, RegistrationForm, RegistrationProfileForm, \
     RegistrationEmailForm, UserUpdateForm, ProfilePictureUpdateForm, ProfileUpdateForm, FuelRequestForm
 from .models import Profile, FuelUpdate, FuelRequest, Transaction, Profile, TokenAuthentication
 from django.contrib.auth import get_user_model
-
+from buyer.forms import BuyerUpdateForm
 User = get_user_model()
 
 # today's date
@@ -66,12 +66,9 @@ def register(request):
 
 
 def verification(request, token, user_id):
-    context = {
-        'title': 'Fuel Finder | Verification',
-    }
+
     check = User.objects.filter(id=user_id)
     print("here l am ")
-    
     if check.exists():
         user = User.objects.get(id=user_id)
         print(user)
@@ -81,9 +78,19 @@ def verification(request, token, user_id):
         print(result)
         if result == True:
             print("tapindawo")
-            user.is_active = True
-            user.save()
-            messages.success(request, f'Welcome {user.username}, your account is now verified')
+            #user.is_active = True
+            #user.save()
+            if request.method == 'POST':
+                form = BuyerUpdateForm(request.POST)
+                if form.is_valid():
+                    form.save()
+                username = form.cleaned_data.get('username')
+                messages.success(request, f'Account created for {username}')
+                return redirect('buyer-login')
+            else:
+                print("pano ndasvika")
+                form = BuyerUpdateForm
+            messages.success(request, f'Email verification successs, Fill in the deatails to complete registration')
 
         else:
             messages.warning(request, 'Wrong verification token')
@@ -91,7 +98,10 @@ def verification(request, token, user_id):
     else:
         messages.warning(request, 'Wrong verification id')
         return redirect('login')
-    return render(request, 'supplier/accounts/verification.html', context=context)
+    context = {
+        'title': 'Fuel Finder | Verification',
+    }
+    return render(request, 'supplier/accounts/verification.html', {'form': form})
 
 
 def sign_in(request):
@@ -113,7 +123,7 @@ def sign_in(request):
             messages.warning(request, 'Incorrect username or password')
             return redirect('login')
 
-    return render(request, 'supplier/accounts/login.html', context=context)
+    return render(request, 'supplier/accounts/login.html', context=context) 
 
 
 @login_required()

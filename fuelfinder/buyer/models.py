@@ -41,6 +41,7 @@ class User(AbstractUser):
     position = models.IntegerField(default=0)
     user_type = models.CharField(max_length=20, default='')
     image = models.ImageField(default='default.png', upload_to='buyer_profile_pics')
+    
 
     def __str__(self):
         return f' {self.phone_number}'
