@@ -23,6 +23,13 @@ OPTIONS= [
 ('SUPPLIER', 'supplier'),
 ]
 
+
+class SupplierUserForm(forms.Form):
+    company = forms.CharField()
+    phone_number = forms.CharField()
+    supplier_role = forms.CharField()
+
+
     
 class BuyerUpdateForm(UserCreationForm):
     company_id = forms.CharField(label='Company', widget=forms.Select(choices=COMPANY_CHOICES))
