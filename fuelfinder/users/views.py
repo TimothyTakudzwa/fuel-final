@@ -81,7 +81,7 @@ def supplier_user_create(request, sid):
             user.last_name = form.cleaned_data['last_name']
             user.first_name = form.cleaned_data['first_name']
             user.save()   
-            contact = SupplierContact.objects.create(user=user, cellphone=cellphone, telephone=telephone, supplier_profile=supplier)
+            contact = SupplierContact.objects.create(user=user, cellphone=cellphone, telephone=telephone, profile=supplier)
 
             token = secrets.token_hex(12)
             domain = request.get_host()
