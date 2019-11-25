@@ -52,8 +52,7 @@
                                </div>
                             </td>
                             
-                        <!--<td><a href="{% url 'users:supplier_user_create' supplier.id %}" class="btn btn-primary">View Supplier</a></td>-->
-                        <!-- Supplier Details Modal -->
+                       
                         <div class="modal fade" id="{{supplier.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                 <div class="modal-content">
@@ -177,7 +176,7 @@
                                 <div class="modal-body">  
                         
                                     {% load crispy_forms_tags %}
-                                    <form action="{% url 'users:supplier_user_create' 2 %}" method="POST">
+                                    <form action="{% url 'users:suppliers_list' %}" method="POST">
                                     {{ form|crispy }}
                                     {% csrf_token %}
                                     <button class="btn btn-primary" type="submit">Add User Profile</button>
