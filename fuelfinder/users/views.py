@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 
-
+from django.shortcuts import Http404
 from supplier.models import *
 from supplier.forms import *
 from buyer.models import *
@@ -11,19 +11,38 @@ from django.core.mail import BadHeaderError, EmailMultiAlternatives
 from datetime import datetime
 from django.contrib import messages
 from buyer.models import User, Company
+from django.contrib.auth import authenticate
 
 def index(request):
     return render(request, 'users/index.html')
 
 
 def suppliers_list(request):
-    suppliers = User.objects.filter(supplier_role='Staff')
-    edit_form = ProfileEditForm()
-    delete_form = ActionForm()
-    return render(request, 'users/suppliers_list.html', {'suppliers': suppliers, 'edit_form': edit_form, 'delete_form': delete_form})
+    #user = authenticate(username='john', password='secret')
+    admin_ = User.objects.filter(username='Marshy').first()
+    print(admin_.company)
+    suppliers = User.objects.filter(company=admin_.company, supplier_role='Staff')
+    form = BuyerContactForm(request.POST)
+    if request.method == 'POST':
+        user_count = User.objects.filter(company=admin_.company).count()
+        if user_count > 10:
+            raise Http404("Your organisation has reached the maximum number of users, delete some ")
+
+        if form.is_valid():
+            company = form.cleaned_data['company']
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            phone_number = form.cleaned_data['cellphone']
+
+            user = User.objects.create_user(first_name, email, password)
+            user.last_name = form.cleaned_data['last_name']
+            user.first_name = form.cleaned_data['first_name']
+            user.save()   
+    
+    return render(request, 'users/suppliers_list.html', {'suppliers': suppliers, 'form': form})
 
 def suppliers_delete(request, sid):
-    supplier = Profile.objects.filter(id=sid).first()
+    supplier = User.objects.filter(id=sid).first()
     if request.method == 'POST':
         supplier.delete()    
 
