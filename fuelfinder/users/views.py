@@ -51,8 +51,8 @@ def supplier_user_delete(request,cid,sid):
 
 # Begining Of Supplier Management
 
-def supplier_user_create(request, sid):
-    supplier = get_object_or_404(Profile, id=sid) 
+def supplier_user_create(request,id):
+    supplier = get_object_or_404(Profile, id=1) 
     staff = SupplierContact.objects.filter(supplier_profile=supplier)
     count = staff.count()
     delete_form = ActionForm()
