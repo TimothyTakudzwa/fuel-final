@@ -17,7 +17,7 @@ def index(request):
 
 
 def suppliers_list(request):
-    suppliers = User.objects.filter(user_type='Seller')
+    suppliers = User.objects.filter(supplier_role='Staff')
     edit_form = ProfileEditForm()
     delete_form = ActionForm()
     return render(request, 'users/suppliers_list.html', {'suppliers': suppliers, 'edit_form': edit_form, 'delete_form': delete_form})
