@@ -53,12 +53,12 @@ def supplier_user_delete(request,cid,sid):
 
 def supplier_user_create(request, sid):
     supplier = get_object_or_404(Profile, id=sid) 
-    staff = SupplierContact.objects.filter(profile=supplier)
+    staff = SupplierContact.objects.filter(supplier_profile=supplier)
     count = staff.count()
     delete_form = ActionForm()
     edit_form = ''
     if request.method == 'POST':
-        user_count = SupplierContact.objects.filter(profile=supplier).count()
+        user_count = SupplierContact.objects.filter(supplier_profile=supplier).count()
         if user_count > 5:
             raise Http404("Organisations has 5 users, delete some ")
         form = SupplierContactForm(request.POST)
