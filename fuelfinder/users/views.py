@@ -45,7 +45,7 @@ def suppliers_list(request):
     #user = authenticate(username='john', password='secret')
     #admin_ = User.objects.filter(company_id='Marshy').first()
     #print(admin_.company)
-    #suppliers = User.objects.all()
+    suppliers = User.objects.all()
     
     if request.method == 'POST':
         form = SupplierContactForm(request.POST)
@@ -67,7 +67,7 @@ def suppliers_list(request):
     else:
         form = SupplierContactForm()           
     
-    return render(request, 'users/suppliers_list.html', {'form': form})
+    return render(request, 'users/suppliers_list.html', {'form': form, 'suppliers': suppliers})
 
 def suppliers_delete(request, sid):
     supplier = User.objects.filter(id=sid).first()
