@@ -6,7 +6,8 @@ from buyer.models import Profile, FuelRequest
 
 
 class ServiceStation(models.Model):
-    
+    pass
+
 
 
 
