@@ -34,8 +34,9 @@ def suppliers_list(request):
     admin_ = User.objects.filter(username='Marshy').first()
     print(admin_.company)
     suppliers = User.objects.filter(company=admin_.company, supplier_role='Staff')
-    form = SupplierContactForm(request.POST)
+    
     if request.method == 'POST':
+        form = SupplierContactForm(request.POST)
         print('--------------------tapinda---------------')
         user_count = User.objects.filter(company=admin_.company).count()
         print(user_count)
@@ -50,7 +51,9 @@ def suppliers_list(request):
             phone_number = form.cleaned_data['cellphone']
             company = form.cleaned_data['company']
             print(type(User))
-            User.objects.create(username=username,email=email,password=password,company=company,phone_number=phone_number)   
+            User.objects.create(username=username,email=email,password=password,company=company,phone_number=phone_number)
+    else:
+        form = SupplierContactForm()           
     
     return render(request, 'users/suppliers_list.html', {'suppliers': suppliers, 'form': form})
 

@@ -62,7 +62,7 @@
                                     </div>
                                     <div class="modal-body">
                                             {% load crispy_forms_tags %}
-                                            <form action="{% url 'supplier:offer'%}" method="POST">
+                                            <form action="{% url 'supplier:supplier' request.id %}" method="POST">
                                                 {% csrf_token %}
                                                 {{ make_offer_form|crispy}}
                                             <button class="btn btn-primary" type="submit">Confirm</button>
