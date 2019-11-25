@@ -48,6 +48,9 @@ class User(AbstractUser):
     image = models.ImageField(default='default.png', upload_to='buyer_profile_pics')
     supplier_role = models.CharField(max_length=70, choices=SUPPLIER_CHOICES)
 
+    def __str__(self):
+        return f' {self.phone_number}'
+
 
 class FuelRequest(models.Model):
     name = models.ForeignKey(User, on_delete=models.DO_NOTHING)

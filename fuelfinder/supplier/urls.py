@@ -7,5 +7,6 @@ from . import views
 
 urlpatterns = [
     path('fuel_update/', views.fuel_update, name='fuel_update'),
+    path('offer/', views.offer, name='offer'),
 
 ]

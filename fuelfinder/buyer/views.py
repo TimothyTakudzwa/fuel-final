@@ -10,38 +10,40 @@ from django.core.mail import BadHeaderError, EmailMultiAlternatives
 from datetime import datetime
 
 
+#def token_gen(request):
+
 # Create your views here.
 def register(request):
     if request.method == 'POST':
         form = BuyerRegisterForm(request.POST)
         if form.is_valid():
-            username = form.cleaned_data['username']
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
             email = form.cleaned_data['email']
-            password = form.cleaned_data['password1']
             phone_number = form.cleaned_data['phone_number']
             # Company.objects.create(name='example', address='123', industry='test', company_type='BUYER')
             # company = Company.objects.get(name='example')
-            User.objects.create_user(username=username, email=email, password=password, is_active=False)
+            User.objects.create(email=email, phone_number=phone_number, first_name=first_name, last_name=last_name, is_active=False)
             # user.save() 
             token = secrets.token_hex(12)
             domain = request.get_host()
-            user = User.objects.get(username=username)
+            user = User.objects.get(email=email)
             url = f'{domain}/verification/{token}/{user.id}'
 
             sender = f'Fuel Finder Accounts<tests@marlvinzw.me>'
             subject = 'User Registration'
-            message = f"Dear {username} , please complete signup here : \n {url} \n. Your password is {password}"
+            message = f"Dear {first_name} {last_name} , please complete signup here : \n {url} \n."
             
             try:
                 msg = EmailMultiAlternatives(subject, message, sender, [f'{email}'])
                 msg.send()
 
-                messages.success(request, f"{username} Registered Successfully")
-                return redirect('users:suppliers_list')
+                messages.success(request, f"{first_name} {last_name} Registered Successfully")
+                return redirect('users:supplier_user_create', sid=user.id)
 
             except BadHeaderError:
                 messages.warning(request, f"Oops , Something Wen't Wrong, Please Try Again")
-                return redirect('users:suppliers_list')
+                return redirect('users:supplier_user_create', sid=user.id)
             #contact.save()
             messages.success(request, ('Your profile was successfully updated!'))
             return redirect('users:supplier_user_create', sid=user.id)

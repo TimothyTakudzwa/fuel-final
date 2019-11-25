@@ -9,7 +9,7 @@
         <hr class="my-2">
     </div>
     <p style="text-align:center">You uploaded a capacity of <strong>1 000</strong> litres today
-        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add_quantity">Upload Quantity</button> </p>
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add_fuel">Upload Quantity</button> </p>
 <div class="row">
     <div class="col-md-12">
         <div class="card mt-5" style="background-color:white">
@@ -45,40 +45,13 @@
                                 <td>
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-danger btn-sm " data-toggle="modal" data-target="#accept_{{request.id}}">Accept</button>
-                                        <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#add_{{offer.id}}">Offer</button>
+                                        <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#add_offer_{{request.id}}">Offer</button>
                                     </div>
                                 </td>
-                                <!-- Request Accept Modal -->
-                        <div class="modal fade" id="accept_{{request.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Accept</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                    </div>
-                                    <div class="modal-body">
-                                            {% load crispy_forms_tags %}
-                                            <form action="#" method="POST">
-                                            {{ delete_form }}
-                                            {% csrf_token %}
-                                            <p>Are You Sure You Want To Accept</p>
-                                                <div class="btn-group">
-                                                    <button class="btn btn-danger" type="submit">Yes</button>
-                                                    <button class="btn btn-warning" data-dismiss="modal">No</button>
-                                                </div>
-                                            </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
+                            </tr>
                             
-                            <!-- Make offer Modal -->
-                        <div class="modal fade" id="add_{{offer.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <!-- Make offer Modal -->
+                        <div class="modal fade" id="add_offer_{{request.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -89,10 +62,10 @@
                                     </div>
                                     <div class="modal-body">
                                             {% load crispy_forms_tags %}
-                                            <form action="#" method="POST">
-                                            {{ edit_form|crispy}}
-                                            {% csrf_token %}
-                                            <button class="btn btn-primary" type="submit">Save Changes</button>
+                                            <form action="{% url 'supplier:offer'%}" method="POST">
+                                                {% csrf_token %}
+                                                {{ make_offer_form|crispy}}
+                                            <button class="btn btn-primary" type="submit">Confirm</button>
                                             </form>
                                     </div>
                                     <div class="modal-footer">
@@ -101,7 +74,6 @@
                                 </div>
                                 </div>
                             </div>
-                            </tr>
                             {%endfor%}
                         </tbody>
                     </table>
@@ -111,28 +83,32 @@
     </div>
 </div>
 
-<!-- Capacity Modal -->
-<div class="modal fade" id="add_quantity" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+<!--update fuel-->
+<div class="modal fade" id="add_fuel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-        <div class="modal-content">
+          <div class="modal-content">
             <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Upload</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <h5 class="modal-title" id="exampleModalLabel">Update today's capacity</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
-            </button>
+              </button>
             </div>
-            <div class="modal-body">
-                    {% load crispy_forms_tags %}
-                    <form action="{% url 'supplier:fuel_update' %}" method="POST">
-                        {% csrf_token %}
-                        {{ form|crispy}}
-                    <button class="btn btn-primary" type="submit">Save Changes</button>
-                    </form>
+            <div class="modal-body">  
+    
+                {% load crispy_forms_tags %}
+                <form action="{% url 'supplier:fuel_update' %}" method="POST">
+                    {% csrf_token %}
+                    {{fuel_update_form|crispy}}
+                <button class="btn btn-primary" type="submit">Update</button>
+                </form>
             </div>
             <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              
             </div>
+          </div>
         </div>
-        </div>
-    </div>
+      </div>
+    
 {%endblock%}
