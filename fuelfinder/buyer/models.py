@@ -5,6 +5,8 @@ from PIL import Image
 from django.contrib.auth.models import AbstractUser
 
 
+
+
 class Company(models.Model):
     name = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
