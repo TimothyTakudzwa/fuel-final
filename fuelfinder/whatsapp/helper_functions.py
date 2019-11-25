@@ -108,9 +108,6 @@ def requests_handler(user, message):
             offer = Offer.objects.filter(id=response).first()
             response_message = suggested_choice.format(offer.supplier.company.name, offer.request.fuel_type, offer.quantity, offer.price, offer.id)
         
-        # user.position = 1
-        # user.stage = 'transacting'
-        # user.save()
         response_message = suggested_choice
     return response_message
 

@@ -26,7 +26,7 @@ class User(AbstractUser):
     supplier_role = models.CharField(max_length=70, choices=SUPPLIER_CHOICES)
 
     def __str__(self):
-        return f' {self.phone_number}'
+        return f' {self.username} {self.username} {self.username}'
 
 
 class FuelRequest(models.Model):
