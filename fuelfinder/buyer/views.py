@@ -24,7 +24,7 @@ def register(request):
             # Company.objects.create(name='example', address='123', industry='test', company_type='BUYER')
             # company = Company.objects.get(name='example')
             username = first_name[0] + last_name
-            User.objects.create(email=email, username=username,  phone_number=phone_number, first_name=first_name, last_name=last_name, is_active=False)
+            User.objects.create(email=email, username=username.lower(),  phone_number=phone_number, first_name=first_name, last_name=last_name, is_active=False)
             # user.save() 
             token = secrets.token_hex(12)
             domain = request.get_host()
@@ -37,7 +37,7 @@ def register(request):
             
             try:
                 msg = EmailMultiAlternatives(subject, message, sender, [f'{email}'])
-                msg.send()
+                print(msg.send())
 
                 messages.success(request, f"{first_name} {last_name} Registered Successfully")
                 return redirect('users:supplier_user_create', sid=user.id)
