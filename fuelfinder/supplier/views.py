@@ -13,6 +13,9 @@ import time
 from .forms import PasswordChange, RegistrationForm, RegistrationProfileForm, \
     RegistrationEmailForm, UserUpdateForm, ProfilePictureUpdateForm, ProfileUpdateForm, FuelRequestForm
 from .models import Profile, FuelUpdate, FuelRequest, Transaction, Profile, TokenAuthentication
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 # today's date
 today = date.today()
@@ -188,21 +191,37 @@ def rate_supplier(request):
 
 @login_required
 def fuel_update(request):
+    context ={
+        # 'form':FuelUpdateForm()
+    }
     if request.method == 'POST':
-        form = FuelUpdateForm(request.POST)
-        if form.is_valid:
-            closing_time = time.strftime("%H:%M:%S")
-            max_amount = request.POST.get('max_amount')
-            min_amount = request.POST.get('min_amount')
-            deliver = request.POST.get('deliver')
-            payment_method = request.POST.get('payment_method')
-            supplier = Profile.objects.get(name=request.user)
-            FuelUpdate.objects.create(closing_time=closing_time, max_amount=max_amount, min_amount=min_amount, deliver=deliver, payment_method=payment_method)
-            message.success(request, 'Capacity updated successfully')
-            return redirect('fuel-request')
-        else:
-            message.warning(request, 'Oops something went wrong!')
-            return redirect('fuel-request')
+        closing_time = time.strftime("%H:%M:%S")
+        max_amount = request.POST.get('max_amount')
+        min_amount = request.POST.get('min_amount')
+        deliver = request.POST.get('deliver')
+        payment_method = request.POST.get('payment_method')
+        supplier = Profile.objects.get(name=request.user)
+        supplier_id = request.user.id
+        FuelUpdate.objects.create(supplier_id=supplier_id, deliver=False, closing_time=closing_time, max_amount=max_amount, min_amount=min_amount, payment_method=payment_method)
+        message.success(request, 'Capacity updated successfully')
+        return redirect('fuel-request')
 
-    return render(request, 'supplier/accounts/ratings.html', {'form':form})
+    return render(request, 'supplier/accounts/ratings.html', context=context)
+
+
+def offer(request):
+    if request.method == "POST":
+        price = request.POST.get('price')
+        quantity = request.POST.get('quantity')
+        submitted_id = FuelRequest.objects.get('id')
+        request = FuelRequest.objects.get(name_id=submitted_id)
+        supplier = SupplierProfile.objects.get(name=request.user)
+
+        Offer.objects.create(price=price, quantity=quantity)
+
+        messages.success(request, 'Offer uploaded successfully')
+        return redirect('fuel-request')
+    else:
+        message.warning(request, 'Oops something went wrong while posting your offer')
+    return render(request, 'supplier/accounts/fuel_request.html')
 
