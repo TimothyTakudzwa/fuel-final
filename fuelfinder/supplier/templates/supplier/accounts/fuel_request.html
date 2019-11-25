@@ -4,10 +4,11 @@
 {{title}}
 {% endblock %}
 {% block body %}
-<div class="jumbotron" style="padding: unset; height: fit-content;">
+<!--<div class="jumbotron" style="padding: unset; height: fit-content;">
         <h1 class="display-3">Supplier Dashboard</h1>
         <hr class="my-2">
-    </div>
+    </div>-->
+    <div class="container">
     <p style="text-align:center">You uploaded a capacity of <strong>1 000</strong> litres today
         <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add_fuel">Upload Quantity</button> </p>
 <div class="row">
@@ -41,7 +42,7 @@
                                 <td>{{ request.fuel_type }}</td>
                                 <td>{{ request.payment_method }}</td>
                                 <td>{{ request.delivery_method }}</td>
-                                <td>dummy</td>
+                                <td>None</td>
                                 <td>
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-danger btn-sm " data-toggle="modal" data-target="#accept_{{request.id}}">Accept</button>
@@ -110,5 +111,6 @@
           </div>
         </div>
       </div>
+    </div>
     
 {%endblock%}

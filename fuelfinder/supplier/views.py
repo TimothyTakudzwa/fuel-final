@@ -12,7 +12,7 @@ import time
 
 from .forms import PasswordChange, RegistrationForm, RegistrationProfileForm, \
     RegistrationEmailForm, UserUpdateForm, ProfilePictureUpdateForm, ProfileUpdateForm, FuelRequestForm
-from .models import Profile, FuelUpdate, FuelRequest, Transaction, Profile, TokenAuthentication
+from .models import Profile, FuelUpdate, FuelRequest, Transaction, Profile, TokenAuthentication, Offer
 from django.contrib.auth import get_user_model
 from buyer.forms import BuyerUpdateForm
 User = get_user_model()
@@ -220,16 +220,12 @@ def fuel_update(request):
 
 
 def offer(request, id):
-    print(id)
     if request.method == "POST":
         price = request.POST.get('price')
         quantity = request.POST.get('quantity')
-        #submitted_id = FuelRequest.objects.filter(id=id)
-        requeststo = FuelRequest.objects.get(name_id=id)
-        print(requeststo)
-        supplier = User.objects.get(username=request.user)
+        fuel_request = FuelRequest.objects.get(id=id)
 
-        Offer.objects.create(price=price, quantity=quantity)
+        Offer.objects.create(price=price, quantity=quantity, supplier=request.user, request=fuel_request)
 
         messages.success(request, 'Offer uploaded successfully')
         return redirect('fuel-request')
