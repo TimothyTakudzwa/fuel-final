@@ -18,17 +18,28 @@ class Company(models.Model):
         return self.name
 
 class User(AbstractUser):
-    company = models.CharField(max_length=20, default='Company')
+    company_id = models.CharField(max_length=100, default='Company')
     fuel_request = models.PositiveIntegerField(default=0)
     phone_number = models.CharField(max_length=20, default='263')
     stage = models.CharField(max_length=20, default='registration')
+    company_position = models.CharField(max_length=100, default='')
     position = models.IntegerField(default=0)
-    user_type = models.CharField(max_length=20, default='', choices=TYPE_CHOICES)
+    user_type = models.CharField(max_length=20, default='')
     image = models.ImageField(default='default.png', upload_to='buyer_profile_pics')
     supplier_role = models.CharField(max_length=70, choices=SUPPLIER_CHOICES)
 
     def __str__(self):
         return f' {self.phone_number}'
+    
+    def save(self, *args, **kwargs):
+        super(User, self).save(*args, **kwargs)
+
+        img = Image.open(self.image.path)
+
+        if img.height > 300 or img.width > 300:
+            output_size = (300,300)
+            img.thumbnail(output_size)
+            img.save(self.image.path) 
 
 
 class FuelRequest(models.Model):
