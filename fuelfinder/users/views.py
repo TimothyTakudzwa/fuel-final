@@ -26,6 +26,8 @@ def supplier_user_edit(request, cid):
         supplier.user_type = request.POST['user_type']
         supplier.supplier_role = request.POST['supplier_role']
         supplier.save()
+        messages.success(request, 'Your Changes Have Been Saved')
+
 
         
 
