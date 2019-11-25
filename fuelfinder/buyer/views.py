@@ -23,7 +23,8 @@ def register(request):
             phone_number = form.cleaned_data['phone_number']
             # Company.objects.create(name='example', address='123', industry='test', company_type='BUYER')
             # company = Company.objects.get(name='example')
-            User.objects.create(email=email, phone_number=phone_number, first_name=first_name, last_name=last_name, is_active=False)
+            username = first_name[0] + last_name
+            User.objects.create(email=email, username=username,  phone_number=phone_number, first_name=first_name, last_name=last_name, is_active=False)
             # user.save() 
             token = secrets.token_hex(12)
             domain = request.get_host()

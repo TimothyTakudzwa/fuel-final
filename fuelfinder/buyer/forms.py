@@ -17,16 +17,22 @@ class BuyerRegisterForm(forms.ModelForm):
         model = User
         fields = ['email', 'phone_number', 'first_name', 'last_name']
 
+OPTIONS= [
+('BUYER', 'Buyer'),
+('SUPPLIER', 'supplier'),
+]
 
-
-
-class BuyerUpdateForm(forms.ModelForm):
-    email = forms.EmailField()
+    
+class BuyerUpdateForm(UserCreationForm):
+    username = forms.CharField()
+    user_type = forms.CharField(label='User Type', widget=forms.Select(choices=OPTIONS))
+    position = forms.CharField()
+    
 
 
     class Meta:
         model = User   
-        fields = ['image']
+        fields = ['image', 'username','user_type', 'position','password1', 'password2']
 
 class ProfileUpdateForm(forms.ModelForm):
 
