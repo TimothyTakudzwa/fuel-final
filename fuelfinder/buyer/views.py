@@ -36,8 +36,9 @@ def register(request):
             message = f"Dear {first_name} {last_name} , please complete signup here : \n {url} \n."
             
             try:
+                print(message)
                 msg = EmailMultiAlternatives(subject, message, sender, [f'{email}'])
-                print(msg.send())
+                msg.send()
 
                 messages.success(request, f"{first_name} {last_name} Registered Successfully")
                 return redirect('users:supplier_user_create', sid=user.id)
