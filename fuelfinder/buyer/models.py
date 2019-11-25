@@ -22,10 +22,11 @@ class User(AbstractUser):
     fuel_request = models.PositiveIntegerField(default=0)
     phone_number = models.CharField(max_length=20, default='263')
     stage = models.CharField(max_length=20, default='registration')
+    company_position = models.CharField(max_length=200, default='registration')
     position = models.IntegerField(default=0)
-    user_type = models.CharField(max_length=20, default='', choices=TYPE_CHOICES)
+    user_type = models.CharField(max_length=20, default='')
     image = models.ImageField(default='default.png', upload_to='buyer_profile_pics')
-    supplier_role = models.CharField(max_length=70, choices=SUPPLIER_CHOICES)
+    supplier_role = models.CharField(max_length=70)
 
     def __str__(self):
         return f' {self.username} {self.username} {self.username}'
