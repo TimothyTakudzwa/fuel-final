@@ -21,21 +21,34 @@ def supplier_user_edit(request, cid):
     supplier = User.objects.filter(id=cid).first()
 
     if request.method == "POST":
-        supplier.company = request['form'].company
-        supplier.phone_number = request['form'].phone_number
-        supplier.user_type = request['form'].user_type
-        supplier.supplier_role = request['form'].supplier_role
+        supplier.company = request.POST['company']
+        supplier.phone_number = request.POST['phone_number']
+        supplier.user_type = request.POST['user_type']
+        supplier.supplier_role = request.POST['supplier_role']
         supplier.save()
+        messages.success(request, 'Your Changes Have Been Saved')
+
+
+
+def stations(request):
+    #user = authenticate(username='john', password='secret')
+    #admin_ = User.objects.filter(company_id='Marshy').first()
+    # print(admin_.company)
+    stations = ServiceStation.objects.all()
+
+    return render(request, 'users/service_stations.html', {'stations': stations})    
+
 
         
 
 def suppliers_list(request):
     #user = authenticate(username='john', password='secret')
-    admin_ = User.objects.filter(username='Marshy').first()
-    print(admin_.company)
-    suppliers = User.objects.filter(company=admin_.company, supplier_role='Staff')
-    form = SupplierContactForm(request.POST)
+    #admin_ = User.objects.filter(company_id='Marshy').first()
+    #print(admin_.company)
+    suppliers = User.objects.all()
+    
     if request.method == 'POST':
+        form = SupplierContactForm(request.POST)
         print('--------------------tapinda---------------')
         user_count = User.objects.filter(company=admin_.company).count()
         print(user_count)
@@ -50,9 +63,11 @@ def suppliers_list(request):
             phone_number = form.cleaned_data['cellphone']
             company = form.cleaned_data['company']
             print(type(User))
-            User.objects.create(username=username,email=email,password=password,company=company,phone_number=phone_number)   
+            User.objects.create(username=username,email=email,password=password,company=company,phone_number=phone_number)
+    else:
+        form = SupplierContactForm()           
     
-    return render(request, 'users/suppliers_list.html', {'suppliers': suppliers, 'form': form})
+    return render(request, 'users/suppliers_list.html', {'form': form, 'suppliers': suppliers})
 
 def suppliers_delete(request, sid):
     supplier = User.objects.filter(id=sid).first()

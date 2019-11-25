@@ -5,7 +5,8 @@ from supplier.models import *
 
 from django.db import models
 # from django.contrib.auth.models import User
-from fuelfinder.settings import AUTH_USER_MODEL as User
+#from fuelfinder.settings import AUTH_USER_MODEL as User
+from buyer.models import User
 from django.contrib import messages
 
 class SupplierContact(models.Model):

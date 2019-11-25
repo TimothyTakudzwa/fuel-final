@@ -3,6 +3,22 @@ from PIL import Image
 from buyer.models import User, FuelRequest
 
 
+class ServiceStation(models.Model):
+    company = models.ForeignKey(Company,on_delete=models.CASCADE)
+    location = models.CharField(max_length=50, help_text='Harare, Livingstone Street')
+    capacity = models.PositiveIntegerField(default=0)
+    has_fuel = models.BooleanField()
+    stock = models.FloatField(help_text='Volume In Litres')
+
+    def __str__(self):
+        return f"{self.company} : {self.location}"
+
+    def get_capacity(self):
+        return self.capacity
+
+    def fuel_available(self):
+        return self.has_fuel        
+
 
 
 
