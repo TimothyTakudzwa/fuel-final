@@ -8,9 +8,26 @@ from buyer.models import User, Company
 import secrets
 from django.core.mail import BadHeaderError, EmailMultiAlternatives
 from datetime import datetime
+from .constants import sender, subject
 
 
-#def token_gen(request):
+def token_is_send(request, user):
+    token = secrets.token_hex(12)
+    domain = request.get_host()            
+    url = f'{domain}/verification/{token}/{user.id}'
+    message = f"Dear {user.first_name}  {user.last_name}, please complete signup here : \n {url} \n. "            
+    try:
+        print(message)
+        msg = EmailMultiAlternatives(subject, message, sender, [f'{user.email}'])
+        msg.send()
+
+        messages.success(request, f"{user.first_name}  {user.last_name} Registered Successfully")
+        return True
+    except BadHeaderError:
+        messages.warning(request, f"Oops , Something Wen't Wrong, Please Try Again")
+        return False              
+    messages.success(request, ('Your profile was successfully updated!'))
+    return redirect('users:supplier_user_create', sid=user.id)
 
 # Create your views here.
 def register(request):
@@ -21,32 +38,19 @@ def register(request):
             last_name = form.cleaned_data['last_name']
             email = form.cleaned_data['email']
             phone_number = form.cleaned_data['phone_number']
-            # Company.objects.create(name='example', address='123', industry='test', company_type='BUYER')
-            # company = Company.objects.get(name='example')
-            User.objects.create(email=email, phone_number=phone_number, first_name=first_name, last_name=last_name, is_active=False)
-            # user.save() 
-            token = secrets.token_hex(12)
-            domain = request.get_host()
-            user = User.objects.get(email=email)
-            url = f'{domain}/verification/{token}/{user.id}'
-
-            sender = f'Fuel Finder Accounts<tests@marlvinzw.me>'
-            subject = 'User Registration'
-            message = f"Dear {first_name} {last_name} , please complete signup here : \n {url} \n."
-            
-            try:
-                msg = EmailMultiAlternatives(subject, message, sender, [f'{email}'])
-                msg.send()
-
-                messages.success(request, f"{first_name} {last_name} Registered Successfully")
+            full_name = first_name + " " + last_name
+            i = 0
+            username = initial_username = first_name[0] + last_name
+            while  User.objects.filter(username=username.lower()).exists():
+                username = initial_username + str(i) 
+                i+=1
+            user = User.objects.create(email=email, username=username.lower(),  phone_number=phone_number, first_name=first_name, last_name=last_name, is_active=False)        
+            if token_is_send(request, user):
+                messages.success(request, f"{full_name} Registered Successfully")           
                 return redirect('users:supplier_user_create', sid=user.id)
-
-            except BadHeaderError:
+            else:
                 messages.warning(request, f"Oops , Something Wen't Wrong, Please Try Again")
                 return redirect('users:supplier_user_create', sid=user.id)
-            #contact.save()
-            messages.success(request, ('Your profile was successfully updated!'))
-            return redirect('users:supplier_user_create', sid=user.id)
         
         else:
             msg = "Error in Information Submitted"

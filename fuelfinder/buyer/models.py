@@ -1,27 +1,11 @@
 from django.db import models
 from fuelfinder.settings import AUTH_USER_MODEL as User
-# from django.contrib.auth.models import User
+from .constants import * 
 from PIL import Image
 from django.contrib.auth.models import AbstractUser
 
 
-'''
-INDUSTRY_CHOICES = (
-    (, 'Ordinary Level'),
-    (, 'Advanced Level'),
-    (, 'Attachee'),
-    (, 'Certificate'),
-    (, 'Diploma'),
-    (, 'Degree'),
-    (, 'Masters Degree'),
-    (, 'Ph.D.'),
-)
-'''
 
-TYPE_CHOICES = (
-    ('Buyer','BUYER'),
-    ('Seller', 'SELLER'),
-)
 
 class Company(models.Model):
     name = models.CharField(max_length=255)
@@ -39,8 +23,9 @@ class User(AbstractUser):
     phone_number = models.CharField(max_length=20, default='263')
     stage = models.CharField(max_length=20, default='registration')
     position = models.IntegerField(default=0)
-    user_type = models.CharField(max_length=20, default='')
+    user_type = models.CharField(max_length=20, default='', choices=TYPE_CHOICES)
     image = models.ImageField(default='default.png', upload_to='buyer_profile_pics')
+    supplier_role = models.CharField(max_length=70, choices=SUPPLIER_CHOICES)
 
     def __str__(self):
         return f' {self.phone_number}'
