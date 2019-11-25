@@ -10,13 +10,14 @@ import secrets
 from django.core.mail import BadHeaderError, EmailMultiAlternatives
 from datetime import datetime
 from django.contrib import messages
+from buyer.models import User, Company
 
 def index(request):
     return render(request, 'users/index.html')
 
 
 def suppliers_list(request):
-    suppliers = Profile.objects.all()
+    suppliers = User.objects.filter(supplier_role='Staff')
     edit_form = ProfileEditForm()
     delete_form = ActionForm()
     return render(request, 'users/suppliers_list.html', {'suppliers': suppliers, 'edit_form': edit_form, 'delete_form': delete_form})

@@ -10,7 +10,7 @@
 <div class="col-md-12">
     <div class="card" style="background-color:white">
         <div class="card-header card-header-primary">
-        <h4 class="card-title ">Supplier Profiles</h4>
+        <h4 class="card-title ">{{suppliers.company}}Staff</h4>
         </div>
     <div class="card-body">
         <div class="container-fluid">
@@ -18,23 +18,23 @@
             <table id="example" class="table table-striped table-bordered" style="width:100%">
                 <thead style="color:white; background:lightslategray">
                     <th style="color:white;">
-                        Name
+                        Companny Name
                        </th>
                        
                        <th style="color:white;">
-                          Phone 
+                          Phone Number 
                          </th>
                          <th style="color:white;">
-                           Street 
+                           Email 
                           </th>
                           <th style="color:white;"></th>
                    <tbody>
                        {% for supplier in suppliers %}
                        <tr>
-                           <td>{{supplier.name}}</td>
+                           <td>{{supplier.company}}</td>
                            
-                           <td>{{supplier.phone}}</td>
-                           <td>{{supplier.street}}</td>
+                           <td>{{supplier.phone_number}}</td>
+                           <td>{{supplier.email}}</td>
                            <td>
                                <div class="btn-group">
                                     <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#{{supplier.id}}">View Details</button>  
