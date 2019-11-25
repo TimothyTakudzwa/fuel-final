@@ -45,14 +45,16 @@ def suppliers_list(request):
 
         if form1.is_valid():
             print('--------------------tapinda---------------')
-            # = form1.cleaned_data['company']
+            username = form1.cleaned_data['username']
             email = form1.cleaned_data['email']
             password = form1.cleaned_data['password']
-            #company = form1.cleaned_data['company']
+            phone_number = form1.cleaned_data['phone_number']
+            company = form1.cleaned_data['company']
+            supplier_role = 'Staff'
+
             print(type(User))
-            user = User.objects.create(uemail=email,password=password)
-            #,company=company,phone_number=phone_number)
-            print(user)
+            User.objects.create(username=username,email=email,password=password,company=company,phone_number=phone_number,supplier_role=supplier_role)
+            messages.success(request, f"{username} Registered Successfully")
     else:
         form1 = SupplierContactForm()           
     
