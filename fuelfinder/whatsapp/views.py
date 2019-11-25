@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.contrib.auth.models import User
-from supplier.models import Profile
+from buyer.models import User
 from .helper_functions import bot_action, send_message
 from django.views.decorators.csrf import csrf_exempt
 import json 
@@ -23,15 +22,16 @@ def index(request):
     if token != 'sq0pk8hw4iclh42b':
         return HttpResponse('Unauthorized')
     else:
-        check = Profile.objects.filter(phone_number = phone_number).exists()
+        check = User.objects.filter(phone_number = phone_number).exists()
         if check:
-            user = Profile.objects.filter(phone_number=phone_number).first()
-            if user.name.is_active:
-                response_message = bot_action(user, message)                
+            user = User.objects.filter(phone_number=phone_number).first()
+            if user.is_active:
+                response_message = bot_action(request, user, message)                
             else:
                 response_message = "Your cannot use this, please create a buyer account and then add the phone number"
         else:
-            response_message = "We could not find an account associated with you"
+            user = User.objects.create(phone_number=phone_number, stage='registration', position=1)
+            response_message = bot_action(request, user, message)
 
     send_message(phone_number, response_message)
     return HttpResponse(response_message)
