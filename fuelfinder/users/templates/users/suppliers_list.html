@@ -177,7 +177,7 @@
                         
                                     {% load crispy_forms_tags %}
                                     <form action="{% url 'users:suppliers_list' %}" method="POST">
-                                    {{ form|crispy }}
+                                    {{ form1|crispy }}
                                     {% csrf_token %}
                                     <button class="btn btn-primary" type="submit">Add User Profile</button>
                                     </form>

@@ -34,7 +34,8 @@ def suppliers_list(request):
     admin_ = User.objects.filter(username='Marshy').first()
     print(admin_.company)
     suppliers = User.objects.filter(company=admin_.company, supplier_role='Staff')
-    form = SupplierContactForm(request.POST)
+    form1 = SupplierContactForm(request.POST)
+    print(type(User))
     if request.method == 'POST':
         print('--------------------tapinda---------------')
         user_count = User.objects.filter(company=admin_.company).count()
@@ -42,17 +43,17 @@ def suppliers_list(request):
         if user_count > 10:
             raise Http404("Your organisation has reached the maximum number of users, delete some ")
 
-        if form.is_valid():
-            print('--------------------tapinda---------------')
-            username = form.cleaned_data['company']
-            email = form.cleaned_data['email']
-            password = form.cleaned_data['password']
-            phone_number = form.cleaned_data['cellphone']
-            company = form.cleaned_data['company']
-            print(type(User))
-            User.objects.create(username=username,email=email,password=password,company=company,phone_number=phone_number)   
+        #if form1.is_valid():
+        print('--------------------tapinda---------------')
+        username = form1.cleaned_data['company']
+        email = form1.cleaned_data['email']
+        password = form1.cleaned_data['password']
+        phone_number = form1.cleaned_data['cellphone']
+        company = form1.cleaned_data['company']
+        print(type(User))
+        User.objects.create(username=username,email=email,password=password,company=company,phone_number=phone_number)   
     
-    return render(request, 'users/suppliers_list.html', {'suppliers': suppliers, 'form': form})
+    return render(request, 'users/suppliers_list.html', {'suppliers': suppliers, 'form1': form1})
 
 def suppliers_delete(request, sid):
     supplier = User.objects.filter(id=sid).first()
