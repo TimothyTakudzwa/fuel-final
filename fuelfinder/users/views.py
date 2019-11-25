@@ -16,9 +16,21 @@ def index(request):
     return render(request, 'users/index.html')
 
 
+def supplier_user_edit(request, cid):
+    supplier = User.objects.filter(id=cid).first()
+
+    if request.method == "POST":
+        supplier.company = request['form'].company
+        supplier.phone_number = request['form'].phone_number
+        supplier.user_type = request['form'].user_type
+        supplier.supplier_role = request['form'].supplier_role
+        supplier.save()
+
+        
+
 def suppliers_list(request):
     suppliers = User.objects.filter(supplier_role='Staff')
-    edit_form = ProfileEditForm()
+    edit_form = SupplierUserForm()
     delete_form = ActionForm()
     return render(request, 'users/suppliers_list.html', {'suppliers': suppliers, 'edit_form': edit_form, 'delete_form': delete_form})
 
