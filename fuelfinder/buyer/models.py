@@ -23,6 +23,11 @@ TYPE_CHOICES = (
     ('Seller', 'SELLER'),
 )
 
+SUPPLIER_CHOICES = (
+    ('Admin','ADMIN'),
+    ('Staff', 'STAFF'),
+)
+
 class Company(models.Model):
     name = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
@@ -41,6 +46,7 @@ class User(AbstractUser):
     position = models.IntegerField(default=0)
     user_type = models.CharField(max_length=20, default='')
     image = models.ImageField(default='default.png', upload_to='buyer_profile_pics')
+    supplier_role = models.CharField(max_length=70, choices=SUPPLIER_CHOICES)
 
     def __str__(self):
         return f' {self.phone_number}'
