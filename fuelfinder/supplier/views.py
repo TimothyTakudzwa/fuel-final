@@ -203,25 +203,27 @@ def fuel_update(request):
         supplier = Profile.objects.get(name=request.user)
         supplier_id = request.user.id
         FuelUpdate.objects.create(supplier_id=supplier_id, deliver=False, closing_time=closing_time, max_amount=max_amount, min_amount=min_amount, payment_method=payment_method)
-        message.success(request, 'Capacity updated successfully')
+        messages.success(request, 'Capacity updated successfully')
         return redirect('fuel-request')
 
     return render(request, 'supplier/accounts/ratings.html', context=context)
 
 
-def offer(request):
+def offer(request, id):
+    print(id)
     if request.method == "POST":
         price = request.POST.get('price')
         quantity = request.POST.get('quantity')
-        submitted_id = FuelRequest.objects.get('id')
-        request = FuelRequest.objects.get(name_id=submitted_id)
-        supplier = SupplierProfile.objects.get(name=request.user)
+        #submitted_id = FuelRequest.objects.filter(id=id)
+        requeststo = FuelRequest.objects.get(name_id=id)
+        print(requeststo)
+        supplier = User.objects.get(username=request.user)
 
         Offer.objects.create(price=price, quantity=quantity)
 
         messages.success(request, 'Offer uploaded successfully')
         return redirect('fuel-request')
     else:
-        message.warning(request, 'Oops something went wrong while posting your offer')
+        messages.warning(request, 'Oops something went wrong while posting your offer')
     return render(request, 'supplier/accounts/fuel_request.html')
 
