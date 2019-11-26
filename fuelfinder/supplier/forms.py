@@ -87,6 +87,11 @@ class OfferForm(forms.ModelForm):
         model = Offer
         fields = ['quantity', 'price']
 
+class EditOfferForm(forms.ModelForm):
+    class Meta:
+        model = Offer
+        fields = ['quantity', 'price']
+
 
 def fuelupdate(request):
     return {
@@ -97,4 +102,9 @@ def fuelupdate(request):
 def makeoffer(request):
     return {
         'make_offer_form': OfferForm()
+    }
+
+def editoffer(request):
+    return {
+        'edit_offer_form': EditOfferForm()
     }

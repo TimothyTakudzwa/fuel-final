@@ -192,6 +192,7 @@ def fuel_request(request):
             buyer_request.offer_id = offer.id
         else:
             buyer_request.my_offer = 0
+            buyer_request.offer_id = 0
     return render(request, 'supplier/accounts/fuel_request.html', {'requests':requests})
 
 
