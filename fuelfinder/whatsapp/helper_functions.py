@@ -38,16 +38,28 @@ def bot_action(request, user, message):
 
 
 def registration_handler(request, user, message):
-    if user.position == 1: 
-       response_message = greetings_message
-       user.position = 2
-       user.save()
-    elif user.position == 2: 
+    if user.position == 1:
+        response_message = "First before we get started can i please have you *Full Name*"
+        user.position = 2 
+        user.save()
+    if user.position == 2: 
+        full_name = user.first_name + " " + user.last_name
+        response_message = greetings_message.format(full_name)
+        try:
+            user.first_name, user.last_name = message.split(' ', 2)[0], message.split(' ', 2)[1]
+        except:
+            user.first_name = message 
+        user.position = 3    
+        user.save()
+    elif user.position == 3: 
         try: 
-            selected_option = user_types[int(message)]
-        except Exception as e:
-            return "Please select a valid option "
-        if selected_option == 
+            selected_option = user_types[int(message)-1]
+        except:
+            return "Please select a valid option\n\n" + greetings_message
+        if selected_option == 'supplier' or selected_option == 'buyer':
+            response_message = "Can i have your company email address.\n*NB* using your personal email address gets you lower precedence in the fuel finding process"
+        else:
+            response_message = "Can i please have your email address"
     elif user.position ==3 : 
         response_message = "Can i have your company email address.\n*NB* using your personal email address gets you lower precedence in the fuel finding process"
         try:

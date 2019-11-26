@@ -1,5 +1,5 @@
 greetings_message = '''
-*Hie, Welcome To Intelli Fuel Finder* 
+*Hie {0}, Welcome To Intelli Fuel Finder* 
 
 Intelli Fuel Finder is system that brings together individuals and corporates that are looking for fuel.
 You can register on the plartform as a Supplier, Individual Buyer or Corporate Buyer.
@@ -9,13 +9,13 @@ To begin the registration process please select one of the below options
 *What would you like to register as*
 1. Individual Buyer *_(200 litres and below)_* 
 2. Corporate Buyer *_(1000 litres and above)_*
-3. Bulk Supplier *_(1000 litres and above)_*
-4. Service Station Supplier *_(200 litres and below)_*
+3. Bulk Supplier *_(Any amount)_*
+
 
 Please Type the desired option to continue. 
 '''
 
-user_types=['individual_buyer', 'bulk_buyer', 'bulk_supplier', 'individual_supplier']
+user_types=['individual', 'buyer', 'supplier']
 
 successful_integration = '''
 You have succesfully integrated your Whatsapp with you company account.
