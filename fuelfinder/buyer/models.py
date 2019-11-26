@@ -41,7 +41,7 @@ class User(AbstractUser):
     supplier_role = models.CharField(max_length=70)
 
     def __str__(self):
-        return f' {self.phone_number}'
+        return f' {str(self.username)}'
     
     def save(self, *args, **kwargs):
         super(User, self).save(*args, **kwargs)

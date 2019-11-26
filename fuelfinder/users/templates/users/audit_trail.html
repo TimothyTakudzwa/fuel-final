@@ -14,7 +14,7 @@
     <div class="card" style="background-color:white">
         
         <div class="card-header card-header-primary">
-        <h4 class="card-title ">Service Stations</h4>
+        <h4 class="card-title ">ZUVA Service Stations</h4>
         </div>
     <div class="card-body">
         <div class="container-fluid">
@@ -29,6 +29,10 @@
                        <th style="color:white;">
                           User 
                          </th>
+                        
+                           <th style="color:white;">
+                            Service Station 
+                           </th>
                          <th style="color:white;">
                             Event 
                            </th>
@@ -44,6 +48,7 @@
                            <td>{{trail.date}}</td>
                            
                            <td>{{trail.user}}</td>
+                           <td>{{trail.service_station}}</td>
                            <td>{{trail.action}}</td>
                            <td>{{trail.reference}}</td>
                            <td style="width: 33%;">
@@ -67,6 +72,7 @@
                                     <div class="modal-body">
                                         <p>Date: {{trail.date}}</p>
                                         <p>User: {{trail.user}}</p>
+                                        <p>Service Station: {{trail.service_station}}</p>
                                         <p>Event: {{trail.action}}</p>
                                         <p>Refence : {{trail.reference}}</p>
                                        
