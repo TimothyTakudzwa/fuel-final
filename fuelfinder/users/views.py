@@ -6,6 +6,7 @@ from supplier.forms import *
 from buyer.models import *
 from buyer.forms import *
 from .forms import *
+from .models import AuditTrail
 import secrets
 from django.core.mail import BadHeaderError, EmailMultiAlternatives
 from datetime import datetime
@@ -31,7 +32,7 @@ def supplier_user_edit(request, cid):
 
 
 def stations(request):
-    #user = authenticate(username='john', password='secret')
+    #user = authenticate(username='', password='')
     #admin_ = User.objects.filter(company_id='Marshy').first()
     # print(admin_.company)
     stations = ServiceStation.objects.all()
@@ -40,7 +41,9 @@ def stations(request):
 
 
 def audit_trail(request):
-    return render(request, 'users/audit_trail.html', {'stations': stations})    
+    trails = AuditTrail.objects.all()
+    print(trails)
+    return render(request, 'users/audit_trail.html', {'trails': trails})    
 
         
 
@@ -71,7 +74,7 @@ def suppliers_list(request):
             print(type(User))
             User.objects.create(username=username,email=email,password=password,company_id=company,phone_number=phone_number,supplier_role=supplier_role)
             messages.success(request, f"{username} Registered Successfully")
-
+            '''
             token = secrets.token_hex(12)
             user = User.objects.get(username=username)
             TokenAuthentication.objects.create(token=token, user=user)
@@ -97,6 +100,7 @@ def suppliers_list(request):
             return redirect('users:suppliers')
             print(token)
             print("above is the token")
+            '''
     else:
         form1 = SupplierContactForm()           
     

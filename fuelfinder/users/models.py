@@ -9,6 +9,14 @@ from django.db import models
 from buyer.models import User
 from django.contrib import messages
 
+
+class AuditTrail(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now_add=True)
+    action = models.CharField(max_length=700, blank=True)
+    reference = models.CharField(max_length=300, blank=True)
+    
+
 class SupplierContact(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     supplier_profile = models.ForeignKey(Profile,on_delete=models.CASCADE)
