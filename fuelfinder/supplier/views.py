@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.core.mail import BadHeaderError, EmailMultiAlternatives
 from django.contrib import messages
 import secrets
+from users.models import AuditTrail
 
 from datetime import date
 import time
@@ -231,7 +232,11 @@ def offer(request, id):
         fuel_request = FuelRequest.objects.get(id=id)
 
         Offer.objects.create(price=price, quantity=quantity, supplier=request.user, request=fuel_request)
+        
         messages.success(request, 'Offer uploaded successfully')
+        action = f"{request.user}  made an offer of {quantity} @ {price}"
+
+        AuditTrail.objects.create(user = request.user, action = action, reference = 'offer' )
         return redirect('fuel-request')
     else:
         messages.warning(request, 'Oops something went wrong while posting your offer')
