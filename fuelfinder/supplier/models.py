@@ -47,7 +47,7 @@ class Profile(models.Model):
         ordering = ['name']
 
 class FuelUpdate(models.Model):
-    supplier = models.ForeignKey(Profile, on_delete=models.DO_NOTHING, related_name='supplier_name')
+    supplier = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='supplier_name')
     closing_time = models.TimeField()
     max_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     min_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)

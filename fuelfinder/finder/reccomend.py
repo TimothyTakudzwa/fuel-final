@@ -5,11 +5,12 @@ from django.contrib.auth.models import User
 def recommend(fuel_type, quantity, user_id, price):
     status = False
     supplies = FuelUpdate.objects.filter(max_amount__lte=quantity, min_amount__gte=quantity, fuel_type__icontains=fuel_type).order_by('-price')
-    print(f"Supplies : {scoreboard}")    
+       
     if supplies.count() == 0:
         return status
     else:
         scoreboard = {}
+        print(f"Supplies : {scoreboard}") 
         for supplier in supplies: 
             scoreboard[supplier.id] = round(supplier.price * 0.6, 2)       
         for key,value in scoreboard:

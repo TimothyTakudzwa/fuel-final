@@ -1,9 +1,11 @@
 from django.shortcuts import render
 import requests
+from validate_email import validate_email
 from .constants import *
 from buyer.views import token_is_send
 from supplier.models import FuelRequest, Offer, Transaction
 from finder.reccomend import recommend
+# from django.core.validators import validate_email
 from buyer.models import User
 
 
@@ -37,18 +39,29 @@ def bot_action(request, user, message):
 
 def registration_handler(request, user, message):
     if user.position == 1: 
-       response_message = "Hie this is our first time talking what is your name"
+       response_message = greetings_message
        user.position = 2
        user.save()
     elif user.position == 2: 
+        
+    elif user.position ==3 : 
         response_message = "Can i have your company email address.\n*NB* using your personal email address gets you lower precedence in the fuel finding process"
         try:
             user.first_name, user.last_name = message.split(' ', 2)
         except:
             user.first_name = message 
-        user.position = 3
+        user.position = 4
         user.save()
-    elif user.position == 3:
+    elif user.position == 4:
+        # if 'gmail' in message or 'yahoo' in message: 
+        #     return "Please type in your company email address"
+      
+        is_valid = validate_email(message, verify=True)
+        print("******************************",is_valid)
+        if is_valid is None:           
+            pass
+        else: 
+            return "*_This email does not exist_*.\n\nPlease enter the a valid email address"         
         response_message = "What kind of user are your.\n\n1. Fuel Supplier\n2. Fuel Buyer"
         user.email = message
         user.position = 4 
@@ -64,8 +77,12 @@ def registration_handler(request, user, message):
         user.save()
         if token_is_send(request, user):
             response_message = "We have sent a verification email to your supplied email, Please visit the link to complete the registration process"
+            user.is_active = True
+            user.save()
         else:
-            response_message = "We have failed to register you to the platform"
+            response_message = "*_We have failed to register you to the platform_*.\n\nPlease enter a valid email address"
+            user.position = 3
+            user.save()
     return response_message
 
 
@@ -74,6 +91,10 @@ def requests_handler(user, message):
         response_message = "Which type of fuel do you want\n\n1. Petrol\n2. Diesel"
         user.position = 3
         user.save()
+    elif user.position == 2:
+        try:
+            selected_option = user_types[int(message)]
+        except Ec
     elif user.position == 3:
         response_message = "How many litres do you want?"
         fuel_type = "Petrol" if message == '1' else "Diesel"

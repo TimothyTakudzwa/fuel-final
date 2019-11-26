@@ -79,23 +79,20 @@ def verification(request, token, user_id):
         result = bool([token_check])
         print(result)
         if result == True:
-            print("tapindawo")
-            #user.is_active = True
-            #user.save()
             if request.method == 'POST':
                 user = User.objects.get(id=user_id)
                 form = BuyerUpdateForm(request.POST, request.FILES, instance=user)
                 if form.is_valid():
                     form.save()
                     company_id = request.POST.get('company_id')
+                    print(f"---------Supplier {company_id} {type(company_id)}")
                     selected_company = Company.objects.filter(id=company_id).first()
                     user.company = selected_company
                     user.save()
             else:
-                print("pano ndasvika")
                 form = BuyerUpdateForm
             messages.success(request, f'Email verification successs, Fill in the deatails to complete registration')
-
+            return redirect('login')
         else:
             messages.warning(request, 'Wrong verification token')
             return redirect('login')
