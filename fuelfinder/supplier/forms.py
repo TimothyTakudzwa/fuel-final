@@ -38,6 +38,8 @@ class RegistrationEmailForm(forms.Form):
 
 
 class UserUpdateForm(forms.ModelForm):
+    first_name = forms.CharField()
+    last_name = forms.CharField()
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email', 'username']
