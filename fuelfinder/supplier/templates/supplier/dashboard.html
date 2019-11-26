@@ -43,13 +43,13 @@
           <li class="nav-item active  ">
             <a class="nav-link" href="./finder/dashboard.html">
               <i class="material-icons">dashboard</i>
-              <p>Dashboard</p>
+              <p>Requests</p>
             </a>
           </li>
           <li class="nav-item ">
             <a class="nav-link" href="./add_org.html">
               <i class="material-icons">swap_vertical_circle</i>
-              <p>Capacity</p>
+              <p>Transactions</p>
             </a>
           </li>
 
@@ -149,13 +149,44 @@
 
 
                 </div>
+                <div class="container">
+                <p style="text-align:center">
+                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add_fuel">Upload Quantity</button> </p>
 
                 {% block body %}{% endblock %}
+                </div>
 
             </div>
         </main>
 
    
+    </div>
+  </div>
+
+  <!--update fuel-->
+<div class="modal fade" id="add_fuel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Update today's capacity</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">  
+
+            {% load crispy_forms_tags %}
+            <form action="{% url 'supplier:fuel_update' %}" method="POST">
+                {% csrf_token %}
+                {{fuel_update_form|crispy}}
+            <button class="btn btn-primary" type="submit">Update</button>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          
+        </div>
+      </div>
     </div>
   </div>
  
@@ -383,9 +414,21 @@
   </script>
   <script>
    $(document).ready(function() {
-   $('#example').DataTable({"order": [[ 0, "desc" ]],
-   });
+    var t = $('#example').DataTable( {
+        "columnDefs": [ {
+            "searchable": false,
+            "orderable": false,
+            "targets": 0
+        } ],
+        "order": [[ 1, 'asc' ]]
     } );
+ 
+    t.on( 'order.dt search.dt', function () {
+        t.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+            cell.innerHTML = i+1;
+        } );
+    } ).draw();
+} );
   </script>
 </body>
 

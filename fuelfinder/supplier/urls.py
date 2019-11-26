@@ -8,5 +8,6 @@ from . import views
 urlpatterns = [
     path('fuel_update/', views.fuel_update, name='fuel_update'),
     path('supplier/<int:id>', views.offer, name='supplier'),
+    path('edit_offer/<int:id>', views.edit_offer, name="edit_offer"),
 
 ]
