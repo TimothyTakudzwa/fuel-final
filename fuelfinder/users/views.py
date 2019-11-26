@@ -29,13 +29,26 @@ def supplier_user_edit(request, cid):
         messages.success(request, 'Your Changes Have Been Saved')
 
 
+
+def stations(request):
+    #user = authenticate(username='john', password='secret')
+    #admin_ = User.objects.filter(company_id='Marshy').first()
+    # print(admin_.company)
+    stations = ServiceStation.objects.all()
+
+    return render(request, 'users/service_stations.html', {'stations': stations})    
+
+
+def audit_trail(request):
+    return render(request, 'users/audit_trail.html', {'stations': stations})    
+
         
 
 def suppliers_list(request):
     #user = authenticate(username='john', password='secret')
-    admin_ = User.objects.filter(username='Marshy').first()
-    print(admin_.company)
-    suppliers = User.objects.filter(company=admin_.company, supplier_role='Staff')
+    #admin_ = User.objects.filter(company_id='Marshy').first()
+    #print(admin_.company)
+    suppliers = User.objects.all()
     
     if request.method == 'POST':
         form1 = SupplierContactForm(request.POST)
@@ -60,7 +73,7 @@ def suppliers_list(request):
     else:
         form1 = SupplierContactForm()           
     
-    return render(request, 'users/suppliers_list.html', {'suppliers': suppliers, 'form1': form1})
+    return render(request, 'users/suppliers_list.html', {'form': form, 'suppliers': suppliers})
 
 def suppliers_delete(request, sid):
     supplier = User.objects.filter(id=sid).first()
