@@ -58,7 +58,7 @@ def registration_handler(request, user, message):
         user.user_type = 'Supplier' if message == "1" else "Buyer"
         username =initial_username = user.first_name[0] + user.last_name 
         i = 0
-        while User.object.filter(username=username.lower()).exists():
+        while User.objects.filter(username=username.lower()).exists():
             username = initial_username + str(i)
         user.position = 4 
         user.save()
@@ -108,9 +108,6 @@ def requests_handler(user, message):
             offer = Offer.objects.filter(id=response).first()
             response_message = suggested_choice.format(offer.supplier.company.name, offer.request.fuel_type, offer.quantity, offer.price, offer.id)
         
-        # user.position = 1
-        # user.stage = 'transacting'
-        # user.save()
         response_message = suggested_choice
     return response_message
 
