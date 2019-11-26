@@ -15,6 +15,7 @@ from .forms import PasswordChange, RegistrationForm, RegistrationProfileForm, \
 from .models import Profile, FuelUpdate, FuelRequest, Transaction, Profile, TokenAuthentication
 from django.contrib.auth import get_user_model
 from buyer.forms import BuyerUpdateForm
+from buyer.models import Company
 User = get_user_model()
 
 # today's date
@@ -69,6 +70,7 @@ def verification(request, token, user_id):
 
     check = User.objects.filter(id=user_id)
     print("here l am ")
+    print(check)
     if check.exists():
         user = User.objects.get(id=user_id)
         print(user)
@@ -81,12 +83,14 @@ def verification(request, token, user_id):
             #user.is_active = True
             #user.save()
             if request.method == 'POST':
-                form = BuyerUpdateForm(request.POST)
+                user = User.objects.get(id=user_id)
+                form = BuyerUpdateForm(request.POST, request.FILES, instance=user)
                 if form.is_valid():
                     form.save()
-                username = form.cleaned_data.get('username')
-                messages.success(request, f'Account created for {username}')
-                return redirect('buyer-login')
+                    company_id = request.POST.get('company_id')
+                    selected_company = Company.objects.filter(id=company_id).first()
+                    user.company = selected_company
+                    user.save()
             else:
                 print("pano ndasvika")
                 form = BuyerUpdateForm

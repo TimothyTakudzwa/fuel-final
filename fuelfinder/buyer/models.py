@@ -1,8 +1,18 @@
 from django.db import models
 from fuelfinder.settings import AUTH_USER_MODEL as User
-from .constants import * 
+# from .constants import * 
 from PIL import Image
 from django.contrib.auth.models import AbstractUser
+
+TYPE_CHOICES = (
+    ('Buyer','BUYER'),
+    ('Seller', 'SELLER'),
+)
+
+SUPPLIER_CHOICES = (
+    ('Admin','ADMIN'),
+    ('Staff', 'STAFF'),
+)
 
 
 
@@ -17,19 +27,31 @@ class Company(models.Model):
     def __str__(self):
         return self.name
 
+
 class User(AbstractUser):
-    company = models.CharField(max_length=20, default='Company')
+    company = models.ForeignKey(Company, on_delete=models.DO_NOTHING, null=True)
+    # company_id = models.CharField(max_length=100, default='Company')
     fuel_request = models.PositiveIntegerField(default=0)
     phone_number = models.CharField(max_length=20, default='263')
     stage = models.CharField(max_length=20, default='registration')
-    company_position = models.CharField(max_length=200, default='registration')
+    company_position = models.CharField(max_length=100, default='')
     position = models.IntegerField(default=0)
     user_type = models.CharField(max_length=20, default='')
     image = models.ImageField(default='default.png', upload_to='buyer_profile_pics')
     supplier_role = models.CharField(max_length=70)
 
     def __str__(self):
-        return f' {self.username} {self.username} {self.username}'
+        return f' {self.phone_number}'
+    
+    def save(self, *args, **kwargs):
+        super(User, self).save(*args, **kwargs)
+
+        img = Image.open(self.image.path)
+
+        if img.height > 300 or img.width > 300:
+            output_size = (300,300)
+            img.thumbnail(output_size)
+            img.save(self.image.path) 
 
 
 class FuelRequest(models.Model):
