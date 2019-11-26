@@ -13,8 +13,7 @@ SECRET_KEY = 'r$q5i8+1h+_r2#y1nn))ly-aojwhuo-!n756hgg-)+h+!6o5zu'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['1dc0663f.ngrok.io', '127.0.0.1']
-
+ALLOWED_HOSTS = ['b60c1816.ngrok.io', '127.0.0.1']
 
 # Application definition
 
@@ -64,6 +63,8 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
 
                 'notification.context.notification_alert',
+                'supplier.forms.fuelupdate',
+                'supplier.forms.makeoffer',
             ],
         },
     },
@@ -113,6 +114,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+AUTH_USER_MODEL = 'buyer.User'
 
 
 # Internationalization

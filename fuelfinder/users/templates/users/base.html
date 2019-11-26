@@ -40,26 +40,34 @@
        </div>
        <div class="sidebar-wrapper">
          <ul class="nav">
-           <li class="nav-item active  ">
-             <a class="nav-link" href="./finder/dashboard.html">
+           <li class="nav-item {% if request.path == '/users/' %} active {% endif %}  ">
+             <a class="nav-link" href="{% url 'users:home' %}">
                <i class="material-icons">dashboard</i>
                <p>Dashboard</p>
              </a>
            </li>
             
-           <li class="nav-item">
+           <li class="nav-item {% if request.path == '/users/suppliers/' %} active {% endif %}">
              <a class="nav-link" href="{% url 'users:suppliers_list' %}">
                <i class="material-icons">people</i>
-               <p>Suppliers</p>
+               <p>Staff</p>
              </a>
            </li>  
 
-           <li class="nav-item">
-            <a class="nav-link" href="{% url 'users:buyers_list' %}">
-              <i class="material-icons">people</i>
-              <p>Buyers</p>
+           <li class="nav-item {% if request.path == '/users/audit_trail/' %} active {% endif %}">
+            <a class="nav-link" href="{% url 'users:audit_trail' %}">
+              <i class="material-icons">account_balance</i>
+              <p>Audit Trail</p>
             </a>
           </li>  
+
+          <li class="nav-item {% if request.path == '/users/stations/' %} active {% endif %}">
+              
+            <a class="nav-link " href="{% url 'users:stations' %}">
+              <i class="material-icons">local_gas_station</i>
+              <p>Service Stations</p>
+            </a>
+          </li>
            
            <li class="nav-item">
              <a class="nav-link" href="#">
@@ -67,6 +75,8 @@
                <p>Logout</p>
              </a>
            </li>
+
+           
           
          </ul>
        </div>

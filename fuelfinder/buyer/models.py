@@ -1,6 +1,20 @@
 from django.db import models
-from django.contrib.auth.models import User
+from fuelfinder.settings import AUTH_USER_MODEL as User
+# from .constants import * 
 from PIL import Image
+from django.contrib.auth.models import AbstractUser
+
+TYPE_CHOICES = (
+    ('Buyer','BUYER'),
+    ('Seller', 'SELLER'),
+)
+
+SUPPLIER_CHOICES = (
+    ('Admin','ADMIN'),
+    ('Staff', 'STAFF'),
+)
+
+
 
 
 class Company(models.Model):
@@ -8,7 +22,35 @@ class Company(models.Model):
     address = models.CharField(max_length=255)
     industry = models.CharField(max_length=255)
     is_verified = models.BooleanField(default=False)
-    company_type = models.CharField(max_length=255)
+    company_type = models.CharField(max_length=255, choices=TYPE_CHOICES)
+    
+    def __str__(self):
+        return self.name
+
+
+class User(AbstractUser):
+    company = models.ForeignKey(Company, on_delete=models.DO_NOTHING, null=True)
+    fuel_request = models.PositiveIntegerField(default=0)
+    phone_number = models.CharField(max_length=20, default='263')
+    stage = models.CharField(max_length=20, default='registration')
+    company_position = models.CharField(max_length=100, default='')
+    position = models.IntegerField(default=0)
+    user_type = models.CharField(max_length=20, default='')
+    image = models.ImageField(default='default.png', upload_to='buyer_profile_pics')
+    supplier_role = models.CharField(max_length=70)
+
+    def __str__(self):
+        return f' {self.id} - {self.username}'
+    
+    def save(self, *args, **kwargs):
+        super(User, self).save(*args, **kwargs)
+
+        img = Image.open(self.image.path)
+
+        if img.height > 300 or img.width > 300:
+            output_size = (300,300)
+            img.thumbnail(output_size)
+            img.save(self.image.path) 
 
 
 class FuelRequest(models.Model):
@@ -31,7 +73,7 @@ class FuelRequest(models.Model):
 
 class Profile(models.Model):
     name = models.OneToOneField(User, on_delete=models.CASCADE, related_name='buyer_name')
-    company = models.ForeignKey(Company, on_delete=models.DO_NOTHING, related_name='comp_name')
+    company = models.ForeignKey(Company, on_delete=models.DO_NOTHING, related_name='company_profile')
     fuel_request = models.OneToOneField(FuelRequest, on_delete=models.CASCADE, related_name='fuel', null=True)
     phone_number = models.CharField(max_length=20, default='')
     stage = models.CharField(max_length=20, default='registration')
@@ -54,3 +96,4 @@ class Profile(models.Model):
 
     class Meta:
         ordering = ['name']
+
