@@ -46,8 +46,8 @@ def audit_trail(request):
 
 def suppliers_list(request):
     #user = authenticate(username='john', password='secret')
-    company = Company.objects.get(name='ZUVA')
-    suppliers = User.objects.filter(company=company,supplier_role='Staff').all()
+    # company = Company.objects.get(name='ZUVA')
+    # suppliers = User.objects.filter(company=company,supplier_role='Staff').all()
     #print(admin_.company)
     #suppliers = User.objects.all()
     
@@ -100,7 +100,7 @@ def suppliers_list(request):
     else:
         form1 = SupplierContactForm()           
     
-    return render(request, 'users/suppliers_list.html', {'form1': form1, 'suppliers': suppliers})
+    return render(request, 'users/suppliers_list.html')
 
 def suppliers_delete(request, sid):
     supplier = User.objects.filter(id=sid).first()
