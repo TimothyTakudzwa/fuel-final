@@ -171,7 +171,12 @@ def account(request):
     if request.method == 'POST':
         userform = UserUpdateForm(request.POST, instance=request.user)
         if userform.is_valid():
-            userform.save()
+            user = request.user
+            user.first_name = request.POST.get('first_name')
+            user.last_name = request.POST.get('last_name')
+            user.email = request.POST.get('email')
+            user.username = request.POST.get('username')
+            user.save()
             messages.success(request, f'Profile successfully updated')
             return redirect('account')
         else:
@@ -248,7 +253,5 @@ def edit_offer(request, id):
         offer.save()
         messages.success(request, 'Offer successfully updated')
         return redirect('fuel-request')
-    else:
-        messages.warning(request, 'Oops something went wrong while posting your offer')
     return render(request, 'supplier/accounts/fuel-request.html')
 
