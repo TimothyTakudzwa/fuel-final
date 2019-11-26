@@ -1,6 +1,6 @@
 from django.db import models
 from PIL import Image
-from buyer.models import User, FuelRequest
+from buyer.models import User, FuelRequest, Company
 
 
 class ServiceStation(models.Model):

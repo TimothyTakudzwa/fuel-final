@@ -39,6 +39,9 @@ def stations(request):
     return render(request, 'users/service_stations.html', {'stations': stations})    
 
 
+def audit_trail(request):
+    return render(request, 'users/audit_trail.html', {'stations': stations})    
+
         
 
 def suppliers_list(request):
