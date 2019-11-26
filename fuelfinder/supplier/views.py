@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.core.mail import BadHeaderError, EmailMultiAlternatives
 from django.contrib import messages
 import secrets
+from users.models import AuditTrail
 
 from datetime import date
 import time
@@ -79,23 +80,22 @@ def verification(request, token, user_id):
         result = bool([token_check])
         print(result)
         if result == True:
-            print("tapindawo")
-            #user.is_active = True
-            #user.save()
             if request.method == 'POST':
                 user = User.objects.get(id=user_id)
                 form = BuyerUpdateForm(request.POST, request.FILES, instance=user)
                 if form.is_valid():
                     form.save()
                     company_id = request.POST.get('company_id')
+                    print(f"---------Supplier {company_id} {type(company_id)}")
                     selected_company = Company.objects.filter(id=company_id).first()
                     user.company = selected_company
+                    user.is_active = True
                     user.save()
+                    
             else:
-                print("pano ndasvika")
                 form = BuyerUpdateForm
             messages.success(request, f'Email verification successs, Fill in the deatails to complete registration')
-
+            return redirect('login')
         else:
             messages.warning(request, 'Wrong verification token')
             return redirect('login')
@@ -169,7 +169,12 @@ def account(request):
     if request.method == 'POST':
         userform = UserUpdateForm(request.POST, instance=request.user)
         if userform.is_valid():
-            userform.save()
+            user = request.user
+            user.first_name = request.POST.get('first_name')
+            user.last_name = request.POST.get('last_name')
+            user.email = request.POST.get('email')
+            user.username = request.POST.get('username')
+            user.save()
             messages.success(request, f'Profile successfully updated')
             return redirect('account')
         else:
@@ -180,20 +185,18 @@ def account(request):
 
 @login_required()
 def fuel_request(request):
-    context = {
-        'title': 'Fuel Finder | Fuel Request',
-        'requests': FuelRequest.objects.filter(date=today)
-    }
-    if request.method == 'POST':
-        submitted_id = request.POST.get('request_id')
-        if FuelRequest.objects.filter(id=submitted_id).exists():
-            request_id = FuelRequest.objects.get(id=submitted_id)
-            buyer_id = Profile.objects.get(id='')
-            Transaction.objects.create(request_id=request_id,
-                                       buyer_id=buyer_id)
-            messages.success(request, f'You have accepted a request for {request_id.amount} litres from {buyer_id.name}')
-            return redirect('fuel-request')
-    return render(request, 'supplier/accounts/fuel_request.html', context=context)
+    requests = FuelRequest.objects.filter(date=today)
+    for buyer_request in requests:
+        if Offer.objects.filter(supplier_id=request.user, request_id=buyer_request).exists():
+            offer = Offer.objects.get(supplier_id=request.user, request_id=buyer_request)
+            buyer_request.my_offer = f'{offer.quantity}ltrs @ ${offer.price}'
+            buyer_request.offer_price = offer.price
+            buyer_request.offer_quantity = offer.quantity
+            buyer_request.offer_id = offer.id
+        else:
+            buyer_request.my_offer = 0
+            buyer_request.offer_id = 0
+    return render(request, 'supplier/accounts/fuel_request.html', {'requests':requests})
 
 
 @login_required()
@@ -214,9 +217,10 @@ def fuel_update(request):
         min_amount = request.POST.get('min_amount')
         deliver = request.POST.get('deliver')
         payment_method = request.POST.get('payment_method')
-        supplier = Profile.objects.get(name=request.user)
+        fuel_type = request.POST.get('fuel_type')
+        #supplier = User.objects.get(name=request.user)
         supplier_id = request.user.id
-        FuelUpdate.objects.create(supplier_id=supplier_id, deliver=False, closing_time=closing_time, max_amount=max_amount, min_amount=min_amount, payment_method=payment_method)
+        FuelUpdate.objects.create(supplier_id=supplier_id, deliver=False, fuel_type=fuel_type, closing_time=closing_time, max_amount=max_amount, min_amount=min_amount, payment_method=payment_method)
         messages.success(request, 'Capacity updated successfully')
         return redirect('fuel-request')
 
@@ -230,10 +234,25 @@ def offer(request, id):
         fuel_request = FuelRequest.objects.get(id=id)
 
         Offer.objects.create(price=price, quantity=quantity, supplier=request.user, request=fuel_request)
-
+        
         messages.success(request, 'Offer uploaded successfully')
+        action = f"{request.user}  made an offer of {quantity} @ {price}"
+
+        AuditTrail.objects.create(user = request.user, action = action, reference = 'offer' )
         return redirect('fuel-request')
     else:
         messages.warning(request, 'Oops something went wrong while posting your offer')
     return render(request, 'supplier/accounts/fuel_request.html')
+
+
+@login_required
+def edit_offer(request, id):
+    offer = Offer.objects.get(id=id)
+    if request.method == 'POST':
+        offer.price = request.POST.get('price')
+        offer.quantity = request.POST.get('quantity')
+        offer.save()
+        messages.success(request, 'Offer successfully updated')
+        return redirect('fuel-request')
+    return render(request, 'supplier/accounts/fuel-request.html')
 
