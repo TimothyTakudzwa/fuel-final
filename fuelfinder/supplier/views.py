@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.core.mail import BadHeaderError, EmailMultiAlternatives
 from django.contrib import messages
 import secrets
+from users.models import AuditTrail
 
 from datetime import date
 import time
@@ -42,7 +43,7 @@ def register(request):
             user.save()
 
             token = secrets.token_hex(12)
-            TokenAuthentication.objects.create(token=token, user = user)
+            TokenAuthentication.objects.create(token=token, user=user)
             domain = request.get_host()
             url = f'{domain}/verification/{token}/{user.id}'
 
@@ -79,25 +80,22 @@ def verification(request, token, user_id):
         result = bool([token_check])
         print(result)
         if result == True:
-            print("tapindawo")
-            #user.is_active = True
-            #user.save()
             if request.method == 'POST':
                 user = User.objects.get(id=user_id)
                 form = BuyerUpdateForm(request.POST, request.FILES, instance=user)
                 if form.is_valid():
                     form.save()
                     company_id = request.POST.get('company_id')
+                    print(f"---------Supplier {company_id} {type(company_id)}")
                     selected_company = Company.objects.filter(id=company_id).first()
                     user.company = selected_company
                     user.is_active = True
                     user.save()
                     
             else:
-                print("pano ndasvika")
                 form = BuyerUpdateForm
             messages.success(request, f'Email verification successs, Fill in the deatails to complete registration')
-
+            return redirect('login')
         else:
             messages.warning(request, 'Wrong verification token')
             return redirect('login')
@@ -239,8 +237,11 @@ def offer(request, id):
         fuel_request = FuelRequest.objects.get(id=id)
 
         Offer.objects.create(price=price, quantity=quantity, supplier=request.user, request=fuel_request)
-
+        
         messages.success(request, 'Offer uploaded successfully')
+        action = f"{request.user}  made an offer of {quantity} @ {price}"
+
+        AuditTrail.objects.create(user = request.user, action = action, reference = 'offer' )
         return redirect('fuel-request')
     else:
         messages.warning(request, 'Oops something went wrong while posting your offer')

@@ -1,15 +1,37 @@
 from django.db import models
 from PIL import Image
 from buyer.models import User, FuelRequest, Company
-
+from buyer.constants import *
 
 class ServiceStation(models.Model):
     # ADD CLOSING TIME, PAYMENT METHOD 
     company = models.ForeignKey(Company,on_delete=models.CASCADE)
-    location = models.CharField(max_length=50, help_text='Harare, Livingstone Street')
+    name = models.CharField(max_length=100, default='')
+    address = models.CharField(max_length=50, help_text='Harare, Livingstone Street')
     capacity = models.PositiveIntegerField(default=0)
-    has_fuel = models.BooleanField()
+    has_fuel = models.BooleanField(default=False)
     stock = models.FloatField(help_text='Volume In Litres')
+    closing_time = models.CharField(max_length=100, default='22:00')
+    payment_method = models.CharField(max_length=100, choices=PAYING_CHOICES)
+
+    def __str__(self):
+        return f"{self.company} : {self.location}"
+
+    def get_capacity(self):
+        return self.capacity
+
+    def fuel_available(self):
+        return self.has_fuel        
+
+class Depot(models.Model):
+    company = models.ForeignKey(Company,on_delete=models.CASCADE)
+    name = models.CharField(max_length=100, default='')
+    address = models.CharField(max_length=50, help_text='Harare, Livingstone Street')
+    capacity = models.PositiveIntegerField(default=0)
+    has_fuel = models.BooleanField(default=False)
+    stock = models.FloatField(help_text='Volume In Litres')
+    closing_time = models.CharField(max_length=100, default='22:00')
+    payment_method = models.CharField(max_length=100, choices=PAYING_CHOICES)
 
     def __str__(self):
         return f"{self.company} : {self.location}"

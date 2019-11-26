@@ -23,8 +23,9 @@ INSTALLED_APPS = [
     'buyer.apps.BuyerConfig',
     'whatsapp.apps.WhatsappConfig',
     'users.apps.UsersConfig',
-    'notifications.apps.NotificationsConfig',
+    'notification.apps.NotificationConfig',
     'finder.apps.FinderConfig',
+
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -33,7 +34,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'crispy_forms'
+    'crispy_forms',
+
 ]
 
 MIDDLEWARE = [
@@ -60,6 +62,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
 
+                'notification.context.notification_alert',
                 'supplier.forms.fuelupdate',
                 'supplier.forms.makeoffer',
             ],
@@ -140,6 +143,6 @@ MEDIA_URL = '/media/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-LOGIN_REDIRECT_URL = 'dashboard'
+# LOGIN_REDIRECT_URL = 'dashboard'
 LOGIN_URL = 'login'
 

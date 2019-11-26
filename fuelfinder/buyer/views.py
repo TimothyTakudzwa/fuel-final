@@ -5,6 +5,7 @@ from django.contrib import messages
 from .forms import BuyerRegisterForm, BuyerUpdateForm, ProfileUpdateForm, FuelRequestForm
 #from supplier.forms import FuelRequestForm
 from buyer.models import User, Company
+import requests
 import secrets
 from django.core.mail import BadHeaderError, EmailMultiAlternatives
 from datetime import datetime
@@ -27,7 +28,8 @@ def token_is_send(request, user):
 
         messages.success(request, f"{user.first_name}  {user.last_name} Registered Successfully")
         return True
-    except BadHeaderError:
+    except Exception as e:
+        print(e)
         messages.warning(request, f"Oops , Something Wen't Wrong, Please Try Again")
         return False              
     messages.success(request, ('Your profile was successfully updated!'))
@@ -50,7 +52,11 @@ def register(request):
                 i+=1
             user = User.objects.create(email=email, username=username.lower(),  phone_number=phone_number, first_name=first_name, last_name=last_name, is_active=False)        
             if token_is_send(request, user):
-                messages.success(request, f"{full_name} Registered Successfully")           
+                messages.success(request, f"{full_name} Registered Successfully")   
+                if user.is_active:
+                    send_message(user.phone_number, "You have been registered succesfully")
+                    user.stage = 'requesting'
+                    user.save()               
                 return redirect('users:supplier_user_create', sid=user.id)
             else:
                 messages.warning(request, f"Oops , Something Wen't Wrong, Please Try Again")
@@ -67,6 +73,16 @@ def register(request):
         form = BuyerRegisterForm
     
     return render(request, 'buyer/register.html', {'form': form})
+
+def send_message(phone_number, message):
+    payload = {
+        "phone": phone_number,
+        "body": message
+    }
+    url = "https://eu33.chat-api.com/instance78632/sendMessage?token=sq0pk8hw4iclh42b"
+    r = requests.post(url=url, data=payload)
+    print(r)
+    return r.status_code
 
 @login_required
 def profile(request):
