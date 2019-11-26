@@ -230,7 +230,6 @@ def offer(request, id):
         fuel_request = FuelRequest.objects.get(id=id)
 
         Offer.objects.create(price=price, quantity=quantity, supplier=request.user, request=fuel_request)
-
         messages.success(request, 'Offer uploaded successfully')
         return redirect('fuel-request')
     else:

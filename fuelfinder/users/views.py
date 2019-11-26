@@ -22,12 +22,13 @@ def supplier_user_edit(request, cid):
     supplier = User.objects.filter(id=cid).first()
 
     if request.method == "POST":
-        supplier.company = request.POST['company']
+        #supplier.company = request.POST['company']
         supplier.phone_number = request.POST['phone_number']
-        supplier.user_type = request.POST['user_type']
-        supplier.supplier_role = request.POST['supplier_role']
+        supplier.supplier_role = request.POST['user_type']
+        #supplier.supplier_role = request.POST['supplier_role']
         supplier.save()
         messages.success(request, 'Your Changes Have Been Saved')
+    return render(request, 'users/suppliers_list.html')
 
 
 
