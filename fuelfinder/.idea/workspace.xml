@@ -2,22 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c36155b2-67ea-4c49-b53e-fabb163842cc" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/notification/admin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/notification/context.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/notification/forms.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/notification/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/supplier/templates/supplier/accounts/notifications.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fuelfinder/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/fuelfinder/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fuelfinder/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/fuelfinder/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notifications/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/notification/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notifications/admin.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/notifications/apps.py" beforeDir="false" afterPath="$PROJECT_DIR$/notification/apps.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notifications/models.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/notifications/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/notification/tests.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notifications/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/notification/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/supplier/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/supplier/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/supplier/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/supplier/views.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/supplier/templates/supplier/accounts/fuel-request.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/notification/models.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -124,7 +110,7 @@
       <workItem from="1574517528148" duration="16996000" />
       <workItem from="1574607754646" duration="1554000" />
       <workItem from="1574672669883" duration="638000" />
-      <workItem from="1574786874185" duration="4544000" />
+      <workItem from="1574786874185" duration="5506000" />
     </task>
     <servers />
   </component>
