@@ -187,6 +187,58 @@ def rate_supplier(request):
     }
     return render(request, 'supplier/accounts/ratings.html', context=context)
 
+@login_required
+def fuel_update(request):
+    if request.method == 'POST':
+        if FuelUpdate.objects.filter(date=today, fuel_type=request.POST.get('fuel_type')).exists():
+            closing_time = time.strftime("%H:%M:%S")
+            max_amount = request.POST.get('max_amount')
+            min_amount = request.POST.get('min_amount')
+            deliver = request.POST.get('deliver')
+            payment_method = request.POST.get('payment_method')
+            fuel_type = request.POST.get('fuel_type')
+            supplier_id = request.user.id
+            FuelUpdate.objects.create(supplier_id=supplier_id, deliver=False, fuel_type=fuel_type, closing_time=closing_time, max_amount=max_amount, min_amount=min_amount, payment_method=payment_method)
+            messages.success(request, 'Quantity uploaded successfully')
+            return redirect('fuel-request')
+        else:
+            fuel_update = FuelUpdate.objects.get(fuel_type=request.POST.get('fuel_type'), date=today)
+            fuel_update.max_amount = request.POST.get('max_amount')
+            fuel_update.min_amount = request.POST.get('min_amount')
+            fuel_update
+
+
+    return render(request, 'supplier/accounts/ratings.html', context=context)
+
+
+def offer(request, id):
+    if request.method == "POST":
+        price = request.POST.get('price')
+        quantity = request.POST.get('quantity')
+        fuel_request = FuelRequest.objects.get(id=id)
+
+        Offer.objects.create(price=price, quantity=quantity, supplier=request.user, request=fuel_request)
+        
+        messages.success(request, 'Offer uploaded successfully')
+        action = f"{request.user}  made an offer of {quantity} @ {price}"
+
+        AuditTrail.objects.create(user = request.user, action = action, reference = 'offer' )
+        return redirect('fuel-request')
+    else:
+        messages.warning(request, 'Oops something went wrong while posting your offer')
+    return render(request, 'supplier/accounts/fuel_request.html')
+
+
+@login_required
+def edit_offer(request, id):
+    offer = Offer.objects.get(id=id)
+    if request.method == 'POST':
+        offer.price = request.POST.get('price')
+        offer.quantity = request.POST.get('quantity')
+        offer.save()
+        messages.success(request, 'Offer successfully updated')
+        return redirect('fuel-request')
+    return render(request, 'supplier/accounts/fuel-request.html')
 
 @login_required()
 def notifications(request):
