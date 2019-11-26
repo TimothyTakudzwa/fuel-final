@@ -83,7 +83,7 @@ class OfferForm(forms.ModelForm):
 
 def fuelupdate(request):
     return {
-        #'fuel_update_form': FuelUpdateForm()
+        'fuel_update_form': FuelUpdateForm()
     }
 
 
