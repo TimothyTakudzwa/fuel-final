@@ -4,6 +4,7 @@ from buyer.models import User, FuelRequest, Company
 
 
 class ServiceStation(models.Model):
+    # ADD CLOSING TIME, PAYMENT METHOD 
     company = models.ForeignKey(Company,on_delete=models.CASCADE)
     location = models.CharField(max_length=50, help_text='Harare, Livingstone Street')
     capacity = models.PositiveIntegerField(default=0)
@@ -47,6 +48,7 @@ class Profile(models.Model):
         ordering = ['name']
 
 class FuelUpdate(models.Model):
+    # To Do Add Type For Bulk Or Individual
     supplier = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='supplier_name')
     closing_time = models.TimeField()
     max_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
