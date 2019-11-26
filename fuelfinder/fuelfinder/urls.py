@@ -25,6 +25,7 @@ urlpatterns = [
     path('index', whatsapp_views.index, name='index'),
     path('home/', finder_views.base, name='finder-home'),
 
+
     path('password-reset/',
          auth_views.PasswordResetView.as_view(template_name='supplier/password/password_reset.html'),
          name='password_reset'),

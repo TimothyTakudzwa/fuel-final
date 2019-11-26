@@ -1,9 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from PIL import Image
-from buyer.models import Profile, FuelRequest, Company
-
-
+from buyer.models import FuelRequest, Company
 
 
 class Profile(models.Model):
@@ -30,6 +28,7 @@ class Profile(models.Model):
 
     class Meta:
         ordering = ['name']
+
 
 class FuelUpdate(models.Model):
     supplier = models.ForeignKey(Profile, on_delete=models.DO_NOTHING, related_name='supplier_name')

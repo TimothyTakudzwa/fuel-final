@@ -13,11 +13,7 @@ SECRET_KEY = 'r$q5i8+1h+_r2#y1nn))ly-aojwhuo-!n756hgg-)+h+!6o5zu'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-<<<<<<< HEAD
 ALLOWED_HOSTS = ['1dc0663f.ngrok.io', '127.0.0.1']
-=======
-ALLOWED_HOSTS = ['1dc0663f.ngrok.io','127.0.0.1']
->>>>>>> 3ca8597c9f9710cbca6375eedf8a1206fbbbb00c
 
 
 # Application definition
@@ -28,8 +24,9 @@ INSTALLED_APPS = [
     'buyer.apps.BuyerConfig',
     'whatsapp.apps.WhatsappConfig',
     'users.apps.UsersConfig',
-    'notifications.apps.NotificationsConfig',
+    'notification.apps.NotificationConfig',
     'finder.apps.FinderConfig',
+
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -38,7 +35,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'crispy_forms'
+    'crispy_forms',
+
 ]
 
 MIDDLEWARE = [
@@ -64,6 +62,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                'notification.context.notification_alert',
             ],
         },
     },
@@ -140,6 +140,6 @@ MEDIA_URL = '/media/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-LOGIN_REDIRECT_URL = 'dashboard'
+# LOGIN_REDIRECT_URL = 'dashboard'
 LOGIN_URL = 'login'
 

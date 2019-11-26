@@ -12,6 +12,7 @@ from datetime import date
 from .forms import PasswordChange, RegistrationForm, RegistrationProfileForm, \
     RegistrationEmailForm, UserUpdateForm, ProfilePictureUpdateForm, ProfileUpdateForm, FuelRequestForm
 from .models import Profile, FuelUpdate, FuelRequest, Transaction, Profile, TokenAuthentication
+from notification.models import Notification
 
 # today's date
 today = date.today()
@@ -37,7 +38,7 @@ def register(request):
             user.save()
 
             token = secrets.token_hex(12)
-            TokenAuthentication.objects.create(token=token, user = user)
+            TokenAuthentication.objects.create(token=token, user=user)
             domain = request.get_host()
             url = f'{domain}/verification/{token}/{user.id}'
 
@@ -67,7 +68,7 @@ def verification(request, token, user_id):
     }
     check = User.objects.filter(id=user_id)
     print("here l am ")
-    
+
     if check.exists():
         user = User.objects.get(id=user_id)
         print(user)
@@ -173,7 +174,8 @@ def fuel_request(request):
             buyer_id = Profile.objects.get(id='')
             Transaction.objects.create(request_id=request_id,
                                        buyer_id=buyer_id)
-            messages.success(request, f'You have accepted a request for {request_id.amount} litres from {buyer_id.name}')
+            messages.success(request,
+                             f'You have accepted a request for {request_id.amount} litres from {buyer_id.name}')
             return redirect('fuel-request')
     return render(request, 'supplier/accounts/fuel_request.html', context=context)
 
@@ -184,3 +186,20 @@ def rate_supplier(request):
         'title': 'Fuel Finder | Rate Supplier',
     }
     return render(request, 'supplier/accounts/ratings.html', context=context)
+
+
+@login_required()
+def notifications(request):
+    context = {
+        'title': 'Fuel Finder | Notification',
+        'notifications': Notification.objects.filter(user=request.user),
+        'notifications_count': Notification.objects.filter(user=request.user, is_read=False).count(),
+    }
+    msgs = Notification.objects.filter(user=request.user, is_read=False)
+    if msgs.exists():
+        nots = Notification.objects.filter(user=request.user, is_read=False)
+        for i in nots:
+            user_not = Notification.objects.get(user=request.user, id=i.id)
+            user_not.is_read = True
+            user_not.save()
+    return render(request, 'supplier/accounts/notifications.html', context=context)

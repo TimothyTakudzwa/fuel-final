@@ -6,12 +6,12 @@ def notification_alert(request):
     if request.user.is_authenticated:
         msgs = Notification.objects.filter(user=request.user, is_read=False)
         if msgs.exist():
-            return {'notifications': notifications}
+            for msg in msgs:
+                msg_user = Notification.objects.get(user=request.user, is_read=False, id=msg.id)
+                msg_user.is_read = True
+            return {'notifications': True}
         else:
-            return {
-                'notifications': notifications,
-
-            }
+            return {'notifications': notifications}
     else:
         return {}
 
