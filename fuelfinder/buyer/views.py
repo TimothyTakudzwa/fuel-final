@@ -2,14 +2,18 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import BuyerRegisterForm, BuyerUpdateForm, ProfileUpdateForm
-from supplier.forms import FuelRequestForm
+from .forms import BuyerRegisterForm, BuyerUpdateForm, ProfileUpdateForm, FuelRequestForm
+#from supplier.forms import FuelRequestForm
 from buyer.models import User, Company
 import requests
 import secrets
 from django.core.mail import BadHeaderError, EmailMultiAlternatives
 from datetime import datetime
 from .constants import sender, subject
+from .models import FuelRequest
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 def token_is_send(request, user):
@@ -104,15 +108,25 @@ def profile(request):
     }
     return render(request, 'buyer/profile.html', context)
 
-@login_required
+#@login_required
 def fuel_request(request):
     if request.method == 'POST':
         form = FuelRequestForm(request.POST)
         if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            messages.success(request, f'Account created for {username}')
-            return redirect('buyer-login')
+            amount = form.cleaned_data['amount']
+            payment_method = form.cleaned_data['payment_method']
+            delivery_method = form.cleaned_data['delivery_method']
+            fuel_type = form.cleaned_data['fuel_type']
+            
+            name = User.objects.get(user=request.user)
+            fuel_request.name_id = name.id
+            fuel_request.amount = amount
+            fuel_request.fuel_type = fuel_type
+            fuel_request.payment_method = payment_method
+            fuel_request.delivery_method = delivery_method
+            fuel_request.save()
+            
+            messages.success(request, f'kindly not your request has been made ')
     else:
         form = FuelRequestForm
     

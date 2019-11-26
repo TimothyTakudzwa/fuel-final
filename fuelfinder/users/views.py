@@ -6,6 +6,7 @@ from supplier.forms import *
 from buyer.models import *
 from buyer.forms import *
 from .forms import *
+from .models import AuditTrail
 import secrets
 from django.core.mail import BadHeaderError, EmailMultiAlternatives
 from datetime import datetime
@@ -21,17 +22,18 @@ def supplier_user_edit(request, cid):
     supplier = User.objects.filter(id=cid).first()
 
     if request.method == "POST":
-        supplier.company = request.POST['company']
+        #supplier.company = request.POST['company']
         supplier.phone_number = request.POST['phone_number']
-        supplier.user_type = request.POST['user_type']
-        supplier.supplier_role = request.POST['supplier_role']
+        supplier.supplier_role = request.POST['user_type']
+        #supplier.supplier_role = request.POST['supplier_role']
         supplier.save()
         messages.success(request, 'Your Changes Have Been Saved')
+    return render(request, 'users/suppliers_list.html')
 
 
 
 def stations(request):
-    #user = authenticate(username='john', password='secret')
+    #user = authenticate(username='', password='')
     #admin_ = User.objects.filter(company_id='Marshy').first()
     # print(admin_.company)
     stations = ServiceStation.objects.all()
@@ -40,37 +42,70 @@ def stations(request):
 
 
 def audit_trail(request):
-    return render(request, 'users/audit_trail.html', {'stations': stations})    
+    trails = AuditTrail.objects.all()
+    print(trails)
+    return render(request, 'users/audit_trail.html', {'trails': trails})    
 
         
 
 def suppliers_list(request):
     #user = authenticate(username='john', password='secret')
-    #admin_ = User.objects.filter(company_id='Marshy').first()
+    company = Company.objects.get(name='ZUVA')
+    suppliers = User.objects.filter(company=company,supplier_role='Staff').all()
     #print(admin_.company)
-    suppliers = User.objects.all()
+    #suppliers = User.objects.all()
     
     if request.method == 'POST':
-        form = SupplierContactForm(request.POST)
+        form1 = SupplierContactForm(request.POST)
         print('--------------------tapinda---------------')
-        user_count = User.objects.filter(company=admin_.company).count()
+        user_count = User.objects.filter(company_id='ZUVA').count()
         print(user_count)
         if user_count > 10:
             raise Http404("Your organisation has reached the maximum number of users, delete some ")
 
-        if form.is_valid():
+        if form1.is_valid():
             print('--------------------tapinda---------------')
-            username = form.cleaned_data['company']
-            email = form.cleaned_data['email']
-            password = form.cleaned_data['password']
-            phone_number = form.cleaned_data['cellphone']
-            company = form.cleaned_data['company']
+            username = form1.cleaned_data['username']
+            email = form1.cleaned_data['email']
+            password = form1.cleaned_data['password']
+            phone_number = form1.cleaned_data['phone_number']
+            company = form1.cleaned_data['company']
+            supplier_role = 'Staff'
+
             print(type(User))
-            User.objects.create(username=username,email=email,password=password,company=company,phone_number=phone_number)
+            User.objects.create(username=username,email=email,password=password,company_id=company,phone_number=phone_number,supplier_role=supplier_role)
+            messages.success(request, f"{username} Registered Successfully")
+            '''
+            token = secrets.token_hex(12)
+            user = User.objects.get(username=username)
+            TokenAuthentication.objects.create(token=token, user=user)
+            domain = request.get_host()
+            url = f'{domain}/verification/{token}/{user.id}' 
+
+            sender = f'Fuel Finder Accounts<tests@marlvinzw.me>'
+            subject = 'User Registration'
+            message = f"Dear {username} , please complete signup here : \n {url} \n. Your password is {password}"
+            
+            try:
+                msg = EmailMultiAlternatives(subject, message, sender, [f'{email}'])
+                msg.send()
+
+                messages.success(request, f"{username} Registered Successfully")
+                return redirect('users:buyers_list')
+
+            except BadHeaderError:
+                messages.warning(request, f"Oops , Something Wen't Wrong, Please Try Again")
+                return redirect('users:buyers_list')
+            #contact.save()
+            messages.success(request, ('Your profile was successfully updated!'))
+            return redirect('users:suppliers')
+            print(token)
+            print("above is the token")
+            '''
     else:
-        form = SupplierContactForm()           
+        form1 = SupplierContactForm()           
     
-    return render(request, 'users/suppliers_list.html', {'form': form, 'suppliers': suppliers})
+    return render(request, 'users/suppliers_list.html', {'form1': form1, 'suppliers': suppliers})
 
 def suppliers_delete(request, sid):
     supplier = User.objects.filter(id=sid).first()

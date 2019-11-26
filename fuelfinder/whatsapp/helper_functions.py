@@ -43,7 +43,11 @@ def registration_handler(request, user, message):
        user.position = 2
        user.save()
     elif user.position == 2: 
-        
+        try: 
+            selected_option = user_types[int(message)]
+        except Exception as e:
+            return "Please select a valid option "
+        if selected_option == 
     elif user.position ==3 : 
         response_message = "Can i have your company email address.\n*NB* using your personal email address gets you lower precedence in the fuel finding process"
         try:
@@ -91,10 +95,6 @@ def requests_handler(user, message):
         response_message = "Which type of fuel do you want\n\n1. Petrol\n2. Diesel"
         user.position = 3
         user.save()
-    elif user.position == 2:
-        try:
-            selected_option = user_types[int(message)]
-        except Ec
     elif user.position == 3:
         response_message = "How many litres do you want?"
         fuel_type = "Petrol" if message == '1' else "Diesel"

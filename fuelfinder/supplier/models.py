@@ -68,7 +68,7 @@ class FuelUpdate(models.Model):
 
 class Transaction(models.Model):
     request_name = models.ForeignKey(FuelRequest, on_delete=models.DO_NOTHING, related_name='fuel_request')
-    buyer_name = models.ForeignKey(Profile, on_delete=models.DO_NOTHING, related_name='buyinh_fuel')
+    buyer_name = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='buyinh_fuel')
     date = models.DateField(auto_now_add=True)
     time = models.TimeField(auto_now_add=True)
 
@@ -102,7 +102,7 @@ class TokenAuthentication(models.Model):
 
 class SupplierRating(models.Model):
     rating = models.PositiveIntegerField(default=0)
-    supplier = models.ForeignKey(Profile, on_delete=models.DO_NOTHING, related_name='supplier_rating')
+    supplier = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='supplier_rating')
 
     class Meta:
         ordering = ['supplier', 'rating']

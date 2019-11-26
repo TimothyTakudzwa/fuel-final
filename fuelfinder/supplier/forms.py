@@ -38,6 +38,8 @@ class RegistrationEmailForm(forms.Form):
 
 
 class UserUpdateForm(forms.ModelForm):
+    first_name = forms.CharField()
+    last_name = forms.CharField()
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email', 'username']
@@ -69,13 +71,25 @@ class FuelRequestForm(forms.ModelForm):
         
 
 class FuelUpdateForm(forms.ModelForm):
+    OPTIONS= [
+    ('PETROL', 'petrol'),
+    ('DIESEL', 'diesel'),
+    ]
+
+    fuel_type = forms.CharField(label='Fuel Type', widget=forms.Select(choices=OPTIONS))
+
     class Meta:
         model = FuelUpdate
-        fields = ['max_amount', 'min_amount', 'deliver', 'payment_method']
+        fields = ['max_amount', 'min_amount', 'deliver','fuel_type', 'payment_method']
 
 
 
 class OfferForm(forms.ModelForm):
+    class Meta:
+        model = Offer
+        fields = ['quantity', 'price']
+
+class EditOfferForm(forms.ModelForm):
     class Meta:
         model = Offer
         fields = ['quantity', 'price']
@@ -90,4 +104,9 @@ def fuelupdate(request):
 def makeoffer(request):
     return {
         'make_offer_form': OfferForm()
+    }
+
+def editoffer(request):
+    return {
+        'edit_offer_form': EditOfferForm()
     }

@@ -23,7 +23,7 @@ class Company(models.Model):
     industry = models.CharField(max_length=255)
     is_verified = models.BooleanField(default=False)
     company_type = models.CharField(max_length=255, choices=TYPE_CHOICES)
-
+    
     def __str__(self):
         return self.name
 

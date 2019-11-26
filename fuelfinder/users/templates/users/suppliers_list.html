@@ -23,7 +23,7 @@
             <table id="example" class="table table-striped table-bordered" style="width:100%">
                 <thead style="color:white; background:lightslategray">
                     <th style="color:white;">
-                        Nmae
+                        Name
                        </th>
                        
                        <th style="color:white;">
@@ -41,7 +41,7 @@
                            <td>{{supplier.username}}</td>
                            
                            <td>{{supplier.phone_number}}</td>
-                           <td>{{supplier.supplier_role}}</td>
+                           <td>{{supplier.email}}</td>
                            <td style="width: 33%;">
                                <div class="btn-group">
                                     <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#{{supplier.id}}">View Details</button>  
@@ -93,18 +93,19 @@
                                             <form action="{% url 'users:supplier_user_edit' supplier.id %}" method="POST">
                                                     {% csrf_token %}
 
-                                                    <div class="form-group row">
+                                                   <!-- <div class="form-group row">
                                                         
                                                     <label for="inputEmail3" class="col-sm-2 col-form-label">Company</label>
                                                     <div class="col-sm-10">
-                                                        <input type="telephone" class="form-control" id="inputEmail3"  value="{{ supplier.company}}">
+                                                        <input name="company" type="telephone" class="form-control" id="inputEmail3"  value="{{ supplier.company}}">
                                                     </div>
                                                     </div>
+                                                    -->
                                                     <div class="form-group row">
                                                         
                                                     <label for="inputEmail3" class="col-sm-2 col-form-label">Phone</label>
                                                     <div class="col-sm-10">
-                                                        <input type="telephone" class="form-control" id="inputEmail3"  value="{{ supplier.phone_number}}">
+                                                        <input name="phone_number" type="telephone" class="form-control" id="inputEmail3"  value="{{ supplier.phone_number}}">
                                                     </div>
                                                     </div>
                                                     
@@ -112,9 +113,9 @@
                                                     <div class="form-group row">
                                                         <label for="inputState" class="col-sm-2 col-form-label">Role</label>
                                                         <div class="col-sm-10" style="margin-left: 5px;"></div>
-                                                            <select id="inputState" class="form-control" style="margin-left: 15px;">
-                                                                <option>STAFF</option>
-                                                                <option>ADMIN</option>
+                                                            <select name="user_type" id="inputState" class="form-control" style="margin-left: 15px;">
+                                                                <option>Staff</option>
+                                                                <option>Admin</option>
                                                             </select>
                                                         </div>    
                                                         <div class="col-md-12 text-center">     
@@ -179,7 +180,7 @@
                         
                                     {% load crispy_forms_tags %}
                                     <form action="{% url 'users:suppliers_list' %}" method="POST">
-                                    {{ form|crispy }}
+                                    {{ form1|crispy }}
                                     {% csrf_token %}
                                     <button class="btn btn-primary" type="submit">Add User Profile</button>
                                     </form>
