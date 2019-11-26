@@ -30,7 +30,6 @@ class Company(models.Model):
 
 class User(AbstractUser):
     company = models.ForeignKey(Company, on_delete=models.DO_NOTHING, null=True)
-    # company_id = models.CharField(max_length=100, default='Company')
     fuel_request = models.PositiveIntegerField(default=0)
     phone_number = models.CharField(max_length=20, default='263')
     stage = models.CharField(max_length=20, default='registration')
