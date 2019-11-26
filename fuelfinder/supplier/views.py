@@ -15,6 +15,7 @@ from .forms import PasswordChange, RegistrationForm, RegistrationProfileForm, \
 from .models import Profile, FuelUpdate, FuelRequest, Transaction, Profile, TokenAuthentication, Offer
 from django.contrib.auth import get_user_model
 from buyer.forms import BuyerUpdateForm
+from buyer.models import Company
 User = get_user_model()
 
 # today's date
@@ -86,29 +87,12 @@ def verification(request, token, user_id):
                 form = BuyerUpdateForm(request.POST, request.FILES, instance=user)
                 if form.is_valid():
                     form.save()
-
-                    ''' 
                     company_id = request.POST.get('company_id')
-                    image = request.FILES.get('image') 
-                    user_type = request.POST.get('user_type')
-                    company_position = request.POST.get('company_position')
-                    pass1 = request.POST.get('password1')
-                    pass2 = request.POST.get('password2')
-                    user = User.objects.get(id=user_id)
-
-                    if pass1 == pass2:
-                        phone_number = User.objects.get(id=user_id)
-                        User.objects.filter(phone_number=phone_number).update(
-                            company_id= company_id,
-                            user_type = user_type,
-                            company_position = company_position,
-                            image=image,
-                            password = pass1)
-                    '''
-                        
-                    username = form.cleaned_data.get('username')
-                    messages.success(request, f'Account created for {username}')
-                    return redirect('buyer-login')
+                    selected_company = Company.objects.filter(id=company_id).first()
+                    user.company = selected_company
+                    user.is_active = True
+                    user.save()
+                    
             else:
                 print("pano ndasvika")
                 form = BuyerUpdateForm
