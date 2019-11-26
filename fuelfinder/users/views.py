@@ -46,7 +46,7 @@ def audit_trail(request):
 
 def suppliers_list(request):
     #user = authenticate(username='john', password='secret')
-    suppliers = User.objects.filter(company_id='ZUVA', supplier_role='Staff').all()
+    suppliers = User.objects.filter(supplier_role='Staff').all()
     #print(admin_.company)
     #suppliers = User.objects.all()
     
