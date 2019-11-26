@@ -90,7 +90,9 @@ def verification(request, token, user_id):
                     company_id = request.POST.get('company_id')
                     selected_company = Company.objects.filter(id=company_id).first()
                     user.company = selected_company
+                    user.is_active = True
                     user.save()
+                    
             else:
                 print("pano ndasvika")
                 form = BuyerUpdateForm
