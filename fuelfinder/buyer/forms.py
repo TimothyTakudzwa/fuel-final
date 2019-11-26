@@ -1,7 +1,7 @@
 from django import forms 
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Profile
+from .models import Profile, FuelRequest
 from .constants import COMPANY_CHOICES
 from django.contrib.auth import get_user_model
 
@@ -44,3 +44,15 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['image']
+
+class FuelRequestForm(forms.ModelForm):
+    OPTIONS= [
+    ('SELF COLLECTION', 'self collection'),
+    ('DELIVERY', 'delivery'),
+    ]
+
+    delivery_method = forms.CharField(label='Delivery Method', widget=forms.Select(choices=OPTIONS))
+    
+    class Meta:
+        model = FuelRequest
+        fields = ['amount','payment_method', 'delivery_method', 'fuel_type']

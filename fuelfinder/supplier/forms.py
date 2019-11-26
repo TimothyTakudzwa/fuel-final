@@ -69,9 +69,16 @@ class FuelRequestForm(forms.ModelForm):
         
 
 class FuelUpdateForm(forms.ModelForm):
+    OPTIONS= [
+    ('PETROL', 'petrol'),
+    ('DIESEL', 'diesel'),
+    ]
+
+    fuel_type = forms.CharField(label='Fuel Type', widget=forms.Select(choices=OPTIONS))
+
     class Meta:
         model = FuelUpdate
-        fields = ['max_amount', 'min_amount', 'deliver', 'payment_method']
+        fields = ['max_amount', 'min_amount', 'deliver','fuel_type', 'payment_method']
 
 
 

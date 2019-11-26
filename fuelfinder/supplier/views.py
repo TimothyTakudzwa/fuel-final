@@ -90,7 +90,9 @@ def verification(request, token, user_id):
                     company_id = request.POST.get('company_id')
                     selected_company = Company.objects.filter(id=company_id).first()
                     user.company = selected_company
+                    user.is_active = True
                     user.save()
+                    
             else:
                 print("pano ndasvika")
                 form = BuyerUpdateForm
@@ -180,20 +182,17 @@ def account(request):
 
 @login_required()
 def fuel_request(request):
-    context = {
-        'title': 'Fuel Finder | Fuel Request',
-        'requests': FuelRequest.objects.filter(date=today)
-    }
-    if request.method == 'POST':
-        submitted_id = request.POST.get('request_id')
-        if FuelRequest.objects.filter(id=submitted_id).exists():
-            request_id = FuelRequest.objects.get(id=submitted_id)
-            buyer_id = Profile.objects.get(id='')
-            Transaction.objects.create(request_id=request_id,
-                                       buyer_id=buyer_id)
-            messages.success(request, f'You have accepted a request for {request_id.amount} litres from {buyer_id.name}')
-            return redirect('fuel-request')
-    return render(request, 'supplier/accounts/fuel_request.html', context=context)
+    requests = FuelRequest.objects.filter(date=today)
+    for buyer_request in requests:
+        if Offer.objects.filter(supplier_id=request.user, request_id=buyer_request).exists():
+            offer = Offer.objects.get(supplier_id=request.user, request_id=buyer_request)
+            buyer_request.my_offer = f'{offer.quantity}ltrs @ ${offer.price}'
+            buyer_request.offer_price = offer.price
+            buyer_request.offer_quantity = offer.quantity
+            buyer_request.offer_id = offer.id
+        else:
+            buyer_request.my_offer = 0
+    return render(request, 'supplier/accounts/fuel_request.html', {'requests':requests})
 
 
 @login_required()
@@ -214,9 +213,10 @@ def fuel_update(request):
         min_amount = request.POST.get('min_amount')
         deliver = request.POST.get('deliver')
         payment_method = request.POST.get('payment_method')
-        supplier = Profile.objects.get(name=request.user)
+        fuel_type = request.POST.get('fuel_type')
+        #supplier = User.objects.get(name=request.user)
         supplier_id = request.user.id
-        FuelUpdate.objects.create(supplier_id=supplier_id, deliver=False, closing_time=closing_time, max_amount=max_amount, min_amount=min_amount, payment_method=payment_method)
+        FuelUpdate.objects.create(supplier_id=supplier_id, deliver=False, fuel_type=fuel_type, closing_time=closing_time, max_amount=max_amount, min_amount=min_amount, payment_method=payment_method)
         messages.success(request, 'Capacity updated successfully')
         return redirect('fuel-request')
 
@@ -236,4 +236,18 @@ def offer(request, id):
     else:
         messages.warning(request, 'Oops something went wrong while posting your offer')
     return render(request, 'supplier/accounts/fuel_request.html')
+
+
+@login_required
+def edit_offer(request, id):
+    offer = Offer.objects.get(id=id)
+    if request.method == 'POST':
+        offer.price = request.POST.get('price')
+        offer.quantity = request.POST.get('quantity')
+        offer.save()
+        messages.success(request, 'Offer successfully updated')
+        return redirect('fuel-request')
+    else:
+        messages.warning(request, 'Oops something went wrong while posting your offer')
+    return render(request, 'supplier/accounts/fuel-request.html')
 

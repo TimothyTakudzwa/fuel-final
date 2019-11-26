@@ -2,7 +2,8 @@
 from buyer.models import Company
 
 companies = Company.objects.all()
-for company in companies:
+COMPANY_CHOICES = ''
+for company in companies: 
     COMPANY_CHOICES = tuple([(company.id, company.name) for company in companies])
 '''   
         
