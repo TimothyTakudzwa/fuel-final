@@ -94,8 +94,8 @@ def verification(request, token, user_id):
                     
             else:
                 form = BuyerUpdateForm
-            messages.success(request, f'Email verification successs, Fill in the deatails to complete registration')
-            return redirect('login')
+                messages.success(request, f'Email verification successs, Fill in the deatails to complete registration')
+                return render(request, 'supplier/accounts/verification.html', {'form': form})
         else:
             messages.warning(request, 'Wrong verification token')
             return redirect('login')

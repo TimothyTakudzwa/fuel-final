@@ -39,6 +39,7 @@ urlpatterns = [
          name='password_reset_complete'),
     path('users/', include(('users.urls','users'), namespace='users')),
     path('supplier/', include(('supplier.urls','supplier'), namespace='supplier')),
+    
 
 
 
