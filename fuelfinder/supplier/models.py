@@ -1,14 +1,18 @@
 from django.db import models
 from PIL import Image
 from buyer.models import User, FuelRequest, Company
+from buyer.constants import *
 
 
 class ServiceStation(models.Model):
     company = models.ForeignKey(Company,on_delete=models.CASCADE)
-    location = models.CharField(max_length=50, help_text='Harare, Livingstone Street')
+    name = models.CharField(max_length=100, default='')
+    address = models.CharField(max_length=50, help_text='Harare, Livingstone Street')
     capacity = models.PositiveIntegerField(default=0)
-    has_fuel = models.BooleanField()
+    has_fuel = models.BooleanField(default=False)
     stock = models.FloatField(help_text='Volume In Litres')
+    closing_time = models.CharField(max_length=100, default='22:00')
+    payment_method = models.CharField(max_length=100, choices=PAYING_CHOICES)
 
     def __str__(self):
         return f"{self.company} : {self.location}"
@@ -19,32 +23,24 @@ class ServiceStation(models.Model):
     def fuel_available(self):
         return self.has_fuel        
 
-
-
-
-class Profile(models.Model):
-    name = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    picture = models.ImageField(default='default.png', upload_to='profiles')
-    phone = models.CharField(max_length=20, help_text='eg 263775580596')  
-    position_in_company = models.CharField(max_length=255)
-    is_authorized = models.BooleanField(default=False)
-    date = models.DateField(auto_now_add=True)
-    time = models.TimeField(auto_now_add=True)
+class Depot(models.Model):
+    company = models.ForeignKey(Company,on_delete=models.CASCADE)
+    name = models.CharField(max_length=100, default='')
+    address = models.CharField(max_length=50, help_text='Harare, Livingstone Street')
+    capacity = models.PositiveIntegerField(default=0)
+    has_fuel = models.BooleanField(default=False)
+    stock = models.FloatField(help_text='Volume In Litres')
+    closing_time = models.CharField(max_length=100, default='22:00')
+    payment_method = models.CharField(max_length=100, choices=PAYING_CHOICES)
 
     def __str__(self):
-        return str(self.name)
+        return f"{self.company} : {self.location}"
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
+    def get_capacity(self):
+        return self.capacity
 
-        img = Image.open(self.picture.path)
-        if img.height > 300 or img.width > 300:
-            output_size = (300, 300)
-            img.thumbnail(output_size)
-            img.save(self.picture.path)
-
-    class Meta:
-        ordering = ['name']
+    def fuel_available(self):
+        return self.has_fuel        
 
 class FuelUpdate(models.Model):
     supplier = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='supplier_name')
