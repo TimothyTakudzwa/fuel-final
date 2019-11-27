@@ -91,8 +91,8 @@ class FuelUpdate(models.Model):
 
 
 class Transaction(models.Model):
-    request_name = models.ForeignKey(FuelRequest, on_delete=models.DO_NOTHING, related_name='fuel_request')
-    buyer_name = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='buyinh_fuel')
+    request = models.ForeignKey(FuelRequest, on_delete=models.DO_NOTHING, related_name='fuel_request')
+    offer = models.ForeignKey(Offer, on_delete=models.DO_NOTHING, related_name='offer')
     date = models.DateField(auto_now_add=True)
     time = models.TimeField(auto_now_add=True)
 
