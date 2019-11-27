@@ -1,7 +1,7 @@
 {% extends "users/base.html" %}
 {% block body %}
 <div>
-    <h1 class="display-3" style="margin-left: 10px;">Service Stations Management</h1>
+    <h1 class="display-3" style="margin-left: 10px;">Deport Management</h1>
     <hr class="my-2">
 </div>
 
@@ -9,11 +9,11 @@
         <div class="card" style="background-color:white">
             
             <div class="card-header card-header-primary">
-            <h4 class="card-title "> Service Stations </h4>
+            <h4 class="card-title "> Depots </h4>
             </div>
         <div class="card-body">
             <div class="container-fluid">
-                {% if stations %}
+                {% if depots %}
     
                 <table id="example" class="table table-striped table-bordered" style="width:100%">
                     <thead style="color:white; background:lightslategray">
@@ -32,38 +32,38 @@
                         </th>
                         <th></th>
                        <tbody>
-                           {% for station in stations %}
+                           {% for depot in depots %}
                            <tr>
-                               <td>{{station.company}}</td>
+                               <td>{{depot.company}}</td>
                                
-                               <td>{{station.address}}</td>
-                               <td>{{station.capacity}}</td>
-                               <td>{{station.stock}}</td>
+                               <td>{{depot.address}}</td>
+                               <td>{{depot.capacity}}</td>
+                               <td>{{depot.stock}}</td>
                                <td style="width: 33%;">
                                    <div class="btn-group">
-                                        <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#{{station.id}}">View Details</button>  
-                                        <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#edit_{{station.id}}">Edit</button>
-                                        <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#delete_{{station.id}}">Delete</button>
+                                        <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#{{depot.id}}">View Details</button>  
+                                        <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#edit_{{depot.id}}">Edit</button>
+                                        <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#delete_{{depot.id}}">Delete</button>
                                         
     
                                    </div>
                                 </td>
                                 
                            
-                            <div class="modal fade" id="{{station.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="{{depot.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">{{station.company}}</h5>
+                                        <h5 class="modal-title" id="exampleModalLabel">{{depot.company}}</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                         </div>
                                         <div class="modal-body">
-                                            <p>Company Name: {{station.company}}</p>
-                                            <p>Location: {{station.location}}</p>
-                                            <p>Capacity: {{station.capacity}}</p>
-                                            <p>Stock: {{station.stock}}</p>
+                                            <p>Company Name: {{depot.company}}</p>
+                                            <p>Location: {{depot.address}}</p>
+                                            <p>Capacity: {{depot.capacity}}</p>
+                                            <p>Stock: {{depot.stock}}</p>
                                            
                                             
                                             

@@ -6,16 +6,17 @@ from buyer.constants import *
 class ServiceStation(models.Model):
     # ADD CLOSING TIME, PAYMENT METHOD 
     company = models.ForeignKey(Company,on_delete=models.CASCADE)
-    name = models.CharField(max_length=100, default='')
-    address = models.CharField(max_length=50, help_text='Harare, Livingstone Street')
+    name = models.CharField(max_length=200, default='')
+    address = models.CharField(max_length=200, help_text='Harare, Livingstone Street')
     capacity = models.PositiveIntegerField(default=0)
     has_fuel = models.BooleanField(default=False)
-    stock = models.FloatField(help_text='Volume In Litres')
+    stock_petrol = models.FloatField(help_text='Volume In Litres')
+    stock_diesel = models.FloatField(help_text='Volume In Litres')
     closing_time = models.CharField(max_length=100, default='22:00')
     payment_method = models.CharField(max_length=100, choices=PAYING_CHOICES)
 
     def __str__(self):
-        return f"{self.company} : {self.location}"
+        return f"{self.company} : {self.has_fuel}"
 
     def get_capacity(self):
         return self.capacity
@@ -25,16 +26,17 @@ class ServiceStation(models.Model):
 
 class Depot(models.Model):
     company = models.ForeignKey(Company,on_delete=models.CASCADE)
-    name = models.CharField(max_length=100, default='')
-    address = models.CharField(max_length=50, help_text='Harare, Livingstone Street')
+    name = models.CharField(max_length=200, default='')
+    address = models.CharField(max_length=200, help_text='Harare, Livingstone Street')
     capacity = models.PositiveIntegerField(default=0)
     has_fuel = models.BooleanField(default=False)
-    stock = models.FloatField(help_text='Volume In Litres')
+    stock_petrol = models.FloatField(help_text='Volume In Litres')
+    stock_diesel = models.FloatField(help_text='Volume In Litres')
     closing_time = models.CharField(max_length=100, default='22:00')
     payment_method = models.CharField(max_length=100, choices=PAYING_CHOICES)
 
     def __str__(self):
-        return f"{self.company} : {self.location}"
+        return f"{self.company} : {self.name}"
 
     def get_capacity(self):
         return self.capacity
@@ -90,19 +92,6 @@ class FuelUpdate(models.Model):
         return f'{str(self.supplier)} - {str(self.max_amount)}l'
 
 
-class Transaction(models.Model):
-    request_name = models.ForeignKey(FuelRequest, on_delete=models.DO_NOTHING, related_name='fuel_request')
-    buyer_name = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='buyinh_fuel')
-    date = models.DateField(auto_now_add=True)
-    time = models.TimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['date', 'time']
-
-    def __str__(self):
-        return f'{str(self.request_name)} - {str(self.buyer_name)}'
-
-
 class Offer(models.Model):
     quantity = models.IntegerField()
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
@@ -133,3 +122,17 @@ class SupplierRating(models.Model):
 
     def __str__(self):
         return f'{str(self.supplier)} - {str(self.rating)}'
+
+
+class Transaction(models.Model):
+    request = models.ForeignKey(FuelRequest, on_delete=models.DO_NOTHING, related_name='fuel_request')
+    offer = models.ForeignKey(Offer, on_delete=models.DO_NOTHING, related_name='offer')
+    date = models.DateField(auto_now_add=True)
+    time = models.TimeField(auto_now_add=True)
+    
+
+    class Meta:
+        ordering = ['date', 'time']
+
+    def __str__(self):
+        return f'{str(self.request_name)} - {str(self.buyer_name)}'

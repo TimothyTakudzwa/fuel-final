@@ -77,11 +77,22 @@ def verification(request, token, user_id):
         result = bool([token_check])
         print(result)
         if result == True:
-            print("tapindawo")
-            user.is_active = True
-            user.save()
-            messages.success(request, f'Welcome {user.username}, your account is now verified')
-
+            if request.method == 'POST':
+                user = User.objects.get(id=user_id)
+                form = BuyerUpdateForm(request.POST, request.FILES, instance=user)
+                if form.is_valid():
+                    form.save()
+                    company_id = request.POST.get('company_id')
+                    print(f"---------Supplier {company_id} {type(company_id)}")
+                    selected_company = Company.objects.filter(id=company_id).first()
+                    user.company = selected_company
+                    user.is_active = True
+                    user.save()
+                    
+            else:
+                form = BuyerUpdateForm
+                messages.success(request, f'Email verification successs, Fill in the deatails to complete registration')
+                return render(request, 'supplier/accounts/verification.html', {'form': form})
         else:
             messages.warning(request, 'Wrong verification token')
             return redirect('login')
@@ -103,7 +114,7 @@ def sign_in(request):
         if authenticated:
             client = User.objects.get(username=username)
             login(request, client)
-
+            
             messages.success(request, 'Welcome {client.username}')
             return redirect('dashboard')
         else:

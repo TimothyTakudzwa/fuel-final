@@ -9,22 +9,32 @@ import requests
 import secrets
 from django.core.mail import BadHeaderError, EmailMultiAlternatives
 from datetime import datetime
-from .constants import sender, subject
+#from .constants import sender, subject
 from .models import FuelRequest
 from django.contrib.auth import get_user_model
 
-User = get_user_model()
+user = get_user_model()
+
+# def login_success(request):
+#     """
+#     Redirects users based on whether they are in the admins group
+#     """
+#     if request.user(user_type="buyer").exists():
+#         # user is an admin
+#         return redirect("buyer-profile")
+#     else:
+#         return redirect("other_view")
 
 def login_success(request):
     """
-    Redirects users based on whether they are in the admins group
+    Redirects users based on whether they are in which group
     """
-    if request.user(user_type="buyer").exists():
-        # user is an admin
+    user_type  = request.user.user_type
+    print(user_type)
+    if user_type == "buyer":
         return redirect("buyer-profile")
     else:
-        return redirect("other_view")
-
+        return redirect("users:suppliers_list")
 def token_is_send(request, user):
     token = secrets.token_hex(12)
     domain = request.get_host()            

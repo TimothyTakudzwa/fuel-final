@@ -11,11 +11,21 @@ import secrets
 from django.core.mail import BadHeaderError, EmailMultiAlternatives
 from datetime import datetime
 from django.contrib import messages
-from buyer.models import User, Company
+from buyer.models import *
+from supplier.models import *
+from users.models import *
 from django.contrib.auth import authenticate
 
 def index(request):
     return render(request, 'users/index.html')
+
+
+def statistics(request):
+    staff_blocked = SupplierContact.objects.count()
+    offers = Offer.objects.count()
+    bulk_requests = FuelRequest.objects.filter(delivery_method="Bulk").count()
+    staff_blocked = len(User.objects.all())
+    return render(request, 'users/statistics.html', {'staff_blocked':staff_blocked, 'offers': offers, 'bulk_requests': bulk_requests})
 
 
 def supplier_user_edit(request, cid):
@@ -50,17 +60,13 @@ def audit_trail(request):
         
 
 def suppliers_list(request):
-    #user = authenticate(username='john', password='secret')
-    company = Company.objects.get(name='ZUVA')
-    suppliers = User.objects.filter(company=company,supplier_role='Staff').all()
-    #print(admin_.company)
-    #suppliers = User.objects.all()
-    
+    suppliers = User.objects.all()    
+    print(request.user.company.id)
     if request.method == 'POST':
-        form1 = SupplierContactForm(request.POST)
+        form1 = SupplierContactForm( request.POST)
         print('--------------------tapinda---------------')
         user_count = User.objects.filter(company_id='ZUVA').count()
-        print(user_count)
+        
         if user_count > 10:
             raise Http404("Your organisation has reached the maximum number of users, delete some ")
 
@@ -74,7 +80,7 @@ def suppliers_list(request):
             supplier_role = 'Staff'
 
             print(type(User))
-            User.objects.create(username=username,email=email,password=password,company_id=company,phone_number=phone_number,supplier_role=supplier_role)
+            User.objects.create(username=username, user_type = 'SUPPLIER', email=email,password=password,company_id=company,phone_number=phone_number,supplier_role=supplier_role)
             messages.success(request, f"{username} Registered Successfully")
             '''
             token = secrets.token_hex(12)
@@ -104,9 +110,12 @@ def suppliers_list(request):
             print("above is the token")
             '''
     else:
-        form1 = SupplierContactForm()           
+        form1 = SupplierContactForm()         
+        companies = Company.objects.all()
+        print(companies)
+        form1.fields['company'].choices = [(company.id, company.name) for company in companies]  
     
-    return render(request, 'users/suppliers_list.html', {'form1': form1, 'suppliers': suppliers})
+    return render(request, 'users/suppliers_list.html')
 
 def suppliers_delete(request, sid):
     supplier = User.objects.filter(id=sid).first()
@@ -137,6 +146,10 @@ def supplier_user_delete(request,cid,sid):
     return redirect('users:supplier_user_create', sid=sid)  
 
 # Begining Of Supplier Management
+
+def supplier_user_create(request,sid):
+    return render(request, 'users/suppliers_list.html')
+
 
 
 def buyer_user_create(request, sid):
