@@ -11,7 +11,7 @@ import secrets
 from django.core.mail import BadHeaderError, EmailMultiAlternatives
 from datetime import datetime
 from django.contrib import messages
-from buyer.models import User, Company
+from buyer.models import *
 from django.contrib.auth import authenticate
 
 def index(request):
@@ -50,7 +50,7 @@ def audit_trail(request):
 
 def suppliers_list(request):
     #user = authenticate(username='john', password='secret')
-    company = Company.objects.get(name='ZUVA')
+    company = Company.objects.get(name='ZUVA PETROLEUM (PVT) LTD')
     suppliers = User.objects.filter(company=company,supplier_role='Staff').all()
     #print(admin_.company)
     #suppliers = User.objects.all()
@@ -136,6 +136,10 @@ def supplier_user_delete(request,cid,sid):
     return redirect('users:supplier_user_create', sid=sid)  
 
 # Begining Of Supplier Management
+
+def supplier_user_create(request,sid):
+    return render(request, 'users/suppliers_list.html')
+
 
 
 def buyer_user_create(request, sid):
