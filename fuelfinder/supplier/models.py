@@ -4,6 +4,7 @@ from buyer.models import User, FuelRequest, Company
 from buyer.constants import *
 
 class ServiceStation(models.Model):
+    # ADD CLOSING TIME, PAYMENT METHOD 
     company = models.ForeignKey(Company,on_delete=models.CASCADE)
     name = models.CharField(max_length=200, default='')
     address = models.CharField(max_length=200, help_text='Harare, Livingstone Street')
@@ -71,6 +72,7 @@ class Profile(models.Model):
         ordering = ['name']
 
 class FuelUpdate(models.Model):
+    # To Do Add Type For Bulk Or Individual
     supplier = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='supplier_name')
     closing_time = models.TimeField()
     max_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
@@ -88,19 +90,6 @@ class FuelUpdate(models.Model):
 
     def __str__(self):
         return f'{str(self.supplier)} - {str(self.max_amount)}l'
-
-
-class Transaction(models.Model):
-    request_name = models.ForeignKey(FuelRequest, on_delete=models.DO_NOTHING, related_name='fuel_request')
-    buyer_name = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='buyinh_fuel')
-    date = models.DateField(auto_now_add=True)
-    time = models.TimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['date', 'time']
-
-    def __str__(self):
-        return f'{str(self.request_name)} - {str(self.buyer_name)}'
 
 
 class Offer(models.Model):
@@ -133,3 +122,16 @@ class SupplierRating(models.Model):
 
     def __str__(self):
         return f'{str(self.supplier)} - {str(self.rating)}'
+
+
+class Transaction(models.Model):
+    request = models.ForeignKey(FuelRequest, on_delete=models.DO_NOTHING, related_name='fuel_request')
+    offer = models.ForeignKey(Offer, on_delete=models.DO_NOTHING, related_name='offer')
+    date = models.DateField(auto_now_add=True)
+    time = models.TimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['date', 'time']
+
+    def __str__(self):
+        return f'{str(self.request_name)} - {str(self.buyer_name)}'
