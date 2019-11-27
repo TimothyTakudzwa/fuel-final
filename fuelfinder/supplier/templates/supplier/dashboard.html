@@ -41,13 +41,19 @@
       <div class="sidebar-wrapper">
         <ul class="nav">
           <li class="nav-item active  ">
-            <a class="nav-link" href="url ">
+            <a class="nav-link" href="{%url 'fuel-request'%}">
               <i class="material-icons">dashboard</i>
               <p>Requests</p>
             </a>
           </li>
           <li class="nav-item ">
-            <a class="nav-link" href="./add_org.html">
+              <a class="nav-link" href="{%url 'stock'%}">
+                <i class="material-icons">swap_vertical_circle</i>
+                <p>Stock</p>
+              </a>
+            </li>
+         <li class="nav-item ">
+            <a class="nav-link" href="{%url 'transaction'%}">
               <i class="material-icons">swap_vertical_circle</i>
               <p>Transactions</p>
             </a>
@@ -126,7 +132,7 @@
                 </div>
                 <div class="container">
                 <p style="text-align:center">
-                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add_fuel">Upload Quantity</button> </p>
+                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add_fuel">Update Stock</button> </p>
 
                 {% block body %}{% endblock %}
                 </div>

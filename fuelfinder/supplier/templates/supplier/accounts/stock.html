@@ -1,0 +1,48 @@
+{% extends "supplier/dashboard.html" %}
+{% load static %}
+{% block title %}
+{{title}}
+{% endblock %}
+{% block body %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mt-5" style="background-color:white">
+            <div class="card-header card-header-primary">
+                <h4 class="card-title">Available stocks</h4>
+            </div>
+            <div class="card-body">
+                <div class="container-fluid">
+                    <table id="example" class="table table-striped table-bordered" style="width:100%">
+                        <thead style="background-color: lightslategray; color:white;">
+                            <tr>
+                                <th style="color: white;"></th>
+                                <th style="color: white;">Fuel Type</th>
+                                <th style="color: white;">Minimum </th>
+                                <th style="color: white;">Maximum</th>
+                                <th style="color: white;">Price</th>
+                                <th style="color: white;">Payment Method</th>
+                                <th style="color: white;">Delivery Method</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for stock in stocks %}
+                            <tr>
+                                <td></td>
+                                <td>{{ stock.fuel_type }}</td>
+                                <td>{{ stock.min_amount }}</td>
+                                <td>{{ stock.max_amount }}</td>
+                                <td>{{ stock.price }}</td>
+                                <td>{{ stock.payment_method }}</td>
+                                <td>{{ stock.delivery_method }}</td>
+                            </tr>
+                            {%endfor%}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    
+{%endblock%}
