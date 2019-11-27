@@ -6,3 +6,6 @@ class BuyerConfig(AppConfig):
 
     def ready(self):
         import buyer.signals
+
+
+        
