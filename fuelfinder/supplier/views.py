@@ -114,7 +114,7 @@ def sign_in(request):
         if authenticated:
             client = User.objects.get(username=username)
             login(request, client)
-
+            
             messages.success(request, 'Welcome {client.username}')
             return redirect('dashboard')
         else:
