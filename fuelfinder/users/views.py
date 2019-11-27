@@ -30,7 +30,8 @@ def supplier_user_edit(request, cid):
         messages.success(request, 'Your Changes Have Been Saved')
     return render(request, 'users/suppliers_list.html')
 
-
+def supplier_user_create(request, sid):
+    return render(request, 'users/suppliers_list.html') 
 
 def stations(request):
     #user = authenticate(username='', password='')
