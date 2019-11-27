@@ -1,14 +1,37 @@
 from django.db import models
 from PIL import Image
 from buyer.models import User, FuelRequest, Company
-
+from buyer.constants import *
 
 class ServiceStation(models.Model):
+    # ADD CLOSING TIME, PAYMENT METHOD 
     company = models.ForeignKey(Company,on_delete=models.CASCADE)
-    location = models.CharField(max_length=50, help_text='Harare, Livingstone Street')
+    name = models.CharField(max_length=100, default='')
+    address = models.CharField(max_length=50, help_text='Harare, Livingstone Street')
     capacity = models.PositiveIntegerField(default=0)
-    has_fuel = models.BooleanField()
+    has_fuel = models.BooleanField(default=False)
     stock = models.FloatField(help_text='Volume In Litres')
+    closing_time = models.CharField(max_length=100, default='22:00')
+    payment_method = models.CharField(max_length=100, choices=PAYING_CHOICES)
+
+    def __str__(self):
+        return f"{self.company} : {self.location}"
+
+    def get_capacity(self):
+        return self.capacity
+
+    def fuel_available(self):
+        return self.has_fuel        
+
+class Depot(models.Model):
+    company = models.ForeignKey(Company,on_delete=models.CASCADE)
+    name = models.CharField(max_length=100, default='')
+    address = models.CharField(max_length=50, help_text='Harare, Livingstone Street')
+    capacity = models.PositiveIntegerField(default=0)
+    has_fuel = models.BooleanField(default=False)
+    stock = models.FloatField(help_text='Volume In Litres')
+    closing_time = models.CharField(max_length=100, default='22:00')
+    payment_method = models.CharField(max_length=100, choices=PAYING_CHOICES)
 
     def __str__(self):
         return f"{self.company} : {self.location}"
@@ -47,6 +70,7 @@ class Profile(models.Model):
         ordering = ['name']
 
 class FuelUpdate(models.Model):
+    # To Do Add Type For Bulk Or Individual
     supplier = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='supplier_name')
     closing_time = models.TimeField()
     max_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
@@ -64,19 +88,6 @@ class FuelUpdate(models.Model):
 
     def __str__(self):
         return f'{str(self.supplier)} - {str(self.max_amount)}l'
-
-
-class Transaction(models.Model):
-    request_name = models.ForeignKey(FuelRequest, on_delete=models.DO_NOTHING, related_name='fuel_request')
-    buyer_name = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='buyinh_fuel')
-    date = models.DateField(auto_now_add=True)
-    time = models.TimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['date', 'time']
-
-    def __str__(self):
-        return f'{str(self.request_name)} - {str(self.buyer_name)}'
 
 
 class Offer(models.Model):
@@ -109,3 +120,16 @@ class SupplierRating(models.Model):
 
     def __str__(self):
         return f'{str(self.supplier)} - {str(self.rating)}'
+
+
+class Transaction(models.Model):
+    request = models.ForeignKey(FuelRequest, on_delete=models.DO_NOTHING, related_name='fuel_request')
+    offer = models.ForeignKey(Offer, on_delete=models.DO_NOTHING, related_name='offer')
+    date = models.DateField(auto_now_add=True)
+    time = models.TimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['date', 'time']
+
+    def __str__(self):
+        return f'{str(self.request_name)} - {str(self.buyer_name)}'
