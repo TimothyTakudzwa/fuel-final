@@ -37,7 +37,7 @@ class User(AbstractUser):
     position = models.IntegerField(default=0)
     user_type = models.CharField(max_length=20, default='')
     image = models.ImageField(default='default.png', upload_to='buyer_profile_pics')
-    supplier_role = models.CharField(max_length=70)
+    supplier_role = models.CharField(max_length=70, choices=SUPPLIER_CHOICES)
 
     def __str__(self):
         return f' {self.id} - {self.username}'

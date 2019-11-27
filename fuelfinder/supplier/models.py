@@ -14,7 +14,7 @@ class ServiceStation(models.Model):
     payment_method = models.CharField(max_length=100, choices=PAYING_CHOICES)
 
     def __str__(self):
-        return f"{self.company} : {self.location}"
+        return f"{self.company} : {self.address}"
 
     def get_capacity(self):
         return self.capacity
@@ -33,7 +33,7 @@ class Depot(models.Model):
     payment_method = models.CharField(max_length=100, choices=PAYING_CHOICES)
 
     def __str__(self):
-        return f"{self.company} : {self.location}"
+        return f"{self.company} : {self.address}"
 
     def get_capacity(self):
         return self.capacity
