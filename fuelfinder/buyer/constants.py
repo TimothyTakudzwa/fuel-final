@@ -10,3 +10,5 @@ for company in companies:
 # print(COMPANY_CHOICES)
 sender = f'Fuel Finder Accounts<tests@marlvinzw.me>'
 subject = 'User Registration'
+
+PAYING_CHOICES = (('USD', 'USD'),('TRANSFER','TRANSFER'),('BOND CASH','BOND CASH'),('USD & TRANSFER','USD & TRANSFER'),('TRANSFER & BOND CASH','TRANSFER & BOND CASH'),('USD & BOND CASH','USD & BOND CASH'),('USD, TRANSFER & BOND CASH','USD, TRANSFER & BOND CASH'))

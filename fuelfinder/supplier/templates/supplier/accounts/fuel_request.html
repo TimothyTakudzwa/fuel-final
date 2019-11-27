@@ -37,7 +37,7 @@
                                 <td>{{ request.delivery_method }}</td>
                                 <td>{{ request.my_offer }}</td>
                                 {% if request.my_offer %}
-                                <td><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#edit_offer_{{request.id}}">Edit Offer</button></td>
+                                <td><button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#edit_offer_{{request.id}}">Edit Offer</button></td>
                                 {% else %}
                                 <td><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#add_offer_{{request.id}}">Make Offer</button></td>
                                 {% endif %}

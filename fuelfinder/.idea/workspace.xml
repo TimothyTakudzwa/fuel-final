@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c36155b2-67ea-4c49-b53e-fabb163842cc" name="Default Changelist" comment="" />
+    <list default="true" id="c36155b2-67ea-4c49-b53e-fabb163842cc" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/supplier/templates/supplier/accounts/fuel-request.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/notification/models.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,6 +48,9 @@
     <property name="settings.editor.selected.configurable" value="vcs.Git" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/notifications" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/supplier/templates/supplier/accounts" />
       <recent name="$PROJECT_DIR$/finder" />
@@ -102,6 +108,9 @@
       <updated>1574460531033</updated>
       <workItem from="1574460532283" duration="4412000" />
       <workItem from="1574517528148" duration="16996000" />
+      <workItem from="1574607754646" duration="1554000" />
+      <workItem from="1574672669883" duration="638000" />
+      <workItem from="1574786874185" duration="5506000" />
     </task>
     <servers />
   </component>
@@ -113,7 +122,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>

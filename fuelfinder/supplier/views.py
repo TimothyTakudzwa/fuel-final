@@ -6,18 +6,13 @@ from django.contrib.auth.models import User
 from django.core.mail import BadHeaderError, EmailMultiAlternatives
 from django.contrib import messages
 import secrets
-from users.models import AuditTrail
 
 from datetime import date
-import time
 
 from .forms import PasswordChange, RegistrationForm, RegistrationProfileForm, \
     RegistrationEmailForm, UserUpdateForm, ProfilePictureUpdateForm, ProfileUpdateForm, FuelRequestForm
-from .models import Profile, FuelUpdate, FuelRequest, Transaction, Profile, TokenAuthentication, Offer
-from django.contrib.auth import get_user_model
-from buyer.forms import BuyerUpdateForm
-from buyer.models import Company
-User = get_user_model()
+from .models import Profile, FuelUpdate, FuelRequest, Transaction, Profile, TokenAuthentication
+from notification.models import Notification
 
 # today's date
 today = date.today()
@@ -43,7 +38,7 @@ def register(request):
             user.save()
 
             token = secrets.token_hex(12)
-            TokenAuthentication.objects.create(token=token, user = user)
+            TokenAuthentication.objects.create(token=token, user=user)
             domain = request.get_host()
             url = f'{domain}/verification/{token}/{user.id}'
 
@@ -68,10 +63,12 @@ def register(request):
 
 
 def verification(request, token, user_id):
-
+    context = {
+        'title': 'Fuel Finder | Verification',
+    }
     check = User.objects.filter(id=user_id)
     print("here l am ")
-    print(check)
+
     if check.exists():
         user = User.objects.get(id=user_id)
         print(user)
@@ -80,32 +77,18 @@ def verification(request, token, user_id):
         result = bool([token_check])
         print(result)
         if result == True:
-            if request.method == 'POST':
-                user = User.objects.get(id=user_id)
-                form = BuyerUpdateForm(request.POST, request.FILES, instance=user)
-                if form.is_valid():
-                    form.save()
-                    company_id = request.POST.get('company_id')
-                    print(f"---------Supplier {company_id} {type(company_id)}")
-                    selected_company = Company.objects.filter(id=company_id).first()
-                    user.company = selected_company
-                    user.is_active = True
-                    user.save()
-                    
-            else:
-                form = BuyerUpdateForm
-            messages.success(request, f'Email verification successs, Fill in the deatails to complete registration')
-            return redirect('login')
+            print("tapindawo")
+            user.is_active = True
+            user.save()
+            messages.success(request, f'Welcome {user.username}, your account is now verified')
+
         else:
             messages.warning(request, 'Wrong verification token')
             return redirect('login')
     else:
         messages.warning(request, 'Wrong verification id')
         return redirect('login')
-    context = {
-        'title': 'Fuel Finder | Verification',
-    }
-    return render(request, 'supplier/accounts/verification.html', {'form': form})
+    return render(request, 'supplier/accounts/verification.html', context=context)
 
 
 def sign_in(request):
@@ -127,7 +110,7 @@ def sign_in(request):
             messages.warning(request, 'Incorrect username or password')
             return redirect('login')
 
-    return render(request, 'supplier/accounts/login.html', context=context) 
+    return render(request, 'supplier/accounts/login.html', context=context)
 
 
 @login_required()
@@ -169,12 +152,7 @@ def account(request):
     if request.method == 'POST':
         userform = UserUpdateForm(request.POST, instance=request.user)
         if userform.is_valid():
-            user = request.user
-            user.first_name = request.POST.get('first_name')
-            user.last_name = request.POST.get('last_name')
-            user.email = request.POST.get('email')
-            user.username = request.POST.get('username')
-            user.save()
+            userform.save()
             messages.success(request, f'Profile successfully updated')
             return redirect('account')
         else:
@@ -185,18 +163,21 @@ def account(request):
 
 @login_required()
 def fuel_request(request):
-    requests = FuelRequest.objects.filter(date=today)
-    for buyer_request in requests:
-        if Offer.objects.filter(supplier_id=request.user, request_id=buyer_request).exists():
-            offer = Offer.objects.get(supplier_id=request.user, request_id=buyer_request)
-            buyer_request.my_offer = f'{offer.quantity}ltrs @ ${offer.price}'
-            buyer_request.offer_price = offer.price
-            buyer_request.offer_quantity = offer.quantity
-            buyer_request.offer_id = offer.id
-        else:
-            buyer_request.my_offer = 0
-            buyer_request.offer_id = 0
-    return render(request, 'supplier/accounts/fuel_request.html', {'requests':requests})
+    context = {
+        'title': 'Fuel Finder | Fuel Request',
+        'requests': FuelRequest.objects.filter(date=today)
+    }
+    if request.method == 'POST':
+        submitted_id = request.POST.get('request_id')
+        if FuelRequest.objects.filter(id=submitted_id).exists():
+            request_id = FuelRequest.objects.get(id=submitted_id)
+            buyer_id = Profile.objects.get(id='')
+            Transaction.objects.create(request_id=request_id,
+                                       buyer_id=buyer_id)
+            messages.success(request,
+                             f'You have accepted a request for {request_id.amount} litres from {buyer_id.name}')
+            return redirect('fuel-request')
+    return render(request, 'supplier/accounts/fuel_request.html', context=context)
 
 
 @login_required()
@@ -208,21 +189,24 @@ def rate_supplier(request):
 
 @login_required
 def fuel_update(request):
-    context ={
-        # 'form':FuelUpdateForm()
-    }
     if request.method == 'POST':
-        closing_time = time.strftime("%H:%M:%S")
-        max_amount = request.POST.get('max_amount')
-        min_amount = request.POST.get('min_amount')
-        deliver = request.POST.get('deliver')
-        payment_method = request.POST.get('payment_method')
-        fuel_type = request.POST.get('fuel_type')
-        #supplier = User.objects.get(name=request.user)
-        supplier_id = request.user.id
-        FuelUpdate.objects.create(supplier_id=supplier_id, deliver=False, fuel_type=fuel_type, closing_time=closing_time, max_amount=max_amount, min_amount=min_amount, payment_method=payment_method)
-        messages.success(request, 'Capacity updated successfully')
-        return redirect('fuel-request')
+        if FuelUpdate.objects.filter(date=today, fuel_type=request.POST.get('fuel_type')).exists():
+            closing_time = time.strftime("%H:%M:%S")
+            max_amount = request.POST.get('max_amount')
+            min_amount = request.POST.get('min_amount')
+            deliver = request.POST.get('deliver')
+            payment_method = request.POST.get('payment_method')
+            fuel_type = request.POST.get('fuel_type')
+            supplier_id = request.user.id
+            FuelUpdate.objects.create(supplier_id=supplier_id, deliver=False, fuel_type=fuel_type, closing_time=closing_time, max_amount=max_amount, min_amount=min_amount, payment_method=payment_method)
+            messages.success(request, 'Quantity uploaded successfully')
+            return redirect('fuel-request')
+        else:
+            fuel_update = FuelUpdate.objects.get(fuel_type=request.POST.get('fuel_type'), date=today)
+            fuel_update.max_amount = request.POST.get('max_amount')
+            fuel_update.min_amount = request.POST.get('min_amount')
+            fuel_update
+
 
     return render(request, 'supplier/accounts/ratings.html', context=context)
 
@@ -256,3 +240,18 @@ def edit_offer(request, id):
         return redirect('fuel-request')
     return render(request, 'supplier/accounts/fuel-request.html')
 
+@login_required()
+def notifications(request):
+    context = {
+        'title': 'Fuel Finder | Notification',
+        'notifications': Notification.objects.filter(user=request.user),
+        'notifications_count': Notification.objects.filter(user=request.user, is_read=False).count(),
+    }
+    msgs = Notification.objects.filter(user=request.user, is_read=False)
+    if msgs.exists():
+        nots = Notification.objects.filter(user=request.user, is_read=False)
+        for i in nots:
+            user_not = Notification.objects.get(user=request.user, id=i.id)
+            user_not.is_read = True
+            user_not.save()
+    return render(request, 'supplier/accounts/notifications.html', context=context)
