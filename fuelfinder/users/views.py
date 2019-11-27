@@ -20,12 +20,21 @@ def index(request):
     return render(request, 'users/index.html')
 
 
+
+
 def statistics(request):
+
     staff_blocked = SupplierContact.objects.count()
     offers = Offer.objects.count()
     bulk_requests = FuelRequest.objects.filter(delivery_method="Bulk").count()
     staff_blocked = len(User.objects.all())
-    return render(request, 'users/statistics.html', {'staff_blocked':staff_blocked, 'offers': offers, 'bulk_requests': bulk_requests})
+    try:
+        trans = Transaction.objects.all().count()/Transaction.objects.all().count()/100
+    except:
+        trans = 0    
+    trans = str(trans) + " %"
+    return render(request, 'users/statistics.html', {'staff_blocked':staff_blocked, 'offers': offers,
+     'bulk_requests': bulk_requests, 'trans': trans})
 
 
 def supplier_user_edit(request, cid):
@@ -60,7 +69,7 @@ def audit_trail(request):
 
 def suppliers_list(request):
     suppliers = User.objects.all()    
-    print(request.user.company.id)
+    #print(request.user.company.id)
     if request.method == 'POST':
         form1 = SupplierContactForm( request.POST)
         print('--------------------tapinda---------------')

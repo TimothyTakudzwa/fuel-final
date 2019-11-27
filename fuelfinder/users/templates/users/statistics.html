@@ -5,6 +5,7 @@
     
     <hr class="my-2">
     <p>More info</p>
+    {{title}}
 
 </div>
 
@@ -12,7 +13,7 @@
     <div class="card border-success mb-3" style="max-width: 12rem;/* padding-top: 30px; */height: 15rem; margin-left: 10px;">
         <div class="card-body text-success">
           <h5 class="card-title">Users Blocked </h5>
-          <p class="card-text" style="font-size: 6rem;margin-top: 53px; color: rgb(5, 82, 145);">{{staff_blocked}}</p>
+          <p class="card-text" style="font-size: 3rem;margin-top: 53px; color: rgb(5, 82, 145);">{{staff_blocked}}</p>
         </div>
         <div class="card-footer bg-transparent border-success">Footer</div>
       </div>
@@ -20,22 +21,16 @@
       <div class="card border-success mb-3" style="max-width: 12rem;/* padding-top: 30px; */height: 15rem; margin-left: 10px;">
         <div class="card-body text-success">
           <h5 class="card-title">Orders Fulfilled </h5>
-          <p class="card-text" style="font-size: 6rem;margin-top: 53px; color: rgb(5, 82, 145);"></p>
+          <p class="card-text" style="font-size: 3rem;margin-top: 53px; color: rgb(5, 82, 145);">{{trans}}</p>
         </div>
         <div class="card-footer bg-transparent border-success">Footer</div>
       </div>  
   
-      <div class="card border-success mb-3" style="max-width: 12rem;/* padding-top: 30px; */height: 15rem; margin-left: 10px;">
-        <div class="card-body text-success">
-          <h5 class="card-title">Orders Outstanding </h5>
-          <p class="card-text" style="font-size: 6rem;margin-top: 53px; color: rgb(5, 82, 145);"></p>
-        </div>
-        <div class="card-footer bg-transparent border-success">Footer</div>
-      </div>  
+       
     <div class="card border-success mb-3" style="max-width: 12rem;/* padding-top: 30px; */height: 15rem; margin-left: 10px;">
         <div class="card-body text-success">
           <h5 class="card-title">Offers - Today</h5>
-          <p class="card-text" style="font-size: 6rem;margin-top: 53px;">{{ offers }}</p>
+          <p class="card-text" style="font-size: 3rem;margin-top: 53px;">{{ offers }}</p>
         </div>
         <div class="card-footer bg-transparent border-success">Footer</div>
       </div>
@@ -43,7 +38,7 @@
       <div class="card border-success mb-3" style="max-width: 12rem;/* padding-top: 30px; */height: 15rem; margin-left: 10px;">
         <div class="card-body text-success">
           <h5 class="card-title">Bulk Requests</h5>
-          <p class="card-text" style="font-size: 6rem;margin-top: 53px; color: rgb(247, 64, 18);">{{bulk_requests}}</p>
+          <p class="card-text" style="font-size: 3rem;margin-top: 53px; color: rgb(247, 64, 18);">{{bulk_requests}}</p>
         </div>
         <div class="card-footer bg-transparent border-success">Footer</div>
       </div>
@@ -51,7 +46,15 @@
       <div class="card border-success mb-3" style="max-width: 12rem;/* padding-top: 30px; */height: 15rem; margin-left: 10px;">
         <div class="card-body text-success">
           <h5 class="card-title">Staff Blocked</h5>
-          <p class="card-text" style="font-size: 6rem;margin-top: 53px; color: rgb(5, 145, 28);"></p>
+          <p class="card-text" style="font-size: 3rem;margin-top: 53px; color: rgb(5, 145, 28);"></p>
+        </div>
+        <div class="card-footer bg-transparent border-success">Footer</div>
+      </div>
+
+      <div class="card border-success mb-3" style="max-width: 12rem;/* padding-top: 30px; */height: 15rem; margin-left: 10px;">
+        <div class="card-body text-success">
+          <h5 class="card-title">Average Rating</h5>
+          <p class="card-text" style="font-size: 3rem;margin-top: 53px; color: rgb(5, 145, 28);"></p>
         </div>
         <div class="card-footer bg-transparent border-success">Footer</div>
       </div>

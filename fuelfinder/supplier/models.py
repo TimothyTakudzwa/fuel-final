@@ -129,8 +129,8 @@ class Transaction(models.Model):
     offer = models.ForeignKey(Offer, on_delete=models.DO_NOTHING, related_name='offer')
     date = models.DateField(auto_now_add=True)
     time = models.TimeField(auto_now_add=True)
+    complete = models.BooleanField(default=False)
     
-
     class Meta:
         ordering = ['date', 'time']
 
