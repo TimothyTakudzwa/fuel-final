@@ -6,16 +6,17 @@ from buyer.constants import *
 class ServiceStation(models.Model):
     # ADD CLOSING TIME, PAYMENT METHOD 
     company = models.ForeignKey(Company,on_delete=models.CASCADE)
-    name = models.CharField(max_length=100, default='')
-    address = models.CharField(max_length=50, help_text='Harare, Livingstone Street')
+    name = models.CharField(max_length=200, default='')
+    address = models.CharField(max_length=200, help_text='Harare, Livingstone Street')
     capacity = models.PositiveIntegerField(default=0)
     has_fuel = models.BooleanField(default=False)
-    stock = models.FloatField(help_text='Volume In Litres')
+    stock_petrol = models.FloatField(help_text='Volume In Litres')
+    stock_diesel = models.FloatField(help_text='Volume In Litres')
     closing_time = models.CharField(max_length=100, default='22:00')
     payment_method = models.CharField(max_length=100, choices=PAYING_CHOICES)
 
     def __str__(self):
-        return f"{self.company} : {self.address}"
+        return f"{self.company} : {self.has_fuel}"
 
     def get_capacity(self):
         return self.capacity
@@ -25,16 +26,17 @@ class ServiceStation(models.Model):
 
 class Depot(models.Model):
     company = models.ForeignKey(Company,on_delete=models.CASCADE)
-    name = models.CharField(max_length=100, default='')
-    address = models.CharField(max_length=50, help_text='Harare, Livingstone Street')
+    name = models.CharField(max_length=200, default='')
+    address = models.CharField(max_length=200, help_text='Harare, Livingstone Street')
     capacity = models.PositiveIntegerField(default=0)
     has_fuel = models.BooleanField(default=False)
-    stock = models.FloatField(help_text='Volume In Litres')
+    stock_petrol = models.FloatField(help_text='Volume In Litres')
+    stock_diesel = models.FloatField(help_text='Volume In Litres')
     closing_time = models.CharField(max_length=100, default='22:00')
     payment_method = models.CharField(max_length=100, choices=PAYING_CHOICES)
 
     def __str__(self):
-        return f"{self.company} : {self.address}"
+        return f"{self.company} : {self.name}"
 
     def get_capacity(self):
         return self.capacity

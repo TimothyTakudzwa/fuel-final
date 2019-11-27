@@ -104,7 +104,7 @@ def suppliers_list(request):
         print(companies)
         form1.fields['company'].choices = [(company.id, company.name) for company in companies]  
     
-    return render(request, 'users/suppliers_list.html', {'form1': form1, 'suppliers': suppliers})
+    return render(request, 'users/suppliers_list.html')
 
 def suppliers_delete(request, sid):
     supplier = User.objects.filter(id=sid).first()
