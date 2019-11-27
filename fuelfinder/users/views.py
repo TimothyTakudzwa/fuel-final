@@ -49,17 +49,13 @@ def audit_trail(request):
         
 
 def suppliers_list(request):
-    #user = authenticate(username='john', password='secret')
-    company = Company.objects.get(name='ZUVA PETROLEUM (PVT) LTD')
-    suppliers = User.objects.filter(company=company,supplier_role='Staff').all()
-    #print(admin_.company)
-    #suppliers = User.objects.all()
-    
+    suppliers = User.objects.all()    
+    print(request.user.company.id)
     if request.method == 'POST':
-        form1 = SupplierContactForm(request.POST)
+        form1 = SupplierContactForm( request.POST)
         print('--------------------tapinda---------------')
         user_count = User.objects.filter(company_id='ZUVA').count()
-        print(user_count)
+        
         if user_count > 10:
             raise Http404("Your organisation has reached the maximum number of users, delete some ")
 
@@ -73,7 +69,7 @@ def suppliers_list(request):
             supplier_role = 'Staff'
 
             print(type(User))
-            User.objects.create(username=username,email=email,password=password,company_id=company,phone_number=phone_number,supplier_role=supplier_role)
+            User.objects.create(username=username, user_type = 'SUPPLIER', email=email,password=password,company_id=company,phone_number=phone_number,supplier_role=supplier_role)
             messages.success(request, f"{username} Registered Successfully")
             '''
             token = secrets.token_hex(12)
@@ -103,7 +99,10 @@ def suppliers_list(request):
             print("above is the token")
             '''
     else:
-        form1 = SupplierContactForm()           
+        form1 = SupplierContactForm()         
+        companies = Company.objects.all()
+        print(companies)
+        form1.fields['company'].choices = [(company.id, company.name) for company in companies]  
     
     return render(request, 'users/suppliers_list.html', {'form1': form1, 'suppliers': suppliers})
 

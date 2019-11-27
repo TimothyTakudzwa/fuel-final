@@ -15,29 +15,26 @@ from django.contrib.auth import get_user_model
 
 user = get_user_model()
 
-def login_success(request):
-    """
-    Redirects users based on whether they are in the admins group
-    """
-    if request.user(user_type="buyer").exists():
-        # user is an admin
-        return redirect("buyer-profile")
-    else:
-        return redirect("other_view")
+# def login_success(request):
+#     """
+#     Redirects users based on whether they are in the admins group
+#     """
+#     if request.user(user_type="buyer").exists():
+#         # user is an admin
+#         return redirect("buyer-profile")
+#     else:
+#         return redirect("other_view")
 
 def login_success(request):
     """
     Redirects users based on whether they are in which group
     """
-    user = User.objects.get(user=request.user)
-    user_type  = user.user_type
-    
+    user_type  = request.user.user_type
+    print(user_type)
     if user_type == "buyer":
-        # user is a buyer
         return redirect("buyer-profile")
     else:
-        return redirect("supplier-profile")#have to check with the supplier landing page
-
+        return redirect("users:suppliers_list")
 def token_is_send(request, user):
     token = secrets.token_hex(12)
     domain = request.get_host()            

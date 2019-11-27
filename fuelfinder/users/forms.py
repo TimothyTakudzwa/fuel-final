@@ -51,8 +51,7 @@ class BuyerContactForm(forms.Form):
 
 
 class SupplierContactForm(forms.Form):
-    company = forms.CharField(label='Company Name)', required=True,
-                                max_length=30)
+    company = forms.ChoiceField()
     username = forms.CharField(label='Username', required=True,
                                  max_length=30)
     email = forms.EmailField(required=True, max_length=100,
