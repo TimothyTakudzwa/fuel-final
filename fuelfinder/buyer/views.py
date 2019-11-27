@@ -15,6 +15,15 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+def login_success(request):
+    """
+    Redirects users based on whether they are in the admins group
+    """
+    if request.user(user_type="buyer").exists():
+        # user is an admin
+        return redirect("buyer-profile")
+    else:
+        return redirect("other_view")
 
 def token_is_send(request, user):
     token = secrets.token_hex(12)

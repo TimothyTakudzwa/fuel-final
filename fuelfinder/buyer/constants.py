@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> 41f7afb17e418e4d6f390db0229629b0cfb39a2d
 from buyer.models import Company
 
 companies = Company.objects.all()
