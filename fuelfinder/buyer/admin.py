@@ -10,5 +10,5 @@ class UserAdmin(admin.ModelAdmin):
 admin.site.register(User, UserAdmin)
 admin.site.register(Company)
 admin.site.register(ServiceStation)
-admin.site.register(Depot)
+#admin.site.register(Depot)
 

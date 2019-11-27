@@ -9,7 +9,7 @@ import requests
 import secrets
 from django.core.mail import BadHeaderError, EmailMultiAlternatives
 from datetime import datetime
-from .constants import sender, subject
+#from .constants import sender, subject
 from .models import FuelRequest
 from django.contrib.auth import get_user_model
 

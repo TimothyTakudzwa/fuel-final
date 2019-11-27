@@ -12,10 +12,20 @@ from django.core.mail import BadHeaderError, EmailMultiAlternatives
 from datetime import datetime
 from django.contrib import messages
 from buyer.models import *
+from supplier.models import *
+from users.models import *
 from django.contrib.auth import authenticate
 
 def index(request):
     return render(request, 'users/index.html')
+
+
+def statistics(request):
+    staff_blocked = SupplierContact.objects.count()
+    offers = Offer.objects.count()
+    bulk_requests = FuelRequest.objects.filter(delivery_method="Bulk").count()
+    staff_blocked = len(User.objects.all())
+    return render(request, 'users/statistics.html', {'staff_blocked':staff_blocked, 'offers': offers, 'bulk_requests': bulk_requests})
 
 
 def supplier_user_edit(request, cid):
