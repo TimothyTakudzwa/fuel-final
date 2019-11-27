@@ -1,28 +1,15 @@
 from django.db import models
 from fuelfinder.settings import AUTH_USER_MODEL as User
-# from .constants import * 
+from .constants2 import * 
 from PIL import Image
 from django.contrib.auth.models import AbstractUser
-
-TYPE_CHOICES = (
-    ('Buyer','BUYER'),
-    ('Seller', 'SELLER'),
-)
-
-SUPPLIER_CHOICES = (
-    ('Admin','ADMIN'),
-    ('Staff', 'STAFF'),
-)
-
-
-
 
 class Company(models.Model):
     name = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
-    industry = models.CharField(max_length=255)
+    industry = models.CharField(max_length=255, choices=INDUSTRY_CHOICES)
     is_verified = models.BooleanField(default=False)
-    company_type = models.CharField(max_length=255, choices=TYPE_CHOICES)
+    company_type = models.CharField(max_length=255, choices=COMPANY_CHOICES)
     
     def __str__(self):
         return self.name
@@ -35,7 +22,7 @@ class User(AbstractUser):
     stage = models.CharField(max_length=20, default='registration')
     company_position = models.CharField(max_length=100, default='')
     position = models.IntegerField(default=0)
-    user_type = models.CharField(max_length=20, default='')
+    user_type = models.CharField(max_length=20, default='', choices=TYPE_CHOICES)
     image = models.ImageField(default='default.png', upload_to='buyer_profile_pics')
     supplier_role = models.CharField(max_length=70)
     #activated_for_whatsapp = models.BooleanField(default=False)
