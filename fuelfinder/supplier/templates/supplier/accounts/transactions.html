@@ -38,7 +38,7 @@
                                 <td>{{ transaction.request.fuel_type }}</td>
                                 <td>{{ transaction.offer.quantity }}</td>
                                 <td>{{ transaction.offer.price }}</td>
-                                <td>{{ transaction.offer.quantity|add:transaction.offer.price }}</td>
+                                <td>{% widthratio transaction.offer.quantity 1 transaction.offer.price %}</td>
                                 <td><button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#edit_offer_{{transaction.id}}">Complete</button></td>
                             </tr>
                             {%endfor%}
