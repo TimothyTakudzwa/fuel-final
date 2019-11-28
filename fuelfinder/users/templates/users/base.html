@@ -95,12 +95,19 @@
             </a>
           </li>
 
-          <li class="nav-item">
+          <li class="nav-item {% if request.path == '/users/statistics/' %} active {% endif %}">
             <a class="nav-link" href="{% url 'users:statistics' %}">
               <i class="material-icons">show_chart</i>
               <p>Statistics</p>
             </a>
           </li>
+
+          <li class="nav-item">
+              <a class="nav-link" href=" {% url 'users:report_generator' %}">
+                <i class="material-icons">calendar_today</i>
+                <p>Report Generator</p>
+              </a>
+            </li>
 
            
            <li class="nav-item">
