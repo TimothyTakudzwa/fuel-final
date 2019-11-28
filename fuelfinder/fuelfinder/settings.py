@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'notification.apps.NotificationConfig',
     'finder.apps.FinderConfig',
+    'serviceStation.apps.ServicestationConfig',
 
 
     'django.contrib.admin',

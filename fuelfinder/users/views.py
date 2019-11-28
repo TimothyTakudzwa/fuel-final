@@ -58,11 +58,13 @@ def suppliers_list(request):
     if request.method == 'POST':
         form1 = SupplierContactForm(request.POST)
         print('--------------------tapinda---------------')
-        user_count = User.objects.filter(company_id='ZUVA').count()
+        '''
+        company = Company.objects.get(name='ZUVA PETROLEUM (PVT) LTD')
+        user_count = User.objects.filter(company=company).count()
         print(user_count)
         if user_count > 10:
             raise Http404("Your organisation has reached the maximum number of users, delete some ")
-
+        '''
         if form1.is_valid():
             print('--------------------tapinda---------------')
             username = form1.cleaned_data['username']

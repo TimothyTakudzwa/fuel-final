@@ -51,8 +51,10 @@ class BuyerContactForm(forms.Form):
 
 
 class SupplierContactForm(forms.Form):
-    company = forms.CharField(label='Company Name)', required=True,
+    company = forms.CharField(label='Company Name', required=True,
                                 max_length=30)
+    service_tation = forms.ChoiceField(label='Service Station')
+                                
     username = forms.CharField(label='Username', required=True,
                                  max_length=30)
     email = forms.EmailField(required=True, max_length=100,

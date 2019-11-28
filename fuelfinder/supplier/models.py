@@ -3,16 +3,13 @@ from PIL import Image
 from buyer.models import User, FuelRequest, Company
 from buyer.constants import *
 
+STATUS_CHOICES = (('OPEN','open'),('CLOSED','Closed'),('OFFLOADING','Offloading'))
 class ServiceStation(models.Model):
     # ADD CLOSING TIME, PAYMENT METHOD 
     company = models.ForeignKey(Company,on_delete=models.CASCADE)
     name = models.CharField(max_length=100, default='')
     address = models.CharField(max_length=50, help_text='Harare, Livingstone Street')
-    capacity = models.PositiveIntegerField(default=0)
-    has_fuel = models.BooleanField(default=False)
-    stock = models.FloatField(help_text='Volume In Litres')
-    closing_time = models.CharField(max_length=100, default='22:00')
-    payment_method = models.CharField(max_length=100, choices=PAYING_CHOICES)
+    assigned_staff =models.ForeignKey(User,on_delete=models.DO_NOTHING)
 
     def __str__(self):
         return f"{self.company} : {self.address}"
@@ -27,11 +24,7 @@ class Depot(models.Model):
     company = models.ForeignKey(Company,on_delete=models.CASCADE)
     name = models.CharField(max_length=100, default='')
     address = models.CharField(max_length=50, help_text='Harare, Livingstone Street')
-    capacity = models.PositiveIntegerField(default=0)
-    has_fuel = models.BooleanField(default=False)
-    stock = models.FloatField(help_text='Volume In Litres')
-    closing_time = models.CharField(max_length=100, default='22:00')
-    payment_method = models.CharField(max_length=100, choices=PAYING_CHOICES)
+    assigned_staff =models.ForeignKey(User,on_delete=models.DO_NOTHING)
 
     def __str__(self):
         return f"{self.company} : {self.address}"
@@ -43,6 +36,35 @@ class Depot(models.Model):
         return self.has_fuel        
 
 
+class FuelAllocation(models.Model):
+    date = models.DateField(auto_now_add=True)
+    service_station = models.CharField(max_length=255)
+    assigned_staff = models.CharField(max_length=300)
+    fuel_type = models.CharField(max_length=300) 
+    allocated_quantity = models.CharField(max_length=255)
+    current_available_quantity = models.CharField(max_length=255)
+
+
+class FuelUpdate(models.Model):
+    supplier = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='supplier_name')
+    available_quantity = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    fuel_type = models.CharField(max_length=20)
+    deliver = models.BooleanField(default=False)
+    queue_size = models.CharField(max_length=200)
+    status = models.CharField(max_length=300, choices=STATUS_CHOICES)
+    arrival_time = models.CharField(max_length=100, default='06:00')
+    payment_method = models.CharField(max_length=200)
+    date = models.DateField(auto_now_add=True)
+    time = models.TimeField(auto_now_add=True)
+    is_deleted = models.BooleanField(default=False)
+
+
+    class Meta:
+        ordering = ['date', 'time', 'supplier']
+
+    def __str__(self):
+        return f'{str(self.supplier)} - {str(self.available_quantity)}l'
 
 
 class Profile(models.Model):
@@ -68,26 +90,6 @@ class Profile(models.Model):
 
     class Meta:
         ordering = ['name']
-
-class FuelUpdate(models.Model):
-    # To Do Add Type For Bulk Or Individual
-    supplier = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='supplier_name')
-    closing_time = models.TimeField()
-    max_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    min_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    fuel_type = models.CharField(max_length=20)
-    deliver = models.BooleanField(default=False)
-    payment_method = models.CharField(max_length=200)
-    date = models.DateField(auto_now_add=True)
-    time = models.TimeField(auto_now_add=True)
-    is_deleted = models.BooleanField(default=False)
-
-    class Meta:
-        ordering = ['date', 'time', 'supplier']
-
-    def __str__(self):
-        return f'{str(self.supplier)} - {str(self.max_amount)}l'
 
 
 class Offer(models.Model):
