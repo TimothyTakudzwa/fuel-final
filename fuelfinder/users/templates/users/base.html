@@ -243,6 +243,11 @@
    <script src="{% static 'finder/assets/demo/demo.js' %}"></script>
    <script>
      
+     
+    $(document).ready(function() {
+      $('#example').DataTable({"order": [[ 0, "desc" ]]});
+    } );
+  
      $(document).ready(function() {
        $().ready(function() {
          $sidebar = $('.sidebar');

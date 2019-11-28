@@ -12,7 +12,7 @@ class ServiceStation(models.Model):
     assigned_staff =models.ForeignKey(User,on_delete=models.DO_NOTHING)
 
     def __str__(self):
-        return f"{self.company} : {self.name}"
+        return f"{self.name}"
 
     def get_capacity(self):
         return self.capacity

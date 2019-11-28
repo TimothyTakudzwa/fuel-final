@@ -23,9 +23,17 @@
             <table id="example" class="table table-striped table-bordered" style="width:100%">
                 <thead style="color:white; background:lightslategray">
                     <th style="color:white;">
-                        Name
+                        First Name
                        </th>
-                       
+                       <th style="color:white;">
+                        Surname
+                       </th>
+                       <th style="color:white;">
+                        Userrname
+                       </th>
+                       <th style="color:white;">
+                        Service Station
+                       </th>
                        <th style="color:white;">
                           Phone Number 
                          </th>
@@ -38,8 +46,10 @@
                    <tbody>
                        {% for supplier in suppliers %}
                        <tr>
+                            <td>{{supplier.first_name}}</td>
+                            <td>{{supplier.last_name}}</td>
                            <td>{{supplier.username}}</td>
-                           
+                           <td>{{supplier.company.name}}</td>
                            <td>{{supplier.phone_number}}</td>
                            <td>{{supplier.email}}</td>
                            <td style="width: 33%;">
@@ -63,8 +73,10 @@
                                     </button>
                                     </div>
                                     <div class="modal-body">
-                                        <p>Company Name: {{supplier.company}}</p>
-                                        <p>Username: {{supplier.username}}</p>
+                                        <p> First Name: {{supplier.first_name}}</p>
+                                        <p> Last Name: {{supplier.last_name}}</p>
+                                        <p> Userame: {{supplier.username}}</p>
+                                        <p>Service Station: {{supplier.service_station}}</p>
                                         <p>Phone Number: {{supplier.phone_number}}</p>
                                         <p>Email: {{supplier.email}}</p>
                                        
