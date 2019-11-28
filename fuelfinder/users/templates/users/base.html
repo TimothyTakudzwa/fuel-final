@@ -52,9 +52,24 @@
            <li class="nav-item {% if request.path == '/users/suppliers/' %} active {% endif %}">
              <a class="nav-link" href="{% url 'users:suppliers_list' %}">
                <i class="material-icons">people</i>
-               <p>Staff</p>
+               <p>Service Station Staff</p>
              </a>
-           </li>  
+           </li> 
+           
+           <li class="nav-item {% if request.path == '/users/suppliers/' %} active {% endif %}">
+            <a class="nav-link" href="{% url 'users:suppliers_list' %}">
+              <i class="material-icons">people</i>
+              <p>Depot Staff</p>
+            </a>
+          </li>
+          
+          <li class="nav-item {% if request.path == '/users/stations/' %} active {% endif %}">
+              
+            <a class="nav-link " href="{% url 'users:stations' %}">
+              <i class="material-icons">local_gas_station</i>
+              <p>Depots</p>
+            </a>
+          </li>
 
            <li class="nav-item {% if request.path == '/users/audit_trail/' %} active {% endif %}">
             <a class="nav-link" href="{% url 'users:audit_trail' %}">

@@ -1,3 +1,5 @@
+import random
+
 from django.shortcuts import render, get_object_or_404, redirect
 
 from django.shortcuts import Http404
@@ -28,13 +30,26 @@ def statistics(request):
     offers = Offer.objects.count()
     bulk_requests = FuelRequest.objects.filter(delivery_method="Bulk").count()
     staff_blocked = len(User.objects.all())
+    clients = []
+    companies = Company.objects.filter(company_type='Corporate')
+    value = [round(random.uniform(5000.5,10000.5),2) for i in range(len(companies))]
+    num_trans = [random.randint(2,12) for i in range(len(companies))]
+    counter = 0
+
+    for company in companies:
+        company.total_value = value[counter]
+        company.num_transactions = num_trans[counter]
+        counter += 1
+
+    clients = [company for company in  companies]    
+
     try:
         trans = Transaction.objects.all().count()/Transaction.objects.all().count()/100
     except:
         trans = 0    
     trans = str(trans) + " %"
     return render(request, 'users/statistics.html', {'staff_blocked':staff_blocked, 'offers': offers,
-     'bulk_requests': bulk_requests, 'trans': trans})
+     'bulk_requests': bulk_requests, 'trans': trans, 'clients': clients})
 
 
 def supplier_user_edit(request, cid):
@@ -123,7 +138,7 @@ def suppliers_list(request):
         print(companies)
         form1.fields['company'].choices = [(company.id, company.name) for company in companies]  
     
-    return render(request, 'users/suppliers_list.html')
+    return render(request, 'users/suppliers_list.html', {'suppliers': suppliers })
 
 def suppliers_delete(request, sid):
     supplier = User.objects.filter(id=sid).first()

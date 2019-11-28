@@ -45,8 +45,6 @@ class Depot(models.Model):
         return self.has_fuel        
 
 
-
-
 class Profile(models.Model):
     name = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     picture = models.ImageField(default='default.png', upload_to='profiles')
