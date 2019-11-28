@@ -75,7 +75,21 @@ def stations(request):
     return render(request, 'users/service_stations.html', {'stations': stations})
 
 def report_generator(request):
-    return render(request, 'users/report.html')
+    if request.method == "POST":
+        start_date = datetime.strptime(request.form['end_date'], '%Y-%m-%d')
+        end_date = datetime.strptime(request.form['start_date'], '%Y-%m-%d')
+        if request.form['report_type'] == 'Transactions':
+            trans = Transaction.objects.filter(date__range=[start_date, end_date])
+            requests = None; allocations = None
+        if request.form['report_type'] == 'Fuel Requests':
+            requests = FuelRequest.objects.filter(date_range=[start_date, end_date])
+            trans = None; allocations = None
+        if request.form['report_type'] == 'Allocations':
+            allocations = FuelAllocation.objects.filter(date_range=[start_date, end_date])
+    form = ReportForm()
+    allocations = requests = trans = None
+
+    return render(request, 'users/report.html', {'trans': trans, 'requests': requests,'allocations':allocations, 'form':form })
 
 def depots(request):
     #user = authenticate(username='', password='')
