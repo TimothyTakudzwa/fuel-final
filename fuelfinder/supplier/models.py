@@ -59,7 +59,6 @@ class FuelUpdate(models.Model):
     time = models.TimeField(auto_now_add=True)
     is_deleted = models.BooleanField(default=False)
 
-
     class Meta:
         ordering = ['date', 'time', 'supplier']
 

@@ -32,6 +32,9 @@
                        <th style="color:white;">
                         Fuel Type
                          </th>
+                         <th style="color:white;">
+                          Arrival Time
+                           </th>
                         
                            <th style="color:white;">
                             Available Quantity 
@@ -45,6 +48,9 @@
                            <th style="color:white;">
                             Queue Size 
                            </th>
+                           <th style="color:white;">
+                            Status 
+                           </th>
                           <th style="color:white;">
                           Action
                         </th>
@@ -54,11 +60,13 @@
                            <td>{{update.date}}</td>
                            <td>{{update.supplier.company.address}}</td>
                            <td>{{update.fuel_type}}</td>
-                           <td>{{update.max_amount}}</td>
+                           <td>{{update.arrival_time}}</td>
+                           <td>{{update.available_quantity}}</td>
                            <td>{{update.price}}</td>
                            <td>{{update.payment_method}}</td>
-                           <td>{{update.closing_time}}</td>
-                           <td style="width: 33%;">
+                           <td>{{update.queue_size}}</td>
+                           <td>{{update.status}}</td>
+                           <td>
                                <div class="btn-group">
                                     <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#{{update.id}}">Update</button>  
                                     
@@ -66,38 +74,34 @@
                                </div>
                             </td>
                             
-                       
-                        <div class="modal fade" id="{{update.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">{{update.fuel_type}}</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p>Date: {{update.date}}</p>
-                                        <p>Fuel Type: {{update.fuel_type}}</p>
-                                        <p>Maximum Quantity: {{update.max_amount}}</p>
-                                        <p>Price Per Litre: {{update.price}}</p>
-                                        <p>Payment Method : {{update.payment_method}}</p>
-                                        <p>Closing Time : {{update.closing_time}}</p>
-                                       
-                                        
-                                        
-                                    </div>
-                                    <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
-                            
-                       
-                           
+           
                     </tr>
-                   
+                               <!--update fuel-->
+<div class="modal fade" id="{{update.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Update Quantity</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">  
+
+          {% load crispy_forms_tags %}
+          <form action="{% url 'serviceStation:serviceStation' %}" method="POST">
+              {% csrf_token %}
+              {{fuel_update_form|crispy}}
+          <button class="btn btn-primary" type="submit">Update</button>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
                     {% endfor %}   
                 </tbody>
                 </table>
@@ -106,6 +110,34 @@
             <p>Nothing To SHow</p>    
             {% endif %}
               <!--update fuel-->
+<div class="modal fade" id="add_fuel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Update today's capacity</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">  
+    
+                {% load crispy_forms_tags %}
+                <form action="{% url 'serviceStation:serviceStation' %}" method="POST">
+                    {% csrf_token %}
+                    {{fuel_update_form|crispy}}
+                <button class="btn btn-primary" type="submit">Update</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+                  <!--update fuel-->
 <div class="modal fade" id="add_fuel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
