@@ -80,7 +80,7 @@ class FuelUpdateForm(forms.ModelForm):
 
     class Meta:
         model = FuelUpdate
-        fields = ['max_amount', 'min_amount', 'deliver','fuel_type', 'payment_method']
+        fields = ['fuel_type', 'available_quantity', 'price','status', 'queue_size']
 
 
 
