@@ -31,7 +31,7 @@ def login_success(request):
     """
     user_type  = request.user.user_type
     print(user_type)
-    if user_type == "buyer":
+    if user_type == "BUYER":
         return redirect("buyer-profile")
     else:
         return redirect("users:suppliers_list")
@@ -52,7 +52,7 @@ def token_is_send(request, user):
         messages.warning(request, f"Oops , Something Wen't Wrong, Please Try Again")
         return False              
     messages.success(request, ('Your profile was successfully updated!'))
-    return redirect('users:supplier_user_create', sid=user.id)
+    return render(request, 'buyer/send_email.html')
 
 # Create your views here.
 def register(request):
@@ -76,10 +76,10 @@ def register(request):
                     send_message(user.phone_number, "You have been registered succesfully")
                     user.stage = 'requesting'
                     user.save()               
-                return redirect('users:supplier_user_create', sid=user.id)
+                return render(request, 'buyer/send_email.html')
             else:
                 messages.warning(request, f"Oops , Something Wen't Wrong, Please Try Again")
-                return redirect('users:supplier_user_create', sid=user.id)
+                return render(request, 'buyer/send_email.html')
         
         else:
             msg = "Error in Information Submitted"
