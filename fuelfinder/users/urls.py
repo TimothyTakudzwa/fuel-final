@@ -9,6 +9,7 @@ urlpatterns = [
     path('audit_trail/', views.audit_trail, name="audit_trail"),
     path('suppliers/', views.suppliers_list, name="suppliers_list"),
     path('stations/', views.stations, name="stations"),
+    path('depots/', views.depots, name="depots"),
     path('statistics/', views.statistics, name="statistics"),
     path('buyers/', views.buyers_list, name="buyers_list"),
     path('supplier_user_create/<int:sid>', views.supplier_user_create, name="supplier_user_create"),

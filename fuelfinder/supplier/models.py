@@ -54,7 +54,7 @@ class FuelUpdate(models.Model):
     queue_size = models.CharField(max_length=200)
     status = models.CharField(max_length=300, choices=STATUS_CHOICES)
     arrival_time = models.CharField(max_length=100, default='06:00')
-    payment_method = models.CharField(max_length=200)
+    payment_method = models.CharField(max_length=200, choices=PAYING_CHOICES)
     date = models.DateField(auto_now_add=True)
     time = models.TimeField(auto_now_add=True)
     is_deleted = models.BooleanField(default=False)

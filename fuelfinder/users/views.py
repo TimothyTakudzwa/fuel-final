@@ -72,7 +72,15 @@ def stations(request):
     # print(admin_.company)
     stations = ServiceStation.objects.all()
 
-    return render(request, 'users/service_stations.html', {'stations': stations})    
+    return render(request, 'users/service_stations.html', {'stations': stations})
+
+def depots(request):
+    #user = authenticate(username='', password='')
+    #admin_ = User.objects.filter(company_id='Marshy').first()
+    # print(admin_.company)
+    stations = Depot.objects.all()
+
+    return render(request, 'users/depots.html', {'depots': depots})         
 
 
 def audit_trail(request):
