@@ -22,6 +22,7 @@ urlpatterns = [
     path('transaction/', supplier_views.transaction, name='transaction'),
     path('stock/', supplier_views.stock, name='stock'),
     path('fuel-request/', supplier_views.fuel_request, name='fuel-request'),
+    path('complete_transaction/<int:id>', supplier_views.complete_transaction, name='complete_transaction'),
     path('rate-supplier', supplier_views.rate_supplier, name='rate-supplier'),
 
     path('index', whatsapp_views.index, name='index'),

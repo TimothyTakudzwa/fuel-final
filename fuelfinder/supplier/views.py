@@ -11,7 +11,7 @@ from datetime import date, datetime
 
 from .forms import PasswordChange, RegistrationForm, RegistrationProfileForm, \
     RegistrationEmailForm, UserUpdateForm, ProfilePictureUpdateForm, ProfileUpdateForm, FuelRequestForm
-from .models import Profile, FuelUpdate, FuelRequest, Transaction, Profile, TokenAuthentication, Offer
+from .models import Profile, FuelUpdate, FuelRequest, Transaction, Profile, TokenAuthentication, Offer, FuelAllocation
 from notification.models import Notification
 
 # today's date
@@ -205,6 +205,10 @@ def fuel_update(request):
             fuel_update.payment_method = request.POST.get('payment_method')
             fuel_update.status = request.POST.get('status')
             fuel_update.save()
+
+            fuel_allocated = FuelAllocation.objects.get(date=today, fuel_type=transaction.request.fuel_type, assigned_staff=request.user)
+            fuel_allocated.current_available_quantity = fuel_allocated.current_available_quantity - request.POST.get('available_quantity')
+            fuel_allocated.save()
         else:
             available_quantity = request.POST.get('available_quantity')
             payment_method = request.POST.get('payment_method')
@@ -213,6 +217,11 @@ def fuel_update(request):
             price = request.POST.get('price')
             supplier_id = request.user.id
             FuelUpdate.objects.create(supplier_id=supplier_id, status=status, fuel_type=fuel_type, price=price, available_quantity=available_quantity, payment_method=payment_method)
+
+            fuel_allocated = FuelAllocation.objects.get(date=today, fuel_type=transaction.request.fuel_type, assigned_staff=request.user)
+            fuel_allocated.current_available_quantity = fuel_allocated.current_available_quantity - request.POST.get('available_quantity')
+            fuel_allocated.save()
+
             messages.success(request, 'Quantity uploaded successfully')
 
     return redirect('stock')
@@ -245,13 +254,13 @@ def edit_offer(request, id):
         offer.save()
         messages.success(request, 'Offer successfully updated')
         return redirect('fuel-request')
-    return render(request, 'supplier/accounts/fuel-request.html')
+    return render(request, 'supplier/accounts/fuel_request.html')
 
 
 @login_required
 def transaction(request):
     context= { 
-       'transactions' : Transaction.objects.filter(supplier=request.user).all()
+       'transactions' : Transaction.objects.filter(supplier=request.user, complete=False).all()
         }
     return render(request, 'supplier/accounts/transactions.html',context=context)
 
@@ -261,6 +270,33 @@ def stock(request):
         'stocks' : FuelUpdate.objects.filter(supplier_id=request.user, date=today)
     }
     return render(request, 'supplier/accounts/stock.html', context=context)
+
+
+@login_required
+def complete_transaction(request, id):
+    transaction = Transaction.objects.get(id=id)
+    if FuelUpdate.objects.filter(date=today, fuel_type=transaction.request.fuel_type).exists():
+        available_quantity = FuelUpdate.objects.get(date=today, fuel_type=transaction.request.fuel_type)
+        if available_quantity.available_quantity > transaction.offer.quantity:
+            transaction.complete == True
+            transaction.save()
+
+            available_quantity.available_quantity = available_quantity.available_quantity - transaction.offer.quantity
+            available_quantity.save()
+
+            fuel_allocated = FuelAllocation.objects.get(date=today, fuel_type=transaction.request.fuel_type, assigned_staff=request.user)
+            fuel_allocated.current_available_quantity = fuel_allocated.current_available_quantity - request.POST.get('available_quantity')
+            fuel_allocated.save()
+
+            messages.success(request, 'Transaction completed successfully!')
+        else:
+            messages.warning(request, f'Not enough {transaction.request.fuel_type} left in stock')
+        
+    else:
+        messages.warning(request, f'You do not have any {transaction.request.fuel_type} available in stock')
+    
+    return redirect('transaction')
+
 
 @login_required()
 def notifications(request):
