@@ -1,4 +1,5 @@
 from buyer.models import Company
+
 COMPANY_CHOICES = ''
 try:
     companies = Company.objects.all()

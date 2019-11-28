@@ -12,7 +12,7 @@ class ServiceStation(models.Model):
     assigned_staff =models.ForeignKey(User,on_delete=models.DO_NOTHING)
 
     def __str__(self):
-        return f"{self.company} : {self.address}"
+        return f"{self.company} : {self.name}"
 
     def get_capacity(self):
         return self.capacity
@@ -27,7 +27,7 @@ class Depot(models.Model):
     assigned_staff =models.ForeignKey(User,on_delete=models.DO_NOTHING)
 
     def __str__(self):
-        return f"{self.company} : {self.address}"
+        return f"{self.company} : {self.name}"
 
     def get_capacity(self):
         return self.capacity
@@ -129,9 +129,7 @@ class Transaction(models.Model):
     offer = models.ForeignKey(Offer, on_delete=models.DO_NOTHING, related_name='offer')
     date = models.DateField(auto_now_add=True)
     time = models.TimeField(auto_now_add=True)
-
+    complete = models.BooleanField(default=False)
+    
     class Meta:
         ordering = ['date', 'time']
-
-    def __str__(self):
-        return f'{str(self.request_name)} - {str(self.buyer_name)}'

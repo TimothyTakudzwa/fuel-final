@@ -10,7 +10,7 @@ urlpatterns = [
     path('logout', auth_views.LogoutView.as_view(template_name='buyer/logout.html'), name='buyer-logout'),
     path('profile', views.profile, name='buyer-profile'),
     path('fuel', views.fuel_request, name='fuel-request'),
-    path('login_success/$', views.login_success, name='login_success'),
+    path('login_success/', views.login_success, name='login_success'),
 ]
 
 if settings.DEBUG: 

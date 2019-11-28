@@ -19,6 +19,8 @@ urlpatterns = [
     path('', supplier_views.sign_in, name='login'),
     path('password-change/', supplier_views.change_password, name='change-password'),
     path('account/', supplier_views.account, name='account'),
+    path('transaction/', supplier_views.transaction, name='transaction'),
+    path('stock/', supplier_views.stock, name='stock'),
     path('fuel-request/', supplier_views.fuel_request, name='fuel-request'),
     path('rate-supplier', supplier_views.rate_supplier, name='rate-supplier'),
 

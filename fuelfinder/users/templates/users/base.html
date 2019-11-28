@@ -7,6 +7,8 @@
  
  <head>
    <meta charset="utf-8" />
+   <!--     ChartistJS CDNS     -->
+   <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
    <link rel="apple-touch-icon" sizes="76x76" href="{% static 'finder/assets/img/apple-icon.png' %}">
    <link rel="icon" type="image/png" href="{% static 'finder/assets/img/favicon.png' %}">
    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -50,9 +52,24 @@
            <li class="nav-item {% if request.path == '/users/suppliers/' %} active {% endif %}">
              <a class="nav-link" href="{% url 'users:suppliers_list' %}">
                <i class="material-icons">people</i>
-               <p>Staff</p>
+               <p>Service Station Staff</p>
              </a>
-           </li>  
+           </li> 
+           
+           <li class="nav-item {% if request.path == '/users/suppliers/' %} active {% endif %}">
+            <a class="nav-link" href="{% url 'users:suppliers_list' %}">
+              <i class="material-icons">people</i>
+              <p>Depot Staff</p>
+            </a>
+          </li>
+          
+          <li class="nav-item {% if request.path == '/users/stations/' %} active {% endif %}">
+              
+            <a class="nav-link " href="{% url 'users:stations' %}">
+              <i class="material-icons">local_gas_station</i>
+              <p>Depots</p>
+            </a>
+          </li>
 
            <li class="nav-item {% if request.path == '/users/audit_trail/' %} active {% endif %}">
             <a class="nav-link" href="{% url 'users:audit_trail' %}">
@@ -68,6 +85,14 @@
               <p>Service Stations</p>
             </a>
           </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'users:statistics' %}">
+              <i class="material-icons">show_chart</i>
+              <p>Statistics</p>
+            </a>
+          </li>
+
            
            <li class="nav-item">
              <a class="nav-link" href="#">
@@ -154,6 +179,8 @@
    </div>
   
    <!--   Core JS Files   -->
+   <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js">
+
    <script src="{% static 'finder/assets/js/core/jquery.min.js' %}"></script>
    <script src="{% static 'finder/assets/js/core/popper.min.js' %}"></script>
    <script src="{% static 'finder/assets/js/core/bootstrap-material-design.min.js' %}"></script>
