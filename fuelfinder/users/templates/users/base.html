@@ -56,16 +56,16 @@
              </a>
            </li> 
            
-           <li class="nav-item {% if request.path == '/users/suppliers/' %} active {% endif %}">
+           <li class="nav-item {% if request.path == '/users/suppliers/' %}  {% endif %}">
             <a class="nav-link" href="{% url 'users:suppliers_list' %}">
               <i class="material-icons">people</i>
               <p>Depot Staff</p>
             </a>
           </li>
           
-          <li class="nav-item {% if request.path == '/users/stations/' %} active {% endif %}">
+          <li class="nav-item {% if request.path == '/users/depots/' %} active {% endif %}">
               
-            <a class="nav-link " href="{% url 'users:stations' %}">
+            <a class="nav-link " href="{% url 'users:depots' %}">
               <i class="material-icons">local_gas_station</i>
               <p>Depots</p>
             </a>
@@ -179,7 +179,7 @@
    </div>
   
    <!--   Core JS Files   -->
-   <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js">
+   <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
 
    <script src="{% static 'finder/assets/js/core/jquery.min.js' %}"></script>
    <script src="{% static 'finder/assets/js/core/popper.min.js' %}"></script>
@@ -404,11 +404,7 @@
  
      });
    </script>
-   <script>
-      $(document).ready(function() {
-        $('#example').DataTable({"order": [[ 0, "desc" ]]});
-      } );
-    </script>
+   
  </body>
  
  </html>
