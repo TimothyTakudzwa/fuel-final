@@ -141,22 +141,18 @@ def suppliers_list(request):
         form1 = SupplierContactForm( request.POST)
         
         print('--------------------tapinda---------------')
-        first_name = 
-        username = form1.cleaned_data['username']
-        email = form1.cleaned_data['email']
-        password = form1.cleaned_data['password']
-        phone_number = form1.cleaned_data['phone_number']
-        company = form1.cleaned_data['company']
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('paasword')
+        phone_number = request.POST.get('phone_number')
         supplier_role = 'Staff'
-
         f_service_station = request.POST.get('service_station')
-        service_station = ServiceStation.objects.get(id=f_service_station)
-        f_staff = request.POST.get('staff')
-        staff = User.objects.get(id=f_staff)
-        fuel_type =  request.POST.get('fuel_type')
-
+        company = Company.objects.get(id=f_service_station)
+        
         print(type(User))
-        User.objects.create(username=username, user_type = 'SUPPLIER', email=email,password=password,company_id=company,phone_number=phone_number,supplier_role=supplier_role)
+        User.objects.create(username=username, first_name=first_name, last_name=last_name, user_type = 'SUPPLIER', company=company, email=email ,password=password, phone_number=phone_number,supplier_role=supplier_role)
         messages.success(request, f"{username} Registered Successfully")
         '''
         token = secrets.token_hex(12)
