@@ -76,21 +76,33 @@ def stations(request):
     return render(request, 'users/service_stations.html', {'stations': stations})
 
 def report_generator(request):
+   
     if request.method == "POST":
-        start_date = datetime.strptime(request.form['end_date'], '%Y-%m-%d')
-        end_date = datetime.strptime(request.form['start_date'], '%Y-%m-%d')
-        if request.form['report_type'] == 'Transactions':
-            trans = Transaction.objects.filter(date__range=[start_date, end_date])
-            requests = None; allocations = None
-        if request.form['report_type'] == 'Fuel Requests':
-            requests = FuelRequest.objects.filter(date_range=[start_date, end_date])
-            trans = None; allocations = None
-        if request.form['report_type'] == 'Allocations':
-            allocations = FuelAllocation.objects.filter(date_range=[start_date, end_date])
+        
+        form = ReportForm(request.POST or None)
+        if form.is_valid():
+            end_date = form.cleaned_data.get('end_date')
+            start_date = form.cleaned_data.get('start_date')
+            
+            # start_date = datetime.strptime(str(start_date), '%Y-%m-%d')
+            # end_date = datetime.strptime(str(end_date), '%Y-%m-%d')
+            if form.cleaned_data.get('report_type') == 'Transactions':
+                trans = Transaction.objects.filter(date__range=[start_date, end_date])
+                requests = None; allocations = None
+            if form.cleaned_data.get('report_type') == 'Fuel Requests':
+                requests = FuelRequest.objects.filter(date__range=[start_date, end_date])
+                trans = None; allocations = None
+            if form.cleaned_data.get('report_type') == 'Allocations':
+                allocations = FuelAllocation.objects.filter(date__range=[start_date, end_date])
+            return render(request, 'users/report.html', {'trans': trans, 'requests': requests,'allocations':allocations, 'form':form } )
+        else:
+            messages.success(request, f"Suo")       
+
+        allocations = requests = trans = None
     form = ReportForm()
     allocations = requests = trans = None
 
-    return render(request, 'users/report.html', {'trans': trans, 'requests': requests,'allocations':allocations, 'form':form })
+    return render(request, 'users/report.html', {'trans': trans, 'requests': requests,'allocations':allocations, 'form':form } )
 
 def depots(request):
     #user = authenticate(username='', password='')
