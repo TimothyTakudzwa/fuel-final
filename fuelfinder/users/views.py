@@ -17,13 +17,31 @@ from buyer.models import *
 from supplier.models import *
 from users.models import *
 from django.contrib.auth import authenticate
+from .forms import AllocationForm
+
 
 def index(request):
     return render(request, 'users/index.html')
 
 
 def allocate(request):
-    return render(request, 'allocate.html')
+    allocates = FuelAllocation.objects.all()
+    
+    if request.method == 'POST':
+        form2 = AllocationForm(request.POST)
+        if form2.is_valid():
+            fuel_type = form2.cleaned_data['fuel_type']
+            quantity = form2.cleaned_data['quantity']
+            staff = form2.cleaned_data['staff']
+            FuelAllocation.objects.create(service_station=service_station,fuel_type=fuel_type,allocated_quantity=quantity,assigned_staff=staff,current_available_quantity=quantity)
+
+    else:
+        form2 = AllocationForm()
+        service_stations = ServiceStation.objects.all()
+        form2.fields['service_station'].choices = [(service_station.name, service_station.name) for service_station in service_stations]
+        return render(request, 'users/allocate.html', {'allocates': allocates, 'form2': form2 })
+
+    return render(request, 'users/allocate.html', {'allocates': allocates, 'form2': form2 })
 
 def statistics(request):
 
