@@ -131,6 +131,3 @@ class Transaction(models.Model):
     
     class Meta:
         ordering = ['date', 'time']
-
-    def __str__(self):
-        return f'{str(self.request_name)} - {str(self.buyer_name)}'
