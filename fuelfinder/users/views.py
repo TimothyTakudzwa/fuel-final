@@ -74,6 +74,9 @@ def stations(request):
 
     return render(request, 'users/service_stations.html', {'stations': stations})
 
+def report_generator(request):
+    return render(request, 'users/report.html')
+
 def depots(request):
     #user = authenticate(username='', password='')
     #admin_ = User.objects.filter(company_id='Marshy').first()

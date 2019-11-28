@@ -11,6 +11,7 @@ urlpatterns = [
     path('stations/', views.stations, name="stations"),
     path('depots/', views.depots, name="depots"),
     path('statistics/', views.statistics, name="statistics"),
+    path('report_generator/', views.report_generator, name="report_generator"),
     path('buyers/', views.buyers_list, name="buyers_list"),
     path('supplier_user_create/<int:sid>', views.supplier_user_create, name="supplier_user_create"),
     path('buyer_user_create/<int:sid>', views.buyer_user_create, name="buyer_user_create"),
