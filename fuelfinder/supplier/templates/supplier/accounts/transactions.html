@@ -19,7 +19,11 @@
                                 <th style="color: white;"></th>
                                 <th style="color: white;"> Date </th>
                                 <th style="color: white;">Buyer Name</th>
+                                <th style="color: white;">Company</th>
                                 <th style="color: white;">Fuel Type</th>
+                                <th style="color: white;">Quantity(l)</th>
+                                <th style="color: white;">Price</th>
+                                <th style="color: white;">Amount</th>
                                 <th style="color: white;"></th>
 
                             </tr>
@@ -29,8 +33,12 @@
                             <tr>
                                 <td></td>
                                 <td>{{ transaction.date }}</td>
-                                <td>{{ transaction.request_id.name_id.username }}</td>
-                                <td>{{ transaction.request_id.fuel_type }}</td>
+                                <td>{{ transaction.buyer.username }}</td>
+                                <td>{{ transaction.buyer.company_id.company_type }}</td>
+                                <td>{{ transaction.request.fuel_type }}</td>
+                                <td>{{ transaction.offer.quantity }}</td>
+                                <td>{{ transaction.offer.price }}</td>
+                                <td>{% widthratio transaction.offer.quantity 1 transaction.offer.price %}</td>
                                 <td><button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#edit_offer_{{transaction.id}}">Complete</button></td>
                             </tr>
                             {%endfor%}

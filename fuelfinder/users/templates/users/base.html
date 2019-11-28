@@ -71,6 +71,15 @@
             </a>
           </li>
 
+          
+          <li class="nav-item {% if request.path == '/users/stations/' %} active {% endif %}">
+              
+            <a class="nav-link " href="{% url 'users:stations' %}">
+              <i class="material-icons">local_gas_station</i>
+              <p>Fuel Allocations</p>
+            </a>
+          </li>
+
            <li class="nav-item {% if request.path == '/users/audit_trail/' %} active {% endif %}">
             <a class="nav-link" href="{% url 'users:audit_trail' %}">
               <i class="material-icons">account_balance</i>

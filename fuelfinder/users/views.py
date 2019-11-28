@@ -22,7 +22,8 @@ def index(request):
     return render(request, 'users/index.html')
 
 
-
+def allocate(request):
+    return render(request, 'allocate.html')
 
 def statistics(request):
 
