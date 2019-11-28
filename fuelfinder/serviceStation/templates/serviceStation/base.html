@@ -40,7 +40,7 @@
        </div>
        <div class="sidebar-wrapper">
          <ul class="nav">
-           <li class="nav-item {% if request.path == '//' %} active {% endif %}  ">
+           <li class="nav-item {% if request.path == '/serviceStation' %} active {% endif %}  ">
              <a class="nav-link" href="#">
                <i class="material-icons">dashboard</i>
                <p>Dashboard</p>
@@ -48,22 +48,22 @@
            </li>
             
     
-           <li class="nav-item ">
+           <li class="nav-item {% if request.path == '/serviceStation/serviceStation/' %} active {% endif %}">
             <a class="nav-link" href="{% url 'serviceStation:serviceStation' %}">
               <i class="material-icons">swap_vertical_circle</i>
               <p>Fuel Updates</p>
             </a>
           </li>  
 
-          <li class="nav-item ">
-            <a class="nav-link" href="">
+          <li class="nav-item {% if request.path == '/serviceStation/allocated_fuel/' %} active {% endif %}">
+            <a class="nav-link" href="{% url 'serviceStation:allocated_fuel' %}">
               <i class="material-icons">swap_vertical_circle</i>
               <p>Update Allocated Stock</p>
             </a>
           </li>  
 
-          <li class="nav-item ">
-            <a class="nav-link" href="">
+          <li class="nav-item {% if request.path == '/serviceStation/myaccount/' %} active {% endif %}">
+            <a class="nav-link" href="{% url 'serviceStation:myaccount' %}">
               <i class="material-icons">person</i>
               <p>User Profile</p>
             </a>

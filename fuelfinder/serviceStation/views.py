@@ -35,22 +35,28 @@ def fuel_updates(request):
     return render(request, 'serviceStation/fuel_updates.html', {'updates': updates})
 
 
-def account(request):
-    context = {
-        'title': 'Fuel Finder | Account',
-        'user': UserUpdateForm(instance=request.user)
+def allocated_fuel(request):
+    allocates = FuelAllocation.objects.filter(assigned_staff = request.user).all()
+    return render(request, 'serviceStation/allocated_fuel.html', {'allocates': allocates})
 
-    }
+
+def myaccount(request):
+    #context = {
+        #'title': 'Fuel Finder | Account',
+        #'user': UserUpdateForm(instance=request.user)
+
+    #}
+    userform = UserUpdateForm(request.POST, instance=request.user)
     if request.method == 'POST':
-        userform = UserUpdateForm(request.POST, instance=request.user)
+        
         if userform.is_valid():
             userform.save()
             messages.success(request, f'Profile successfully updated')
-            return redirect('account')
+            return redirect('myaccount')
         else:
             messages.warning(request, f'Something went wrong while saving your changes')
-            return redirect('account')
-    return render(request, 'serviceStation/profile.html', context=context)
+            return redirect('myaccount')
+    return render(request, 'serviceStation/profile.html', {'userform' : userform})
 
 '''
 def user_profile(request):
