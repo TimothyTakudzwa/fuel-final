@@ -16,6 +16,7 @@ admin.site.register(Transaction)
 admin.site.register(TokenAuthentication)
 admin.site.register(SupplierRating)
 admin.site.register(Offer)
+admin.site.register(FuelAllocation)
 # admin.site.register(Depot)
 
 

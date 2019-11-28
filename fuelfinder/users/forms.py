@@ -22,6 +22,13 @@ def validate_user_email(value):
         raise ValidationError('%(value)s is already registered',
             params={'value': value},)
 
+
+class ReportForm(forms.Form):
+    CHOICES = (('Transactions', 'Transactions'),('Fuel Requests', 'Fuel Requests'), ('Allocations', 'Allocations'))
+    report_choices = forms.ChoiceField(choices=CHOICES)
+    start_date = forms.DateField(widget=forms.SelectDateWidget())
+    end_date = forms.DateField(widget=forms.SelectDateWidget())
+
 class SupplierStaffEditForm(forms.ModelForm):
     class Meta:
         model = SupplierContact
@@ -49,6 +56,12 @@ class BuyerContactForm(forms.Form):
         if password != password2:
             raise forms.ValidationError("The passwords do not match!")
 
+
+class AllocationForm(forms.Form):
+    service_station = forms.ChoiceField()
+    fuel_type = forms.CharField(label='Fuel Type', required=True)
+    quantity = forms.CharField(label='Quantity', required=True)
+    staff = forms.CharField(label='Assigned Staff', required=True)
 
 class SupplierContactForm(forms.Form):
     company = forms.CharField(label='Company Name', required=True,
