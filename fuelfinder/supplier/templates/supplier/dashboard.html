@@ -40,26 +40,26 @@
       </div>
       <div class="sidebar-wrapper">
         <ul class="nav">
-          <li class="nav-item active  ">
+          <li class="nav-item {% if request.path == '/fuel-request/' %} active {% endif %}  ">
             <a class="nav-link" href="{%url 'fuel-request'%}">
               <i class="material-icons">dashboard</i>
               <p>Requests</p>
             </a>
           </li>
-          <li class="nav-item ">
+          <li class="nav-item {% if request.path == '/stock/' %} active {% endif %} ">
               <a class="nav-link" href="{%url 'stock'%}">
-                <i class="material-icons">swap_vertical_circle</i>
-                <p>Stock</p>
+                <i class="material-icons">local_gas_station</i>
+                <p>Fuel Stocks</p>
               </a>
             </li>
-         <li class="nav-item ">
+         <li class="nav-item {% if request.path == '/transaction/' %} active {% endif %}">
             <a class="nav-link" href="{%url 'transaction'%}">
               <i class="material-icons">swap_vertical_circle</i>
               <p>Transactions</p>
             </a>
           </li>
 
-          <li class="nav-item ">
+          <li class="nav-item {% if request.path == '/account/' %} active {% endif %}" >
             <a class="nav-link" href="{%url 'account'%}">
               <i class="material-icons">person</i>
               <p>User Profile</p>
@@ -149,9 +149,6 @@
 
                 </div>
                 <div class="container">
-                <p style="text-align:center">
-                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add_fuel">Update Stock</button> </p>
-
                 {% block body %}{% endblock %}
                 </div>
 
@@ -159,33 +156,6 @@
         </main>
 
    
-    </div>
-  </div>
-
-  <!--update fuel-->
-<div class="modal fade" id="add_fuel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Update today's capacity</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">  
-
-            {% load crispy_forms_tags %}
-            <form action="{% url 'supplier:fuel_update' %}" method="POST">
-                {% csrf_token %}
-                {{fuel_update_form|crispy}}
-            <button class="btn btn-primary" type="submit">Update</button>
-            </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          
-        </div>
-      </div>
     </div>
   </div>
  

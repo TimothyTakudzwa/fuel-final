@@ -126,6 +126,8 @@ class SupplierRating(models.Model):
 class Transaction(models.Model):
     request = models.ForeignKey(FuelRequest, on_delete=models.DO_NOTHING, related_name='fuel_request')
     offer = models.ForeignKey(Offer, on_delete=models.DO_NOTHING, related_name='offer')
+    supplier = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='supplier')
+    buyer = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='buyer')
     date = models.DateField(auto_now_add=True)
     time = models.TimeField(auto_now_add=True)
     complete = models.BooleanField(default=False)
