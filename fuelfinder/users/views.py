@@ -22,7 +22,8 @@ def index(request):
     return render(request, 'users/index.html')
 
 
-
+def allocate(request):
+    return render(request, 'allocate.html')
 
 def statistics(request):
 
@@ -72,7 +73,18 @@ def stations(request):
     # print(admin_.company)
     stations = ServiceStation.objects.all()
 
-    return render(request, 'users/service_stations.html', {'stations': stations})    
+    return render(request, 'users/service_stations.html', {'stations': stations})
+
+def report_generator(request):
+    return render(request, 'users/report.html')
+
+def depots(request):
+    #user = authenticate(username='', password='')
+    #admin_ = User.objects.filter(company_id='Marshy').first()
+    # print(admin_.company)
+    stations = Depot.objects.all()
+
+    return render(request, 'users/depots.html', {'depots': depots})         
 
 
 def audit_trail(request):

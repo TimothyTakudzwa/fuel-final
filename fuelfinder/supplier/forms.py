@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from .models import Profile, FuelUpdate, FuelRequest
 from django.contrib.auth import get_user_model
 
+User = get_user_model()
 from .models import Profile, FuelUpdate, FuelRequest, Offer
 from buyer.constants import *
 
@@ -74,12 +75,18 @@ class FuelRequestForm(forms.ModelForm):
         
 
 class FuelUpdateForm(forms.ModelForm):
+    OPTIONS= [
+    ('PETROL', 'Petrol'),
+    ('DIESEL', 'Diesel'),
+    ('BLEND', 'Blend'),
+    ]
 
-    fuel_type = forms.CharField(label='Fuel Type', widget=forms.Select(choices=FUEL_CHOICES))
+    fuel_type = forms.CharField(label='Fuel Type', widget=forms.Select(choices=OPTIONS))
+    payment_method = forms.CharField(label='Payment Method', widget=forms.Select(choices=PAYING_CHOICES))
 
     class Meta:
         model = FuelUpdate
-        fields = ['fuel_type', 'available_quantity', 'price','status', 'queue_size']
+        fields = ['fuel_type', 'available_quantity', 'price', 'payment_method', 'status', 'queue_size']
 
 
 class StockLevelForm(forms.ModelForm):

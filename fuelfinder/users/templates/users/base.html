@@ -56,18 +56,27 @@
              </a>
            </li> 
            
-           <li class="nav-item {% if request.path == '/users/suppliers/' %} active {% endif %}">
+           <li class="nav-item {% if request.path == '/users/suppliers/' %}  {% endif %}">
             <a class="nav-link" href="{% url 'users:suppliers_list' %}">
               <i class="material-icons">people</i>
               <p>Depot Staff</p>
             </a>
           </li>
           
+          <li class="nav-item {% if request.path == '/users/depots/' %} active {% endif %}">
+              
+            <a class="nav-link " href="{% url 'users:depots' %}">
+              <i class="material-icons">local_gas_station</i>
+              <p>Depots</p>
+            </a>
+          </li>
+
+          
           <li class="nav-item {% if request.path == '/users/stations/' %} active {% endif %}">
               
             <a class="nav-link " href="{% url 'users:stations' %}">
               <i class="material-icons">local_gas_station</i>
-              <p>Depots</p>
+              <p>Fuel Allocations</p>
             </a>
           </li>
 
@@ -86,12 +95,19 @@
             </a>
           </li>
 
-          <li class="nav-item">
+          <li class="nav-item {% if request.path == '/users/statistics/' %} active {% endif %}">
             <a class="nav-link" href="{% url 'users:statistics' %}">
               <i class="material-icons">show_chart</i>
               <p>Statistics</p>
             </a>
           </li>
+
+          <li class="nav-item">
+              <a class="nav-link" href=" {% url 'users:report_generator' %}">
+                <i class="material-icons">calendar_today</i>
+                <p>Report Generator</p>
+              </a>
+            </li>
 
            
            <li class="nav-item">
@@ -179,7 +195,7 @@
    </div>
   
    <!--   Core JS Files   -->
-   <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js">
+   <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
 
    <script src="{% static 'finder/assets/js/core/jquery.min.js' %}"></script>
    <script src="{% static 'finder/assets/js/core/popper.min.js' %}"></script>
@@ -404,11 +420,7 @@
  
      });
    </script>
-   <script>
-      $(document).ready(function() {
-        $('#example').DataTable({"order": [[ 0, "desc" ]]});
-      } );
-    </script>
+   
  </body>
  
  </html>

@@ -4,14 +4,37 @@
 {{title}}
 {% endblock %}
 {% block body %}
-    <div class="col-md-12">
-        <div class="card mt-5" style="background-color:white">
+<div style="margin-left: 30px;">
+    <h1 class="display-3"> Update Profile </h1>
+    <hr class="my-2">
+    
+      
+
+</div
+
+
+<div class="col-md-12">
+    <div class="card" style="background-color:white">
+        
+        <div class="card-header card-header-primary">
+        <h4 class="card-title "></h4>
+        </div>
+    <div class="card-body">
+        <div class="container-fluid">
+            
             {% load crispy_forms_tags %}
-            <form action="{% url 'serviceStation:account' %}" method="POST">
+            <form action="{% url 'serviceStation:myaccount' %}" method="POST">
                 {% csrf_token %}
-                {{ form|crispy}}
+                {{ userform|crispy}}
             <button class="btn btn-primary" type="submit">Update</button>
             </form>
+
+
+                  
         </div>
     </div>
+    </div>
+    
+</div>
+
 {%endblock%}
