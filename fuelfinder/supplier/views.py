@@ -250,9 +250,9 @@ def edit_offer(request, id):
 
 @login_required
 def transaction(request):
-    context = {
-        'transactions' : Transaction.objects.all()
-    }
+    context= { 
+       'transactions' : Transaction.objects.filter(supplier=request.user).all()
+        }
     return render(request, 'supplier/accounts/transactions.html',context=context)
 
 @login_required
