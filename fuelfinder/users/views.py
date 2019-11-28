@@ -17,13 +17,36 @@ from buyer.models import *
 from supplier.models import *
 from users.models import *
 from django.contrib.auth import authenticate
+from .forms import AllocationForm
+
 
 def index(request):
     return render(request, 'users/index.html')
 
 
 def allocate(request):
-    return render(request, 'allocate.html')
+    allocates = FuelAllocation.objects.all()
+    form2 = AllocationForm()
+    service_stations = ServiceStation.objects.all()
+    users = User.objects.all()
+    form2.fields['service_station'].choices = [((service_station.id, service_station.name)) for service_station in service_stations]
+    form2.fields['staff'].choices = [((user.id, user.username)) for user in users]
+    if request.method == 'POST':
+        form2 = AllocationForm(request.POST)
+        # if form2.is_valid():
+        f_service_station = request.POST.get('service_station')
+        service_station = ServiceStation.objects.get(id=f_service_station)
+        f_staff = request.POST.get('staff')
+        staff = User.objects.get(id=f_staff)
+        fuel_type =  request.POST.get('fuel_type')
+        quantity =  request.POST.get('quantity')
+        # staff = request.cleaned_data['staff']
+        print(service_station, staff, fuel_type, quantity)
+        FuelAllocation.objects.create(service_station=service_station,fuel_type=fuel_type,allocated_quantity=quantity,assigned_staff=staff,current_available_quantity=quantity)
+
+  
+
+    return render(request, 'users/allocate.html', {'allocates': allocates, 'form2': form2 })
 
 def statistics(request):
 
@@ -176,9 +199,10 @@ def suppliers_list(request):
         form1 = SupplierContactForm()         
         companies = Company.objects.all()
         print(companies)
-        form1.fields['company'].choices = [(company.id, company.name) for company in companies]  
+        form1.fields['company'].choices = [(company.id, company.name) for company in companies]
+        return render(request, 'users/suppliers_list.html', {'suppliers': suppliers, 'form1': form1})  
     
-    return render(request, 'users/suppliers_list.html', {'suppliers': suppliers })
+    return render(request, 'users/suppliers_list.html', {'suppliers': suppliers, 'form1': form1})
 
 def suppliers_delete(request, sid):
     supplier = User.objects.filter(id=sid).first()

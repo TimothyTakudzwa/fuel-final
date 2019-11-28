@@ -12,5 +12,6 @@ urlpatterns = [
     path('account/', views.account, name='account'),
     path('stock/', views.stock, name='stock'),
     path('transaction/', views.transaction, name='transaction'),
+    path('complete_transaction/<int:id>', views.complete_transaction, name='complete_transaction'),
 
 ]

@@ -56,7 +56,12 @@ class BuyerContactForm(forms.Form):
         if password != password2:
             raise forms.ValidationError("The passwords do not match!")
 
-
+FUEL_CHOICES=[('Petrol', 'PETROL'), ('Diesel', 'DIESEL'),]
+class AllocationForm(forms.Form):
+    service_station = forms.ChoiceField()
+    fuel_type = forms.ChoiceField(choices=FUEL_CHOICES)
+    quantity = forms.CharField(label='Quantity', required=True)
+    staff = forms.ChoiceField()
 class SupplierContactForm(forms.Form):
     company = forms.CharField(label='Company Name', required=True,
                                 max_length=30)

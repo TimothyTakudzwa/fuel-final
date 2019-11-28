@@ -12,7 +12,7 @@ class ServiceStation(models.Model):
     assigned_staff =models.ForeignKey(User,on_delete=models.DO_NOTHING)
 
     def __str__(self):
-        return f"{self.company} : {self.name}"
+        return f"{self.name}"
 
     def get_capacity(self):
         return self.capacity
@@ -38,8 +38,8 @@ class Depot(models.Model):
 
 class FuelAllocation(models.Model):
     date = models.DateField(auto_now_add=True)
-    service_station = models.CharField(max_length=255)
-    assigned_staff = models.CharField(max_length=300)
+    service_station = models.ForeignKey(ServiceStation, on_delete=models.DO_NOTHING)
+    assigned_staff = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     fuel_type = models.CharField(max_length=300) 
     allocated_quantity = models.CharField(max_length=255)
     current_available_quantity = models.CharField(max_length=255)

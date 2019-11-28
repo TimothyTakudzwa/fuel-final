@@ -72,9 +72,9 @@
           </li>
 
           
-          <li class="nav-item {% if request.path == '/users/stations/' %} active {% endif %}">
+          <li class="nav-item {% if request.path == '/users/allocate/' %} active {% endif %}">
               
-            <a class="nav-link " href="{% url 'users:stations' %}">
+            <a class="nav-link " href="{% url 'users:allocate' %}">
               <i class="material-icons">local_gas_station</i>
               <p>Fuel Allocations</p>
             </a>
@@ -250,6 +250,11 @@
     } );
 
      
+     
+    $(document).ready(function() {
+      $('#example').DataTable({"order": [[ 0, "desc" ]]});
+    } );
+  
      $(document).ready(function() {
        $().ready(function() {
          $sidebar = $('.sidebar');
