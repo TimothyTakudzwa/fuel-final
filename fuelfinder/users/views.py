@@ -144,63 +144,55 @@ def audit_trail(request):
         
 
 def suppliers_list(request):
-    suppliers = User.objects.all()    
-    #print(request.user.company.id)
+    suppliers = User.objects.all()   
+    form1 = SupplierContactForm()         
+    companies = Company.objects.all()
+    form1.fields['service_tation'].choices = [((company.id, company.name)) for company in companies] 
+
     if request.method == 'POST':
         form1 = SupplierContactForm( request.POST)
+        
         print('--------------------tapinda---------------')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('paasword')
+        phone_number = request.POST.get('phone_number')
+        supplier_role = 'Staff'
+        f_service_station = request.POST.get('service_station')
+        company = Company.objects.get(id=f_service_station)
+        
+        print(type(User))
+        User.objects.create(username=username, first_name=first_name, last_name=last_name, user_type = 'SUPPLIER', company=company, email=email ,password=password, phone_number=phone_number,supplier_role=supplier_role)
+        messages.success(request, f"{username} Registered Successfully")
         '''
-        company = Company.objects.get(name='ZUVA PETROLEUM (PVT) LTD')
-        user_count = User.objects.filter(company=company).count()
-        print(user_count)
-        if user_count > 10:
-            raise Http404("Your organisation has reached the maximum number of users, delete some ")
-        '''
-        if form1.is_valid():
-            print('--------------------tapinda---------------')
-            username = form1.cleaned_data['username']
-            email = form1.cleaned_data['email']
-            password = form1.cleaned_data['password']
-            phone_number = form1.cleaned_data['phone_number']
-            company = form1.cleaned_data['company']
-            supplier_role = 'Staff'
+        token = secrets.token_hex(12)
+        user = User.objects.get(username=username)
+        TokenAuthentication.objects.create(token=token, user=user)
+        domain = request.get_host()
+        url = f'{domain}/verification/{token}/{user.id}' 
 
-            print(type(User))
-            User.objects.create(username=username, user_type = 'SUPPLIER', email=email,password=password,company_id=company,phone_number=phone_number,supplier_role=supplier_role)
+        sender = f'Fuel Finder Accounts<tests@marlvinzw.me>'
+        subject = 'User Registration'
+        message = f"Dear {username} , please complete signup here : \n {url} \n. Your password is {password}"
+        
+        try:
+            msg = EmailMultiAlternatives(subject, message, sender, [f'{email}'])
+            msg.send()
+
             messages.success(request, f"{username} Registered Successfully")
-            '''
-            token = secrets.token_hex(12)
-            user = User.objects.get(username=username)
-            TokenAuthentication.objects.create(token=token, user=user)
-            domain = request.get_host()
-            url = f'{domain}/verification/{token}/{user.id}' 
+            return redirect('users:buyers_list')
 
-            sender = f'Fuel Finder Accounts<tests@marlvinzw.me>'
-            subject = 'User Registration'
-            message = f"Dear {username} , please complete signup here : \n {url} \n. Your password is {password}"
-            
-            try:
-                msg = EmailMultiAlternatives(subject, message, sender, [f'{email}'])
-                msg.send()
-
-                messages.success(request, f"{username} Registered Successfully")
-                return redirect('users:buyers_list')
-
-            except BadHeaderError:
-                messages.warning(request, f"Oops , Something Wen't Wrong, Please Try Again")
-                return redirect('users:buyers_list')
-            #contact.save()
-            messages.success(request, ('Your profile was successfully updated!'))
-            return redirect('users:suppliers')
-            print(token)
-            print("above is the token")
-            '''
-    else:
-        form1 = SupplierContactForm()         
-        companies = Company.objects.all()
-        print(companies)
-        form1.fields['company'].choices = [(company.id, company.name) for company in companies]
-        return render(request, 'users/suppliers_list.html', {'suppliers': suppliers, 'form1': form1})  
+        except BadHeaderError:
+            messages.warning(request, f"Oops , Something Wen't Wrong, Please Try Again")
+            return redirect('users:buyers_list')
+        #contact.save()
+        messages.success(request, ('Your profile was successfully updated!'))
+        return redirect('users:suppliers')
+        print(token)
+        print("above is the token")
+        '''
     
     return render(request, 'users/suppliers_list.html', {'suppliers': suppliers, 'form1': form1})
 

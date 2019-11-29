@@ -194,13 +194,11 @@
                                     <form action="{% url 'users:suppliers_list' %}" method="POST">
                                     {{ form1|crispy }}
                                     {% csrf_token %}
-                                    <button class="btn btn-primary" type="submit">Add User Profile</button>
+                                    <button class="btn btn-primary" type="submit">Add User Profile</button>  <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                                       
                                     </form>
                                 </div>
-                                <div class="modal-footer">
-                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                  
-                                </div>
+                               
                               </div>
                             </div>
                           </div>

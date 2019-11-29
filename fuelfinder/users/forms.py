@@ -63,12 +63,13 @@ class AllocationForm(forms.Form):
     quantity = forms.CharField(label='Quantity', required=True)
     staff = forms.ChoiceField()
 class SupplierContactForm(forms.Form):
-    company = forms.CharField(label='Company Name', required=True,
-                                max_length=30)
-    service_tation = forms.ChoiceField(label='Service Station')
-                                
+    first_name = forms.CharField(label='First Name', required=True,
+                                 max_length=30)  
+    last_name = forms.CharField(label='Last Name', required=True,
+                                 max_length=30)                         
     username = forms.CharField(label='Username', required=True,
                                  max_length=30)
+    service_tation = forms.ChoiceField()
     email = forms.EmailField(required=True, max_length=100,
                             validators=[validate_user_email])
     phone_number = forms.CharField(label='Cellphone number', required=True,
